@@ -25,7 +25,7 @@ public class SetLEDColorMessage extends Command {
 
     private byte ledId;
 
-    private byte[] ledColor;
+    private byte[] ledColor;    // 6 * byte
 
 
     public SetLEDColorMessage(
