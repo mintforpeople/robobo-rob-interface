@@ -27,6 +27,7 @@ public class RobSetLEDsModeMessage  extends Command {
 
     public RobSetLEDsModeMessage(byte mode) {
         super();
+        this.setCommandType((byte)4);
         this.mode = mode;
     }
 

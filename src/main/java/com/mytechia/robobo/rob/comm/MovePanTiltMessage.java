@@ -37,6 +37,7 @@ public class MovePanTiltMessage extends Command {
             long time) {
 
         super();
+        this.setCommandType((byte)6);
         this.panTilt = panTilt;
         this.angVel = angVel;
         this.angle = angle;

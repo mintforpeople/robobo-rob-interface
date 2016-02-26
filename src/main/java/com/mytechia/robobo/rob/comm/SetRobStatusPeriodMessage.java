@@ -25,6 +25,8 @@ public class SetRobStatusPeriodMessage extends Command {
 
 
     public SetRobStatusPeriodMessage(int period) {
+        super();
+        this.setCommandType((byte)2);
         this.period = period;
     }
 

@@ -40,6 +40,7 @@ public class MoveMTMessage extends Command {
             long time) {
 
         super();
+        this.setCommandType((byte)5);
         this.angVel1 = angVel1;
         this.angle1 = angle1;
         this.angVel2 = angVel2;

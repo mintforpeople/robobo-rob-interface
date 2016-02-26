@@ -33,6 +33,7 @@ public class SetLEDColorMessage extends Command {
             byte[] ledColor) {
 
         super();
+        this.setCommandType((byte)3);
         this.ledId = ledId;
         this.ledColor = ledColor;
 

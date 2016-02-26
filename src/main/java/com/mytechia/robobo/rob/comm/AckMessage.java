@@ -26,6 +26,7 @@ public class AckMessage extends Command {
 
     public AckMessage(byte error) {
         super();
+        this.setCommandType((byte)0);
         this.error = error;
     }
 

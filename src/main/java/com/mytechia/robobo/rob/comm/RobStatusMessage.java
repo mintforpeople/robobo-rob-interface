@@ -53,6 +53,7 @@ public class RobStatusMessage extends Command {
             double[] motorVoltages) {
 
         super();
+        this.setCommandType((byte)1);
         this.gaps = gaps;
         this.falls = falls;
         this.irs = irs;

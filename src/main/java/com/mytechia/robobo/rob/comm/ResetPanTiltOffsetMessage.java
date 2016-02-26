@@ -19,8 +19,11 @@ import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFor
 public class ResetPanTiltOffsetMessage extends Command {
 
 
-    public ResetPanTiltOffsetMessage(byte mode) {
+    public ResetPanTiltOffsetMessage() {
+
         super();
+        this.setCommandType((byte)7);
+
     }
 
 
