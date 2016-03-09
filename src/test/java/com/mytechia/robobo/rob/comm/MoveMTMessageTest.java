@@ -9,10 +9,8 @@ import static org.junit.Assert.*;
  */
 public class MoveMTMessageTest {
 
-
     @Test
     public void testCodeMessageData() throws Exception {
-
 
         MoveMTMessage originalMessage =
                 new MoveMTMessage(
