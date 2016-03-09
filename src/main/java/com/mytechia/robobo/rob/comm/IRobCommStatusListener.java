@@ -13,7 +13,7 @@ package com.mytechia.robobo.rob.comm;
 /**
  * Callback interface to receive ROB-STATUS messages.
  */
-public interface IRobStatusListener {
+public interface IRobCommStatusListener {
 
     public void robStatus(RobStatusMessage rs);
 
