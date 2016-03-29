@@ -16,8 +16,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
- * This class checks if the send message were lost.
- *
  * @author Julio Alberto Gomez Fernandez
  */
 public class SmpRobCommTest {
@@ -84,7 +82,7 @@ public class SmpRobCommTest {
 
         int sequenceNumberSenTRoboCommand=34;
 
-        //Sending command1
+        //Creando command1
         RoboCommand roboCommand1= spy(RoboCommand.class);
         roboCommand1.setSequenceNumber(sequenceNumberSenTRoboCommand);
         //Envio del comand1
@@ -92,7 +90,7 @@ public class SmpRobCommTest {
         //Le asignamos un tiempo de transmision muy antiguo. Asi el mensaje debe ser reenviado.
         roboCommand1.setLastTransmissionTime(500L);
 
-        //Sending command2
+        //Creando command2
         RoboCommand roboCommand2= spy(RoboCommand.class);
         roboCommand2.setSequenceNumber(sequenceNumberSenTRoboCommand);
         roboCommand2.increaseNumTransmissions();
@@ -101,7 +99,7 @@ public class SmpRobCommTest {
         //Le asignamos un tiempo de transmision muy antiguo. Asi el mensaje debe ser reenviado.
         roboCommand2.setLastTransmissionTime(1000L);
 
-        //Sending command3
+        //Creando command3
         RoboCommand roboCommand3= spy(RoboCommand.class);
         roboCommand3.setSequenceNumber(sequenceNumberSenTRoboCommand);
         //Envio del comando 3
@@ -116,8 +114,10 @@ public class SmpRobCommTest {
         //Ejercitamos el SUT
         smpRobComm.checkForRensendRoboCommands();
 
+        //Vereficamos que efectivamente el comando 1 fue reenviado
         verify(basicCommunicationChannel).send(roboCommand1);
 
+        //Vereficamos que efectivamente el comando 2 fue reenviado
         verify(basicCommunicationChannel).send(roboCommand2);
 
         //Comprobamos que no se reenvia el command3 porque su tiempo de espera no ha acabado
@@ -126,6 +126,7 @@ public class SmpRobCommTest {
     }
 
 
+    
     /*
     @Test
     public void testCheckForLostRoboCommands(){
@@ -138,5 +139,6 @@ public class SmpRobCommTest {
 
     }
     */
+    
 
 }

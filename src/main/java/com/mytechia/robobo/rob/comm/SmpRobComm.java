@@ -281,8 +281,8 @@ public class SmpRobComm implements IRobComm{
                 roboCommand.setLastTransmissionTime(System.currentTimeMillis());
                 roboCommand.increaseNumTransmissions();
                 communicationChannel.send(roboCommand);
-            } catch (CommunicationException e) {
-                LOGGER.error("Error retransmitting {}", roboCommand.toTransmittingString());
+            } catch (CommunicationException exception) {
+                LOGGER.error("Error retransmitting {}", roboCommand.toTransmittingString(), exception);
             }
 
             LOGGER.debug("Retransmitted {}", roboCommand.toTransmittingString());

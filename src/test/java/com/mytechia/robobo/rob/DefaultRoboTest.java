@@ -226,7 +226,7 @@ public class DefaultRoboTest {
         expectedObstacleStatusDistance[5]= 4567;
         expectedObstacleStatusDistance[6]= 7.89;
 
-
+        //Simulamos que recibimos el mensaje status
         defaultRob.robStatus(statusMessage);
 
         List<ObstacleSensorStatus> obstacleSensorStatusList = defaultRob.getLastStatusObstacles();
@@ -244,7 +244,7 @@ public class DefaultRoboTest {
     }
 
     @Test
-    public void baterryMustBeUpdatedWhenRobStatusMessageArrive(){
+    public void bateryMustBeUpdatedWhenRobStatusMessageArrive(){
 
 
         DefaultRob defaultRob= createDefaultRoboCom();

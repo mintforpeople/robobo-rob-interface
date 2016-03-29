@@ -97,9 +97,10 @@ public class ConnectionRobTest {
 
         ConnectionRob connectionRob= new ConnectionRob();
 
+        /*
         for (int i = 0; i < 10; i++) {
             RoboCommand roboCommand= createRoboCommand(i);
-        }
+        }*/
 
         List<RoboCommand> expectedLostRoboCommands= new ArrayList<>();
         for (int i = 0; i < 3; i++) {

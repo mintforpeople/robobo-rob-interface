@@ -13,8 +13,6 @@ package com.mytechia.robobo.rob.comm;
  */
 public enum MessageType {
 
-
-
     AckMessage((byte)0),
     RobStatusMessage((byte)1),
     SetRobStatusPeriodMessage((byte)2),
