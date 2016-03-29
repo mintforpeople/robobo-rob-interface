@@ -126,6 +126,7 @@ public class SmpRobCommTest {
     }
 
 
+    /*
     @Test
     public void testCheckForLostRoboCommands(){
 
@@ -136,5 +137,6 @@ public class SmpRobCommTest {
         int sequenceNumberSenTRoboCommand=34;
 
     }
+    */
 
 }
