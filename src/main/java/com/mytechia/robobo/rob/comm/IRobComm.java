@@ -42,7 +42,7 @@ public interface IRobComm {
      * @param angVel2 angular velocity of the motor 2
      * @param angle2 total angle of movement of the motor 2
      */
-    public void moveMT(double angVel1, double angle1, double angVel2, double angle2);
+    public void moveMT(double angVel1, double angle1, double angVel2, double angle2) ;
 
     /** Sends a move command to the two motors in charge of wheel movement.
      *

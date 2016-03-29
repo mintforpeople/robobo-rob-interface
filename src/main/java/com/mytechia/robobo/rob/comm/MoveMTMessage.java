@@ -9,17 +9,18 @@
  */
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+
+import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
 
 /**
  *  Implementation for MoveMTMessage
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class MoveMTMessage extends Command {
+public class MoveMTMessage extends RoboCommand {
 
     private double angVel1;
 
@@ -40,7 +41,7 @@ public class MoveMTMessage extends Command {
             long time) {
 
         super();
-        this.setCommandType((byte)5);
+        this.setCommandType(MoveMTMessage.commandType);
         this.angVel1 = angVel1;
         this.angle1 = angle1;
         this.angVel2 = angVel2;

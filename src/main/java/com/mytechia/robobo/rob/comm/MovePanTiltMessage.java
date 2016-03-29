@@ -9,17 +9,18 @@
  */
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+
+import static com.mytechia.robobo.rob.comm.MessageType.MovePanTiltMessage;
 
 /**
  *  Implementation for MovePanTiltMessage
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class MovePanTiltMessage extends Command {
+public class MovePanTiltMessage extends RoboCommand {
 
     private byte panTilt;
 
@@ -37,7 +38,7 @@ public class MovePanTiltMessage extends Command {
             long time) {
 
         super();
-        this.setCommandType((byte)6);
+        this.setCommandType(MovePanTiltMessage.commandType);
         this.panTilt = panTilt;
         this.angVel = angVel;
         this.angle = angle;

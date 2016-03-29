@@ -9,24 +9,25 @@
  */
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+
+import static com.mytechia.robobo.rob.comm.MessageType.SetRobStatusPeriodMessage;
 
 /**
  *  Implementation for SetRobStatusPeriodMessage.
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class SetRobStatusPeriodMessage extends Command {
+public class SetRobStatusPeriodMessage extends RoboCommand {
 
     private int period;
 
 
     public SetRobStatusPeriodMessage(int period) {
         super();
-        this.setCommandType((byte)2);
+        this.setCommandType(SetRobStatusPeriodMessage.commandType);
         this.period = period;
     }
 

@@ -9,20 +9,21 @@
  */
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+
+import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
 
 /**
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class ResetPanTiltOffsetMessage extends Command {
+public class ResetPanTiltOffsetMessage extends RoboCommand {
 
 
     public ResetPanTiltOffsetMessage() {
 
         super();
-        this.setCommandType((byte)7);
+        this.setCommandType(ResetPanTiltOffsetMessage.commandType);
 
     }
 
@@ -35,4 +36,6 @@ public class ResetPanTiltOffsetMessage extends Command {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         return 0;
     }
+
+
 }

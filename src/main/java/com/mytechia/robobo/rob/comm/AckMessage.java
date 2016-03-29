@@ -9,24 +9,25 @@
  */
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+
+import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 
 /**
  *  Implementation for AckMessage
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class AckMessage extends Command {
+public class AckMessage extends RoboCommand {
 
     private byte error;
 
 
     public AckMessage(byte error) {
         super();
-        this.setCommandType((byte)0);
+        this.setCommandType(AckMessage.commandType);
         this.error = error;
     }
 
