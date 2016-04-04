@@ -102,7 +102,7 @@ public class ConnectionRobTest {
             RoboCommand roboCommand= createRoboCommand(i);
         }*/
 
-        List<RoboCommand> expectedLostRoboCommands= new ArrayList<>();
+        List<RoboCommand> expectedLostRoboCommands= new ArrayList<RoboCommand>();
         for (int i = 0; i < 3; i++) {
 
             //Un numero de secuencia que no coincida con cualquiera de los numeros secuencia de los

@@ -21,7 +21,7 @@ public class ConnectionRob {
 
     private static final Logger LOGGER= LoggerFactory.getLogger(ConnectionRob.class);
 
-    protected final ArrayList<RoboCommand> sentRoboCommands = new ArrayList<>();
+    protected final ArrayList<RoboCommand> sentRoboCommands = new ArrayList<RoboCommand>();
 
     
     public ConnectionRob() {}
@@ -67,7 +67,7 @@ public class ConnectionRob {
 
     public  List<RoboCommand> checkLostRoboCommands(){
 
-        List<RoboCommand> lostRoboCommands = new ArrayList<>();
+        List<RoboCommand> lostRoboCommands = new ArrayList<RoboCommand>();
 
         synchronized (sentRoboCommands) {
 
@@ -88,7 +88,7 @@ public class ConnectionRob {
 
     public List<RoboCommand> resendRoboCommands(){
 
-        List<RoboCommand> resendRoboCommands = new ArrayList<>();
+        List<RoboCommand> resendRoboCommands = new ArrayList<RoboCommand>();
 
         synchronized (sentRoboCommands) {
 

@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class DispatcherRobCommStatusListener {
 
-    private final List<IRobCommStatusListener> robCommStatusListeners = new ArrayList<>();
+    private final List<IRobCommStatusListener> robCommStatusListeners = new ArrayList<IRobCommStatusListener>();
     
 
     public void subscribeToRobCommStatus(IRobCommStatusListener robCommStatusListener) {
@@ -34,9 +34,11 @@ public class DispatcherRobCommStatusListener {
     
 
     void fireReceivedStatusMotorsMT(RobStatusMessage rs) {
-        robCommStatusListeners.stream().forEach((robStatusListener) -> {
-            robStatusListener.robStatus(rs);
-        });
+        
+        for (IRobCommStatusListener robCommStatusListener : robCommStatusListeners) {
+            robCommStatusListener.robStatus(rs);
+        }
+        
     }
 
 

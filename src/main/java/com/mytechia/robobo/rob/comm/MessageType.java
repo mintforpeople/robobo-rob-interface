@@ -17,7 +17,7 @@ public enum MessageType {
     RobStatusMessage((byte)1),
     SetRobStatusPeriodMessage((byte)2),
     SetLEDColorMessage((byte)3),
-    RobotSetLEDsModeMessage((byte)4),
+    RobSetLEDsModeMessage((byte)4),
     MoveMTMessage((byte)5),
     MovePanTiltMessage((byte)6),
     ResetPanTiltOffsetMessage((byte)7);

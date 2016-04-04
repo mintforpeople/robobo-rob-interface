@@ -13,7 +13,7 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
-import static com.mytechia.robobo.rob.comm.MessageType.RobotSetLEDsModeMessage;
+import static com.mytechia.robobo.rob.comm.MessageType.RobSetLEDsModeMessage;
 
 /**
  *  Implementation for SetLEDsModeMessage
@@ -28,7 +28,7 @@ public class RobSetLEDsModeMessage  extends RoboCommand {
 
     public RobSetLEDsModeMessage(byte mode) {
         super();
-        this.setCommandType(RobotSetLEDsModeMessage.commandType);
+        this.setCommandType(RobSetLEDsModeMessage.commandType);
         this.mode = mode;
     }
 

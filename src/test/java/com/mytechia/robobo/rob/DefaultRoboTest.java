@@ -31,9 +31,9 @@ public class DefaultRoboTest {
 
     private RobStatusMessage createDefaultRoboStatusMessage(){
 
-        byte gaps= 0b0000_0000;
+        byte gaps= 0;
 
-        byte falls= 0b0000_0000;
+        byte falls= 0;
 
         double[] irs= new double[IRSentorStatusId.values().length];
 
@@ -83,7 +83,7 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        byte gaps= 0b0011_1001;
+        byte gaps= 57;
 
         statusMessage.setGaps(gaps);
 
@@ -149,7 +149,7 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        byte falls= (byte)0b1011_1001;
+        byte falls= (byte)185;
 
         statusMessage.setFalls(falls);
 

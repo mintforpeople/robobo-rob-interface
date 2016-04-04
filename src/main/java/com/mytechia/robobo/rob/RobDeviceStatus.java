@@ -7,7 +7,8 @@
 package com.mytechia.robobo.rob;
 
 import java.util.Date;
-import java.util.Objects;
+
+
 
 public class RobDeviceStatus<T extends Enum<T>> {
 
@@ -39,7 +40,7 @@ public class RobDeviceStatus<T extends Enum<T>> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + this.id.hashCode();
         return hash;
     }
 
@@ -55,10 +56,9 @@ public class RobDeviceStatus<T extends Enum<T>> {
             return false;
         }
         final RobDeviceStatus<?> other = (RobDeviceStatus<?>) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        
+        return (this.id == other.id) || (this.id != null && this.id.equals(other.id));
+        
     }
 
 

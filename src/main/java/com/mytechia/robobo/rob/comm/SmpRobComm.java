@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,10 +44,11 @@ public class SmpRobComm implements IRobComm{
 
     protected  TimerTask timerTask= new ChecherLostMessages();
 
-    protected MessageProcessor messageProcessor= new MessageProcessor();
+    protected final MessageProcessor messageProcessor= new MessageProcessor();
 
     private Thread messageProcessorThread;
 
+    private int numberSequence=0;
 
 
     public void start(){
@@ -82,7 +82,9 @@ public class SmpRobComm implements IRobComm{
 
     public SmpRobComm(IBasicCommunicationChannel communicationChannel){
 
-        Objects.requireNonNull(communicationChannel, "The parameter communicationChannel is required");
+        if (communicationChannel == null) {
+            throw new NullPointerException("The parameter roboCom is required");
+        }
 
         this.communicationChannel= communicationChannel;
     }
@@ -90,9 +92,7 @@ public class SmpRobComm implements IRobComm{
 
     @Override
     public void setLEDColor(int ledId, int r, int g, int b) {
-
-        short[] ledColor = new short[3];
-
+        
         SetLEDColorMessage setLEDColorMessage = new SetLEDColorMessage((byte) ledId, (short)r, (short)g, (short)b);
         
         sendCommand(setLEDColorMessage);
@@ -187,8 +187,11 @@ public class SmpRobComm implements IRobComm{
 
         try {
 
-
+            roboCommand.setSequenceNumber(numberSequence);
+            numberSequence++;
+            
             communicationChannel.send(roboCommand);
+            
         } catch (CommunicationException ex) {
             LOGGER.error("Error sending command", ex);
         }

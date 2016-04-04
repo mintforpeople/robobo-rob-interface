@@ -51,13 +51,11 @@ public class SmpRobCommTest {
         IBasicCommunicationChannel basicCommunicationChannel= mock(IBasicCommunicationChannel.class);
 
         SmpRobComm smpRobComm= new SmpRobComm(basicCommunicationChannel);
-
-        int sequenceNumberSenTRoboCommand=34;
-
+        
         //Sending command
         RoboCommand roboCommand= spy(RoboCommand.class);
-        roboCommand.setSequenceNumber(sequenceNumberSenTRoboCommand);
         smpRobComm.sendCommand(roboCommand);
+        int sequenceNumberSenTRoboCommand=roboCommand.getSequenceNumber();
 
         //receiving Ack message
         byte errorCode = (byte) 0;

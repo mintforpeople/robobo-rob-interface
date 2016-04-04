@@ -14,7 +14,7 @@ import com.mytechia.robobo.util.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+
 
 import static com.mytechia.robobo.rob.BumpStatus.BumpStatusId;
 import static com.mytechia.robobo.rob.FallStatus.FallStatusId;
@@ -29,25 +29,27 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private BatteryStatus battery= new BatteryStatus();
 
-    private final List<ObstacleSensorStatus> obstacles = new ArrayList<>();
+    private final List<ObstacleSensorStatus> obstacles = new ArrayList<ObstacleSensorStatus>();
 
-    private final List<BumpStatus> bumps = new ArrayList<>();
+    private final List<BumpStatus> bumps = new ArrayList<BumpStatus>();
 
-    private final List<FallStatus> falls = new ArrayList<>();
+    private final List<FallStatus> falls = new ArrayList<FallStatus>();
 
-    private final List<GapStatus> gaps = new ArrayList<>();
+    private final List<GapStatus> gaps = new ArrayList<GapStatus>();
 
-    private final List<IRSensorStatus> irSensors = new ArrayList<>();
+    private final List<IRSensorStatus> irSensors = new ArrayList<IRSensorStatus>();
 
-    private final List<MotorStatus> motors = new ArrayList<>();
+    private final List<MotorStatus> motors = new ArrayList<MotorStatus>();
 
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
     
     
     
     public DefaultRob(IRobComm roboCom){
-
-        Objects.requireNonNull(roboCom, "The parameter roboCom is required");
+        
+        if(roboCom==null){
+            throw new NullPointerException("The parameter roboCom is required");
+        }
         
         initObstacles();
         
@@ -179,7 +181,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     
 
     private byte readBitAtPosition(byte value, int position) {
-        byte mask = 0b000_0001;
+        byte mask = 0x1;
 
         byte readedBit = (byte) ((value >> position) & mask);
 
@@ -330,32 +332,32 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     @Override
     public List<MotorStatus> getLastStatusMotors() {
-        return new ArrayList<>(this.motors);
+        return new ArrayList<MotorStatus>(this.motors);
     }
 
     @Override
     public List<IRSensorStatus> getLastStatusIRs() {
-        return new ArrayList<>(this.irSensors);
+        return new ArrayList<IRSensorStatus>(this.irSensors);
     }
 
     @Override
     public List<GapStatus> getLastGapsStatus() {
-        return new ArrayList<>(this.gaps);
+        return new ArrayList<GapStatus>(this.gaps);
     }
 
     @Override
     public List<FallStatus> getLastStatusFalls() {
-        return new ArrayList<>(this.falls);
+        return new ArrayList<FallStatus>(this.falls);
     }
 
     @Override
     public List<BumpStatus> getLastStatusBumps() {
-        return new ArrayList<>(this.bumps);
+        return new ArrayList<BumpStatus>(this.bumps);
     }
 
     @Override
     public List<ObstacleSensorStatus> getLastStatusObstacles() {
-        return new ArrayList<>(this.obstacles);
+        return new ArrayList<ObstacleSensorStatus>(this.obstacles);
     }
 
     @Override
