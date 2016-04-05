@@ -8,6 +8,7 @@ package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import static com.mytechia.robobo.rob.comm.RoboCommand.DEFAULT_MAX_NUMBER_TRANSMISSIONS;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -87,6 +88,7 @@ public class SmpRobCommTest {
         smpRobComm.sendCommand(roboCommand1);
         //Le asignamos un tiempo de transmision muy antiguo. Asi el mensaje debe ser reenviado.
         roboCommand1.setLastTransmissionTime(500L);
+        roboCommand1.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
 
         //Creando command2
         RoboCommand roboCommand2= spy(RoboCommand.class);
@@ -96,6 +98,7 @@ public class SmpRobCommTest {
         smpRobComm.sendCommand(roboCommand2);
         //Le asignamos un tiempo de transmision muy antiguo. Asi el mensaje debe ser reenviado.
         roboCommand2.setLastTransmissionTime(1000L);
+        roboCommand2.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
 
         //Creando command3
         RoboCommand roboCommand3= spy(RoboCommand.class);
@@ -104,6 +107,7 @@ public class SmpRobCommTest {
         smpRobComm.sendCommand(roboCommand3);
         //Le ponemos un tiempo de espera muy alto para que no sea reenviado
         roboCommand3.setLastTransmissionTime(Long.MAX_VALUE);
+        roboCommand3.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
 
         //Reseteamos el mock para no tener en cuenta las invocaciones
         //de los tres comandos

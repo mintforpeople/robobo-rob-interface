@@ -29,7 +29,7 @@ public abstract class RoboCommand extends  Command{
 
     protected long waitingTimeAck =DEFAULT_TIME_TO_WAIT;
 
-    protected int maxNumTransmissions=DEFAULT_MAX_NUMBER_TRANSMISSIONS;
+    protected int maxNumTransmissions=1;
 
     protected int numberTransmissions =0;
 
@@ -72,7 +72,7 @@ public abstract class RoboCommand extends  Command{
         this.waitingTimeAck = waitingTimeAck;
     }
 
-    public long getMaxNumTransmissions() {
+    public int getMaxNumTransmissions() {
         return maxNumTransmissions;
     }
 
@@ -110,7 +110,7 @@ public abstract class RoboCommand extends  Command{
     public String toSimpleString(){
 
         StringBuilder simpleStringBuilder= new StringBuilder();
-        simpleStringBuilder.append(this.getClass());
+        simpleStringBuilder.append(this.getClass().getSimpleName());
         simpleStringBuilder.append("[");
         simpleStringBuilder.append("type=").append(this.getCommandType());
         simpleStringBuilder.append(", sequenceNumer=").append(this.getSequenceNumber());
@@ -121,7 +121,7 @@ public abstract class RoboCommand extends  Command{
 
     public String toTransmittingString(){
         StringBuilder simpleStringBuilder= new StringBuilder();
-        simpleStringBuilder.append(this.getClass());
+        simpleStringBuilder.append(this.getClass().getSimpleName());
         simpleStringBuilder.append("[");
         simpleStringBuilder.append("type=").append(this.getCommandType());
         simpleStringBuilder.append(", sequenceNumer=").append(this.getSequenceNumber());

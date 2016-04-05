@@ -154,7 +154,7 @@ public class ConnectionRobTest {
             lostRoboCommand.setLastTransmissionTime(lastTransmissionTime);
 
             //Simulamos que hemos alcanzado el numero maximo de transmisiones
-            lostRoboCommand.numberTransmissions = DEFAULT_MAX_NUMBER_TRANSMISSIONS;
+            lostRoboCommand.numberTransmissions = lostRoboCommand.getMaxNumTransmissions();
 
             connectionRob.addSentRoboCommand(lostRoboCommand);
 
@@ -173,16 +173,18 @@ public class ConnectionRobTest {
 
         for (int i = 0; i < 10; i++) {
             RoboCommand roboCommand = createRoboCommand(i);
+            roboCommand.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
             connectionRob.addSentRoboCommand(roboCommand);
         }
 
-        int numResendCommands=3;
+        int numResendCommands=DEFAULT_MAX_NUMBER_TRANSMISSIONS;
 
         for (int i = 0; i < numResendCommands; i++) {
 
             //Un numero de secuencia que no coincida con cualquiera de los numeros secuencia de los
             //mensajes anteriores
             RoboCommand lostRoboCommand = createRoboCommand((30 + i));
+            lostRoboCommand.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
 
             long lastTransmissionTime = generateExcededWaitingTime(lostRoboCommand.getWaitingTimeAck());
             lostRoboCommand.setLastTransmissionTime(lastTransmissionTime);
@@ -229,7 +231,7 @@ public class ConnectionRobTest {
 
         //Simplemente definimos el numero maximo de transmisiones que tiene el mensaje.
         //Este paso es necesario porque se esta usando un mock
-        roboCommand.setMaxNumTransmissions(DEFAULT_MAX_NUMBER_TRANSMISSIONS);
+        roboCommand.setMaxNumTransmissions(roboCommand.getMaxNumTransmissions());
 
         return roboCommand;
 
