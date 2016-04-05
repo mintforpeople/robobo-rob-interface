@@ -18,6 +18,9 @@ import java.util.TimerTask;
 
 import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.logging.Level;
 
 
 /**
@@ -32,7 +35,7 @@ public class SmpRobComm implements IRobComm{
 
     private static final Logger LOGGER= LoggerFactory.getLogger(SmpRobComm.class);
 
-    public static final int TIME_CHECK_MESSAGE = 50;
+    public static final int TIME_CHECK_MESSAGE = 1000;
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
@@ -44,9 +47,7 @@ public class SmpRobComm implements IRobComm{
 
     protected  TimerTask timerTask= new ChecherLostMessages();
 
-    protected final MessageProcessor messageProcessor= new MessageProcessor();
-
-    private Thread messageProcessorThread;
+    private final MessageProcessor messageProcessor= new MessageProcessor();
 
     private int numberSequence=0;
 
@@ -55,11 +56,9 @@ public class SmpRobComm implements IRobComm{
 
         this.timer= new Timer();
 
-        this.timer.schedule(timerTask, TIME_CHECK_MESSAGE);
+        this.timer.schedule(timerTask, TIME_CHECK_MESSAGE, TIME_CHECK_MESSAGE);
 
-        messageProcessorThread=new Thread(messageProcessorThread);
-
-        messageProcessorThread.start();
+        messageProcessor.start();
 
     }
 
@@ -69,15 +68,20 @@ public class SmpRobComm implements IRobComm{
         if(this.timer!=null) {
             this.timer.cancel();
         }
-
-        if(communicationChannel!=null){
-
-        }
-
+        
         if(messageProcessor!=null){
             messageProcessor.interrupt();
         }
 
+        if(communicationChannel!=null){
+            if(communicationChannel instanceof Closeable){
+                try { 
+                    ((Closeable)communicationChannel).close();
+                } catch (IOException ex) {
+                    LOGGER.warn("Error try to close communication channel", ex);
+                }
+            }        
+        }
     }
 
     public SmpRobComm(IBasicCommunicationChannel communicationChannel){
@@ -219,7 +223,12 @@ public class SmpRobComm implements IRobComm{
     void processReceivedCommand(RoboCommand command){
 
         if(command.getCommandType()== AckMessage.commandType){
-            this.connectionRob.receivedAck((AckMessage)command);
+            boolean receivedAck=this.connectionRob.receivedAck((AckMessage)command);
+            
+            if(receivedAck){
+                LOGGER.debug("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
+            }
+            
             return;
         }
 
@@ -230,29 +239,30 @@ public class SmpRobComm implements IRobComm{
     }
 
 
-    class MessageProcessor extends Thread{
+    class MessageProcessor extends Thread {
 
         @Override
         public void run() {
 
             while (!this.isInterrupted()) {
-                handleReceivedCommand();
+                try {
+                    handleReceivedCommand();
+                } catch (CommunicationException ex) {
+                    LOGGER.error("Error receiving command", ex);
+                    return;
+                }
             }
         }
 
-
-
     }
 
-    void handleReceivedCommand() {
+    void handleReceivedCommand() throws CommunicationException {
 
         Command command=null;
 
-        try {
+      
             command = communicationChannel.receive();
-        } catch (CommunicationException e) {
-            LOGGER.error("Error receiving command", e);
-        }
+
 
         if(command!=null) {
             processReceivedCommand((RoboCommand)command);
