@@ -9,6 +9,7 @@ package com.mytechia.robobo.rob.comm;
 import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,6 @@ import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.logging.Level;
 
 
 /**
@@ -111,7 +111,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(double angVel1, double angle1, double angVel2, double angle2) {
+    public void moveMT(short angVel1, short angle1, short angVel2, short angle2) {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
         
@@ -120,7 +120,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(double angVel1, double angVel2, long time)  {
+    public void moveMT(short angVel1, short angVel2, long time)  {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
         
@@ -129,7 +129,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(double angVel, double angle) {
+    public void movePan(short angVel, short angle) {
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, angle, 0);
         
@@ -137,7 +137,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(double angVel, long time) {
+    public void movePan(short angVel, long time) {
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, time);
         
@@ -146,7 +146,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveTilt(double angVel, double angle) {
+    public void moveTilt(short angVel, short angle) {
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, angVel, angle, 0);
         
@@ -155,7 +155,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveTilt(double angVel, long time) {
+    public void moveTilt(short angVel, long time) {
         
         MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, angVel, 0, time);
 
@@ -245,18 +245,22 @@ public class SmpRobComm implements IRobComm{
         public void run() {
 
             while (!this.isInterrupted()) {
+                
                 try {
                     handleReceivedCommand();
-                } catch (CommunicationException ex) {
+                } catch(MessageFormatException ex){
+                    LOGGER.error("Error format command", ex);
+                }catch (CommunicationException ex) {
                     LOGGER.error("Error receiving command", ex);
                     return;
                 }
             }
+            
         }
 
     }
 
-    void handleReceivedCommand() throws CommunicationException {
+    void handleReceivedCommand() throws CommunicationException, MessageFormatException {
 
         Command command=null;
 

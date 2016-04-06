@@ -10,18 +10,18 @@ import com.mytechia.robobo.rob.ObstacleSensorStatus.ObstacleSensorStatusId;
 
 public class ObstacleSensorStatus extends RobDeviceStatus<ObstacleSensorStatusId> {
 
-    private double distance;
+    private short distance;
 
     public ObstacleSensorStatus(ObstacleSensorStatusId id) {
         super(id);
 
     }
 
-    public double getDistance() {
+    public short getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(short distance) {
         this.distance = distance;
     }
     

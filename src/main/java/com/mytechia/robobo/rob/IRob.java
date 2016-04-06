@@ -16,17 +16,17 @@ public interface IRob {
 
 	 void setLEDsMode(LEDsModeEnum mode);
 
-	 void moveMT(double angVel1, double angle1, double angVel2, double angle2);
+	 void moveMT(short angVel1, short angle1, short angVel2, short angle2);
 
-	 void moveMT(double angVel1, double angVel2, long time);
+	 void moveMT(short angVel1, short angVel2, long time);
 
-	 void movePan(double angVel, double angle);
+	 void movePan(short angVel, short angle);
 
-	 void movePan(double angVel, long time);
+	 void movePan(short angVel, long time);
 
-	 void moveTilt(double angVel, double angle);
+	 void moveTilt(short angVel, short angle);
 
-	 void moveTilt(double angVel, long time);
+	 void moveTilt(short angVel, long time);
 
 	 void resetPanTiltOffset();
 

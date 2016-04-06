@@ -35,17 +35,17 @@ public class DefaultRoboTest {
 
         byte falls= 0;
 
-        double[] irs= new double[IRSentorStatusId.values().length];
+        short[] irs= new short[IRSentorStatusId.values().length];
 
-        double[] obstacles= new double[ObstacleSensorStatusId.values().length];
+        short[] obstacles= new short[ObstacleSensorStatusId.values().length];
 
-        double[] bumps= new double[BumpStatusId.values().length];
+        short[] bumps= new short[BumpStatusId.values().length];
 
-        double[] motorVelocities= new double[MotorStatusId.values().length];
+        int[] motorVelocities= new int[MotorStatusId.values().length];
 
-        double[] motorAngles= new  double[MotorStatusId.values().length];
+        int[] motorAngles= new  int[MotorStatusId.values().length];
 
-        double[] motorVoltages= new double[MotorStatusId.values().length];
+        int[] motorVoltages= new int[MotorStatusId.values().length];
 
         int bateryLevel= 0;
 
@@ -112,16 +112,16 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        double[] irs=statusMessage.getIrs();
+        short[] irs=statusMessage.getIrs();
 
-        irs[2]= 2.87;
-        irs[5]= (double) 4567;
-        irs[7]= (double) 7.89;
+        irs[2]= 287;
+        irs[5]= 4567;
+        irs[7]= 789;
 
-        double[] expectedIRSDistance= new double[IRSentorStatusId.values().length];
-        expectedIRSDistance[2]= 2.87;
+        short[] expectedIRSDistance= new short[IRSentorStatusId.values().length];
+        expectedIRSDistance[2]= 287;
         expectedIRSDistance[5]= 4567;
-        expectedIRSDistance[7]=(double) 7.89;
+        expectedIRSDistance[7]=789;
 
 
         defaultRob.robStatus(statusMessage);
@@ -176,17 +176,17 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        double[] bumps=statusMessage.getBumps();
+        short[] bumps=statusMessage.getBumps();
         bumps[0]= 0;
-        bumps[1]= 0.1;
-        bumps[2]= 4.98;
-        bumps[3]= 6.87;
+        bumps[1]= 1;
+        bumps[2]= 498;
+        bumps[3]= 687;
 
-        double[] expectedBumpDistance= new double[BumpStatusId.values().length];
+        short[] expectedBumpDistance= new short[BumpStatusId.values().length];
         expectedBumpDistance[0]= 0;
-        expectedBumpDistance[1]= 0.1;
-        expectedBumpDistance[2]= 4.98;
-        expectedBumpDistance[3]= 6.87;
+        expectedBumpDistance[1]= 1;
+        expectedBumpDistance[2]= 498;
+        expectedBumpDistance[3]= 687;
 
 
         defaultRob.robStatus(statusMessage);
@@ -214,17 +214,17 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        double[] obstacles=statusMessage.getObstacles();
+        short[] obstacles=statusMessage.getObstacles();
         obstacles[0]= 1;
-        obstacles[2]= 2.87;
+        obstacles[2]= 287;
         obstacles[5]= 4567;
-        obstacles[6]= 7.89;
+        obstacles[6]= 789;
 
-        double[] expectedObstacleStatusDistance= new double[ObstacleSensorStatusId.values().length];
+        short[] expectedObstacleStatusDistance= new short[ObstacleSensorStatusId.values().length];
         expectedObstacleStatusDistance[0]= 1;
-        expectedObstacleStatusDistance[2]= 2.87;
+        expectedObstacleStatusDistance[2]= 287;
         expectedObstacleStatusDistance[5]= 4567;
-        expectedObstacleStatusDistance[6]= 7.89;
+        expectedObstacleStatusDistance[6]= 789;
 
         //Simulamos que recibimos el mensaje status
         defaultRob.robStatus(statusMessage);
@@ -273,41 +273,41 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        double[] motorAngles=statusMessage.getMotorAngles();
+        int[] motorAngles=statusMessage.getMotorAngles();
         motorAngles[0]= 1;
-        motorAngles[1]= 2.87;
+        motorAngles[1]= 287;
         motorAngles[2]= 4567;
-        motorAngles[3]= 7.89;
+        motorAngles[3]= 789;
 
-        double[] motorVelocities=statusMessage.getMotorVelocities();
+        int[] motorVelocities=statusMessage.getMotorVelocities();
         motorVelocities[0]= 1;
-        motorVelocities[1]= 9.76;
-        motorVelocities[2]= 2.87;
+        motorVelocities[1]= 976;
+        motorVelocities[2]= 287;
         motorVelocities[3]= 4567;
 
-        double[] motorVoltage=statusMessage.getMotorVoltages();
-        motorVoltage[0]= 1.65;
-        motorVoltage[1]= 3.76;
-        motorVoltage[2]= 1.87;
+        int[] motorVoltage=statusMessage.getMotorVoltages();
+        motorVoltage[0]= 165;
+        motorVoltage[1]= 376;
+        motorVoltage[2]= 187;
         motorVoltage[3]= 34;
 
-        double[] expectedVariationAngle= new double[MotorStatusId.values().length];
+        int[] expectedVariationAngle= new int[MotorStatusId.values().length];
         expectedVariationAngle[0]= 1;
-        expectedVariationAngle[1]= 2.87;
+        expectedVariationAngle[1]= 287;
         expectedVariationAngle[2]= 4567;
-        expectedVariationAngle[3]= 7.89;
+        expectedVariationAngle[3]= 789;
 
-        double[] expectedAngularVelocities= new double[MotorStatusId.values().length];
+        int[] expectedAngularVelocities= new int[MotorStatusId.values().length];
         expectedAngularVelocities[0]= 1;
-        expectedAngularVelocities[1]= 9.76;
-        expectedAngularVelocities[2]= 2.87;
+        expectedAngularVelocities[1]= 976;
+        expectedAngularVelocities[2]= 287;
         expectedAngularVelocities[3]= 4567;
 
 
-        double[] expectedVoltage= new double[MotorStatusId.values().length];
-        expectedVoltage[0]= 1.65;
-        expectedVoltage[1]= 3.76;
-        expectedVoltage[2]= 1.87;
+        int[] expectedVoltage= new int[MotorStatusId.values().length];
+        expectedVoltage[0]= 165;
+        expectedVoltage[1]= 376;
+        expectedVoltage[2]= 187;
         expectedVoltage[3]= 34;
 
         //Ejercitamos el SUT
@@ -382,10 +382,10 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel1=10.1;
-        double angle1=66;
-        double angVel2=67.1;
-        double angle2= 45;
+        short angVel1=101;
+        short angle1=66;
+        short angVel2=671;
+        short angle2= 45;
 
         defaultRob.moveMT(angVel1, angle1, angVel2, angle2);
 
@@ -404,8 +404,8 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel1=10.1;
-        double angVel2=67.1;
+        short angVel1=101;
+        short angVel2=671;
         long time=60;
 
         defaultRob.moveMT(angVel1, angVel2, time);
@@ -429,8 +429,8 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel=120.1;
-        double angle=76;
+        short angVel=120;
+        short angle=76;
 
         defaultRob.movePan(angVel, angle);
 
@@ -449,8 +449,8 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel=120.1;
-        double angle=76;
+        short angVel=120;
+        short angle=76;
 
         defaultRob.moveTilt(angVel, angle);
 
@@ -469,7 +469,7 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel=10.1;
+        short angVel=10;
         long time=45;
 
         defaultRob.movePan(angVel, time);
@@ -489,7 +489,7 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        double angVel=16.1;
+        short angVel=16;
         long time=45;
 
         defaultRob.moveTilt(angVel, time);

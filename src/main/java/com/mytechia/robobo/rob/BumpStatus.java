@@ -10,17 +10,17 @@ import com.mytechia.robobo.rob.BumpStatus.BumpStatusId;
 
 public class BumpStatus extends RobDeviceStatus<BumpStatusId> {
 
-    private double distance;
+    private short distance;
 
     public BumpStatus(BumpStatusId id) {
         super(id);
     }
 
-    public double getDistance() {
+    public short getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(short distance) {
         this.distance = distance;
     }
     

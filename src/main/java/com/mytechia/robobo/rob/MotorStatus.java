@@ -12,11 +12,11 @@ import com.mytechia.robobo.rob.MotorStatus.MotorStatusId;
 
 public class MotorStatus extends RobDeviceStatus<MotorStatusId> {
 
-    private double angularVelocity;
+    private int angularVelocity;
 
-    private double variationAngle;
+    private int variationAngle;
 
-    private double voltage;
+    private int voltage;
     
     
 
@@ -25,27 +25,27 @@ public class MotorStatus extends RobDeviceStatus<MotorStatusId> {
 
     }
 
-    public double getAngularVelocity() {
+    public int getAngularVelocity() {
         return angularVelocity;
     }
 
-    public double getVariationAngle() {
+    public int getVariationAngle() {
         return variationAngle;
     }
 
-    public double getVoltage() {
+    public int getVoltage() {
         return voltage;
     }
 
-    public void setAngularVelocity(double angularVelocity) {
+    public void setAngularVelocity(int angularVelocity) {
         this.angularVelocity = angularVelocity;
     }
 
-    public void setVariationAngle(double variationAngle) {
+    public void setVariationAngle(int variationAngle) {
         this.variationAngle = variationAngle;
     }
 
-    public void setVoltage(double voltage) {
+    public void setVoltage(int voltage) {
         this.voltage = voltage;
     }
     

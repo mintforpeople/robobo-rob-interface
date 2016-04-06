@@ -60,7 +60,7 @@ public class SmpRobCommTest {
 
         //receiving Ack message
         byte errorCode = (byte) 0;
-        AckMessage ackMessage= new AckMessage(errorCode);
+        AckMessage ackMessage= new AckMessage();
         ackMessage.setSequenceNumber(sequenceNumberSenTRoboCommand);
 
         when(basicCommunicationChannel.receive()).thenReturn(ackMessage);

@@ -161,7 +161,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private void updateIRSensorStatus(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        double[] irs = robStatusMessage.getIrs();
+        short[] irs = robStatusMessage.getIrs();
 
         if ((irs == null) || (irs.length == 0)) {
             return;
@@ -209,7 +209,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private void updateBumps(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        double[] bumpsValues = robStatusMessage.getBumps();
+        short[] bumpsValues = robStatusMessage.getBumps();
 
         if ((bumpsValues == null) || (bumpsValues.length == 0)) {
             return;
@@ -229,7 +229,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private void updateObstacles(RobStatusMessage robStatusMessage, Date updateDate) {
         
-        double[] obstablesValues = robStatusMessage.getObstacles();
+        short[] obstablesValues = robStatusMessage.getObstacles();
         
         if ((obstablesValues == null) || (obstablesValues.length == 0)) {
             return;
@@ -249,11 +249,11 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private void updateMotorStatus(RobStatusMessage roStatusMessage, Date updateDate) {
 
-        double[] motorAngle = roStatusMessage.getMotorAngles();
+        int[] motorAngle = roStatusMessage.getMotorAngles();
 
-        double[] motorVelocities = roStatusMessage.getMotorVelocities();
+        int[] motorVelocities = roStatusMessage.getMotorVelocities();
 
-        double[] motorVoltages = roStatusMessage.getMotorVoltages();
+        int[] motorVoltages = roStatusMessage.getMotorVoltages();
 
         for (int i = 0; i < MotorStatusId.values().length; i++) {
 
@@ -296,32 +296,32 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     @Override
-    public void moveMT(double angVel1, double angle1, double angVel2, double angle2) {
+    public void moveMT(short angVel1, short angle1, short angVel2, short angle2) {
         this.roboCom.moveMT(angVel1, angle1, angVel2, angle2);
     }
 
     @Override
-    public void moveMT(double angVel1, double angVel2, long time) {
+    public void moveMT(short angVel1, short angVel2, long time) {
         this.roboCom.moveMT(angVel1, angVel2, time);
     }
 
     @Override
-    public void movePan(double angVel, double angle) {
+    public void movePan(short angVel, short angle) {
         this.roboCom.movePan(angVel, angle);
     }
 
     @Override
-    public void movePan(double angVel, long time) {
+    public void movePan(short angVel, long time) {
         this.roboCom.movePan(angVel, time);
     }
 
     @Override
-    public void moveTilt(double angVel, double angle) {
+    public void moveTilt(short angVel, short angle) {
         this.roboCom.moveTilt(angVel, angle);
     }
 
     @Override
-    public void moveTilt(double angVel, long time) {
+    public void moveTilt(short angVel, long time) {
         this.roboCom.moveTilt(angVel, time);
     }
 

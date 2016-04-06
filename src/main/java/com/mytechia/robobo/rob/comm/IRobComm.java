@@ -42,7 +42,7 @@ public interface IRobComm {
      * @param angVel2 angular velocity of the motor 2
      * @param angle2 total angle of movement of the motor 2
      */
-    public void moveMT(double angVel1, double angle1, double angVel2, double angle2) ;
+    public void moveMT(short angVel1, short angle1, short angVel2, short angle2) ;
 
     /** Sends a move command to the two motors in charge of wheel movement.
      *
@@ -50,7 +50,7 @@ public interface IRobComm {
      * @param angVel2 angular velocity o the motor 2
      * @param time total time duration of the movement
      */
-    public void moveMT(double angVel1, double angVel2, long time);
+    public void moveMT(short angVel1, short angVel2, long time);
 
 
 
@@ -61,14 +61,14 @@ public interface IRobComm {
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
      */
-    public void movePan(double angVel, double angle);
+    public void movePan(short angVel, short angle);
 
     /** Sends a move command to the motor in charge of the smartphone PAN movement.
      *
      * @param angVel angular velocity of the motor
      * @param time total time duration of the movement
      */
-    public void movePan(double angVel, long time);
+    public void movePan(short angVel, long time);
 
 
     /** Sends a move command to the motor in charge of the smartphone TILT movement.
@@ -76,14 +76,14 @@ public interface IRobComm {
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
      */
-    public void moveTilt(double angVel, double angle);
+    public void moveTilt(short angVel, short angle);
 
     /** Sends a move command to the motor in charge of the smartphone TILT movement.
      *
      * @param angVel angular velocity of the motor
      * @param time total time duration of the movement
      */
-    public void moveTilt(double angVel, long time);
+    public void moveTilt(short angVel, long time);
 
 
     /** Resets the pan & tilt offset...

@@ -12,18 +12,19 @@ public class RobStatusMessageTest {
 
 
     @Test
+   
     public void testCodeMessageData() throws Exception {
 
         RobStatusMessage originalMessage =
                 new RobStatusMessage(
                         (byte)4,
                         (byte)2,
-                        new double[] {1,2,3,4,5,6,7,8,9},
-                        new double[] {1,2,3,4,5,6, 7},
-                        new double[] {1,2,3,4},
-                        new double[] {1,2,3,4},
-                        new double[] {1,2,3,4},
-                        new double[] {1,2,3,4}, 10, false);
+                        new short[] {1,2,3,4,5,6,7,8,9},
+                        new short[] {1,2,3,4,5,6, 7},
+                        new short[] {1,2,3,4},
+                        new int[] {1,2,3,4},
+                        new int[] {1,2,3,4},
+                        new int[] {1,2,3,4}, 10, false);
 
         final byte[] messageData = originalMessage.codeMessage();
 

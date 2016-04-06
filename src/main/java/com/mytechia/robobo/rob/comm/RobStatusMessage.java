@@ -43,17 +43,17 @@ public class RobStatusMessage extends RoboCommand {
 
     private byte falls;
 
-    private double[] irs;               // 8 * double
+    private short[] irs;               // 9 * short
 
-    private double[] obstacles;         // 8 * double
+    private short[] obstacles;         // 8 * short
 
-    private double[] bumps;             // 4 * double
+    private short[] bumps;             // 4 * short
 
-    private double[] motorVelocities;   // 4 * double
+    private int[] motorVelocities;   // 4 * (4 bytes)
 
-    private double[] motorAngles;       // 4 * double
+    private int[] motorAngles;       // 4 * (4 bytes)
 
-    private double[] motorVoltages;     // 4 * double
+    private int[] motorVoltages;     // 4 * (4 bytes)
 
     private int baterryLevel;
 
@@ -62,12 +62,12 @@ public class RobStatusMessage extends RoboCommand {
     public RobStatusMessage(
             byte gaps,
             byte falls,
-            double[] irs,
-            double[] obstacles,
-            double[] bumps,
-            double[] motorVelocities,
-            double[] motorAngles,
-            double[] motorVoltages,
+            short[] irs,
+            short[] obstacles,
+            short[] bumps,
+            int[] motorVelocities,
+            int[] motorAngles,
+            int[] motorVoltages,
             int baterryLevel,
             boolean dockConnection) {
 
@@ -89,6 +89,26 @@ public class RobStatusMessage extends RoboCommand {
     public RobStatusMessage(byte[] messageData) throws MessageFormatException {
         super(messageData);
     }
+    
+    private short[] transformToShortArray(double[] arrays){
+        short[] shortValues= new short[arrays.length];
+        for (int i = 0; i < arrays.length; i++) {
+            shortValues[i]= (short) arrays[i];
+        }
+        
+        return shortValues;
+        
+    }
+    
+    private int[] transformToIntArray(double[] arrays){
+        int[] shortValues= new int[arrays.length];
+        for (int i = 0; i < arrays.length; i++) {
+            shortValues[i]= (int) arrays[i];
+        }
+        
+        return shortValues;
+        
+    }
 
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
@@ -97,18 +117,18 @@ public class RobStatusMessage extends RoboCommand {
         messageCoder.writeByte(this.gaps, GAPS);
 
         messageCoder.writeByte(this.falls, FALLS);
+        
+        messageCoder.writeShortArray(this.irs, IRS);
 
-        messageCoder.writeDoubleArray(this.irs, IRS);
+        messageCoder.writeShortArray(this.obstacles, OBSTACLES);
 
-        messageCoder.writeDoubleArray(this.obstacles, OBSTACLES);
+        messageCoder.writeShortArray(this.bumps, BUMPS);
 
-        messageCoder.writeDoubleArray(this.bumps, BUMPS);
+        messageCoder.writeIntArray(this.motorVelocities, MOTOR_VELOCITIES);
 
-        messageCoder.writeDoubleArray(this.motorVelocities, MOTOR_VELOCITIES);
+        messageCoder.writeIntArray(this.motorAngles, MOTOR_ANGLES);
 
-        messageCoder.writeDoubleArray(this.motorAngles, MOTOR_ANGLES);
-
-        messageCoder.writeDoubleArray(this.motorVoltages, MOTOR_VOLTAGES);
+        messageCoder.writeIntArray(this.motorVoltages, MOTOR_VOLTAGES);
 
         messageCoder.writeInt(this.baterryLevel, BATERRY_LEVEL);
 
@@ -116,6 +136,7 @@ public class RobStatusMessage extends RoboCommand {
         messageCoder.writeByte(byteDockConnection, DOCK_CONNECTION);
 
         return messageCoder.getBytes();
+        
     }
 
     @Override
@@ -126,23 +147,28 @@ public class RobStatusMessage extends RoboCommand {
 
         this.falls = messageDecoder.readByte(FALLS);
 
-        this.irs = messageDecoder.readDoubleArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
+        this.irs = messageDecoder.readShortArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
+  
 
-        this.obstacles = messageDecoder.readDoubleArray(OBSTACLES, ObstacleSensorStatus.ObstacleSensorStatusId.values().length);
+        this.obstacles = messageDecoder.readShortArray(OBSTACLES, ObstacleSensorStatus.ObstacleSensorStatusId.values().length);
+     
 
-        this.bumps = messageDecoder.readDoubleArray(BUMPS, BumpStatus.BumpStatusId.values().length);
+        this.bumps = messageDecoder.readShortArray(BUMPS, BumpStatus.BumpStatusId.values().length);
+      
 
-        this.motorVelocities = messageDecoder.readDoubleArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
+        this.motorVelocities = messageDecoder.readIntArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
+  
 
-        this.motorAngles = messageDecoder.readDoubleArray(MOTOR_ANGLES, MotorStatus.MotorStatusId.values().length);
-
-        this.motorVoltages = messageDecoder.readDoubleArray(MOTOR_VOLTAGES, MotorStatus.MotorStatusId.values().length);
+        this.motorAngles = messageDecoder.readIntArray(MOTOR_ANGLES, MotorStatus.MotorStatusId.values().length);
+        
+        this.motorVoltages = messageDecoder.readIntArray(MOTOR_VOLTAGES, MotorStatus.MotorStatusId.values().length);
+    
 
         this.baterryLevel = messageDecoder.readInt(BATERRY_LEVEL);
 
         byte byteDocConnection = messageDecoder.readByte(DOCK_CONNECTION);
 
-        this.dockConnection= (byteDocConnection==1);
+        this.dockConnection = (byteDocConnection == 1);
 
         return messageDecoder.getArrayIndex();
     }
@@ -187,27 +213,27 @@ public class RobStatusMessage extends RoboCommand {
         return falls;
     }
 
-    public double[] getIrs() {
+    public short[] getIrs() {
         return irs;
     }
 
-    public double[] getObstacles() {
+    public short[] getObstacles() {
         return obstacles;
     }
 
-    public double[] getBumps() {
+    public short[] getBumps() {
         return bumps;
     }
 
-    public double[] getMotorVelocities() {
+    public int[] getMotorVelocities() {
         return motorVelocities;
     }
 
-    public double[] getMotorAngles() {
+    public int[] getMotorAngles() {
         return motorAngles;
     }
 
-    public double[] getMotorVoltages() {
+    public int[] getMotorVoltages() {
         return motorVoltages;
     }
 

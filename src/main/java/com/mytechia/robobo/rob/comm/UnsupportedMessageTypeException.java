@@ -7,11 +7,7 @@
 package com.mytechia.robobo.rob.comm;
 
 
-
-
 /**
- * Concrete implementations of this interfaces containts the logic to
- * process different types of messages
  *
  * @author Julio Alberto Gomez Fernandez
  */

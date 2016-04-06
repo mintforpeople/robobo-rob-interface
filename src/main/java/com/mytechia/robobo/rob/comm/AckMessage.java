@@ -22,13 +22,10 @@ import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
  */
 public class AckMessage extends RoboCommand {
 
-    private byte error;
 
-
-    public AckMessage(byte error) {
+    public AckMessage() {
         super();
         this.setCommandType(AckMessage.commandType);
-        this.error = error;
     }
 
 
@@ -40,35 +37,17 @@ public class AckMessage extends RoboCommand {
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeByte(this.error, "error");
-
         return messageCoder.getBytes();
     }
 
     @Override
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
+        
         MessageDecoder messageDecoder = this.getMessageDecoder();
-
-        this.error = messageDecoder.readByte("error");
 
         return messageDecoder.getArrayIndex();
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        AckMessage that = (AckMessage) o;
-
-        return error == that.error;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) error;
-    }
 }

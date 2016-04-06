@@ -37,7 +37,7 @@ public class ConnectionRobTest {
             connectionRob.addSentRoboCommand(roboCommand);
         }
 
-        AckMessage ackMessage= new AckMessage((byte)0);
+        AckMessage ackMessage= new AckMessage();
         ackMessage.setSequenceNumber(4);
 
         boolean receivedAck=connectionRob.receivedAck(ackMessage);
@@ -58,7 +58,7 @@ public class ConnectionRobTest {
             connectionRob.addSentRoboCommand(roboCommand);
         }
 
-        AckMessage ackMessage= new AckMessage((byte)0);
+        AckMessage ackMessage= new AckMessage();
         ackMessage.setSequenceNumber(20);
 
         boolean notReceivedAck=connectionRob.receivedAck(ackMessage);
@@ -79,7 +79,7 @@ public class ConnectionRobTest {
             connectionRob.addSentRoboCommand(roboCommand);
         }
 
-        AckMessage ackMessage= new AckMessage((byte)0);
+        AckMessage ackMessage= new AckMessage();
         ackMessage.setSequenceNumber(5);
 
         connectionRob.receivedAck(ackMessage);

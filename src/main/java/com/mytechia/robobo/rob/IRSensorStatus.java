@@ -10,7 +10,7 @@ import com.mytechia.robobo.rob.IRSensorStatus.IRSentorStatusId;
 
 public class IRSensorStatus extends RobDeviceStatus<IRSentorStatusId> {
 
-    private double distance;
+    private short distance;
 
 
     public IRSensorStatus(IRSentorStatusId id) {
@@ -19,11 +19,11 @@ public class IRSensorStatus extends RobDeviceStatus<IRSentorStatusId> {
 
 
 
-    public double getDistance() {
+    public short getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(short distance) {
         this.distance = distance;
     }
     
