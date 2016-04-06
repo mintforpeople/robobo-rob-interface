@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public abstract class RoboCommand extends  Command{
 
-    public static final long DEFAULT_TIME_TO_WAIT=100;//20 ms
+    public static final long DEFAULT_TIME_TO_WAIT=2000;//20 ms
 
     public static final int DEFAULT_MAX_NUMBER_TRANSMISSIONS =3;
 
@@ -34,6 +34,8 @@ public abstract class RoboCommand extends  Command{
     protected int numberTransmissions =0;
 
     private  final SimpleDateFormat TRANSMISSION_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+    
+    private  static final CommandUtil COMMAND_UTIL= new CommandUtil();
 
 
     public RoboCommand() {
@@ -88,6 +90,11 @@ public abstract class RoboCommand extends  Command{
         numberTransmissions++;
     }
 
+    
+    public static int decodeDataFieldSize(byte[] messageHeaderData) throws MessageFormatException{
+        COMMAND_UTIL.decodeMessageHead(messageHeaderData);
+        return COMMAND_UTIL.getDataFieldSize();
+    }
 
     boolean exceededWaitingTimeAck() {
 
@@ -133,6 +140,21 @@ public abstract class RoboCommand extends  Command{
         simpleStringBuilder.append("]");
 
         return simpleStringBuilder.toString();
+    }
+    
+    private static class CommandUtil extends Command{
+
+        @Override
+        protected int decodeMessageData(byte[] bytes, int initIndex) throws MessageFormatException {
+            throw new UnsupportedOperationException("Not supported yet."); 
+        }
+        
+        
+        @Override
+        public void decodeMessageHead(byte[] messageHeaderData) throws MessageFormatException{
+                super.decodeMessageHead(messageHeaderData);
+        }
+        
     }
 
 
