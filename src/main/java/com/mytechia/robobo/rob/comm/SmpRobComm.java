@@ -7,6 +7,7 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.Command;
+import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
@@ -50,6 +51,11 @@ public class SmpRobComm implements IRobComm{
     private final MessageProcessor messageProcessor= new MessageProcessor();
 
     private int numberSequence=0;
+    
+    private final byte[] buffer= new byte[Command.MAX_MESSAGE_SIZE];
+    
+    private final StreamProcessor bluetoothStreamProcessor;
+    
 
 
     public void start(){
@@ -84,13 +90,19 @@ public class SmpRobComm implements IRobComm{
         }
     }
 
-    public SmpRobComm(IBasicCommunicationChannel communicationChannel){
+    public SmpRobComm(IBasicCommunicationChannel communicationChannel, MessageFactory messageFactory){
 
         if (communicationChannel == null) {
             throw new NullPointerException("The parameter roboCom is required");
         }
 
+        if(messageFactory==null){
+            throw new NullPointerException("The parameter messageFactory is required");
+        }
+        
         this.communicationChannel= communicationChannel;
+        
+        this.bluetoothStreamProcessor= new StreamProcessor(messageFactory);
     }
     
 
@@ -262,15 +274,20 @@ public class SmpRobComm implements IRobComm{
 
     void handleReceivedCommand() throws CommunicationException, MessageFormatException {
 
-        Command command=null;
-
-      
-            command = communicationChannel.receive();
-
-
-        if(command!=null) {
-            processReceivedCommand((RoboCommand)command);
+        int readedBytes=communicationChannel.receive(buffer);
+        
+        this.bluetoothStreamProcessor.push(buffer, 0, readedBytes);
+        
+        List<RoboCommand> roboCommands = this.bluetoothStreamProcessor.process();
+        
+        if(roboCommands==null){
+            return;
         }
+        
+        for (RoboCommand roboCommand : roboCommands) {
+            processReceivedCommand(roboCommand);
+        }
+        
 
     }
 

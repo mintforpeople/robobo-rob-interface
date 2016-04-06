@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Julio Alberto Gomez Fernandez
  */
-public class BluetoothStreamProcessorTest {
+public class StreamProcessorTest {
     
     @Before
     public void initTest(){
@@ -30,7 +31,7 @@ public class BluetoothStreamProcessorTest {
         
         int sequenceNumber = 56;
         
-        BluetoothStreamProcessor arrayByteQueueProcessor= new BluetoothStreamProcessor(new RoboCommandFactory());
+        StreamProcessor arrayByteQueueProcessor= new StreamProcessor(new RoboCommandFactory());
         
         AckMessage ackMessage= new AckMessage();
         ackMessage.setSequenceNumber(sequenceNumber);
@@ -51,7 +52,7 @@ public class BluetoothStreamProcessorTest {
     @Test
     public void discardIncorrectRobStatusMessage() throws MessageFormatException, FullByteQueueException{
         
-        BluetoothStreamProcessor bluetoothStreamProcessor = new BluetoothStreamProcessor(new RoboCommandFactory());
+        StreamProcessor bluetoothStreamProcessor = new StreamProcessor(new RoboCommandFactory());
 
         RobStatusMessage message1
                 = new RobStatusMessage((byte) 4, (byte) 2,
@@ -77,7 +78,7 @@ public class BluetoothStreamProcessorTest {
     @Test
     public void severalRobStatusMessageMustReaded() throws MessageFormatException, FullByteQueueException{
         
-       BluetoothStreamProcessor bluetoothStreamProcessor = new BluetoothStreamProcessor(new RoboCommandFactory());
+       StreamProcessor bluetoothStreamProcessor = new StreamProcessor(new RoboCommandFactory());
         
 
         RobStatusMessage message1
@@ -124,7 +125,7 @@ public class BluetoothStreamProcessorTest {
     @Test
     public void dividedRobStatusMessageMustReaded() throws MessageFormatException, FullByteQueueException {
 
-        BluetoothStreamProcessor arrayByteQueueProcessor = new BluetoothStreamProcessor(new RoboCommandFactory());
+        StreamProcessor arrayByteQueueProcessor = new StreamProcessor(new RoboCommandFactory());
 
         RobStatusMessage originalMessage
                 = new RobStatusMessage((byte) 4, (byte) 2,

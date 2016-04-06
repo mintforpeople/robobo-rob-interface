@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Julio Alberto Gomez Fernandez
  */
-public class BluetoothStreamProcessor {
+public class StreamProcessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BluetoothStreamProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StreamProcessor.class);
 
     private final ArrayByteQueue dataQueue;
 
@@ -36,7 +36,7 @@ public class BluetoothStreamProcessor {
     private final MessageFactory messageFactory;
     
     
-    public BluetoothStreamProcessor(MessageFactory messageFactory) {
+    public StreamProcessor(MessageFactory messageFactory) {
         
         if (messageFactory == null) {
             throw new NullPointerException("The parameter messageFactory is required");

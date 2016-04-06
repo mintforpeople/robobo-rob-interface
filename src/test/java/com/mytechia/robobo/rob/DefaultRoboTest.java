@@ -6,6 +6,7 @@
  */
 package com.mytechia.robobo.rob;
 
+import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.robobo.rob.comm.*;
 import com.mytechia.robobo.util.Color;
@@ -71,7 +72,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         return new DefaultRob(smpRoboCom);
     }
@@ -333,7 +334,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -356,7 +357,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -378,7 +379,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -400,7 +401,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -425,7 +426,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -445,7 +446,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -465,7 +466,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -485,7 +486,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
@@ -505,7 +506,7 @@ public class DefaultRoboTest {
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel);
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
