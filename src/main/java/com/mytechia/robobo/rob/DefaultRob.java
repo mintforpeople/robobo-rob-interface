@@ -6,24 +6,27 @@
  */
 package com.mytechia.robobo.rob;
 
-import com.mytechia.robobo.rob.comm.IRobComm;
-import com.mytechia.robobo.rob.comm.IRobCommStatusListener;
-import com.mytechia.robobo.rob.comm.RobStatusMessage;
-import com.mytechia.robobo.util.Color;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-
 import static com.mytechia.robobo.rob.BumpStatus.BumpStatusId;
 import static com.mytechia.robobo.rob.FallStatus.FallStatusId;
 import static com.mytechia.robobo.rob.GapStatus.GapStatusId;
 import static com.mytechia.robobo.rob.IRSensorStatus.IRSentorStatusId;
 import static com.mytechia.robobo.rob.MotorStatus.MotorStatusId;
 import static com.mytechia.robobo.rob.ObstacleSensorStatus.ObstacleSensorStatusId;
+import com.mytechia.robobo.rob.comm.IRobComm;
+import com.mytechia.robobo.rob.comm.IRobCommStatusListener;
+import com.mytechia.robobo.rob.comm.RobStatusMessage;
+import com.mytechia.robobo.util.Color;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class DefaultRob implements IRobCommStatusListener, IRob {
+    
+    private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
     private IRobComm roboCom;
 
@@ -64,6 +67,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         initMotors();
 
         this.roboCom = roboCom;
+        
+        this.roboCom.addRobStatusListener(this);
         
         
     }
@@ -112,6 +117,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     @Override
     public void robStatus(RobStatusMessage robStatusMessage) {
+        
+        LOGGER.trace("Received robStatusMessage");
         
         Date updateDate= new Date(System.currentTimeMillis());
 
@@ -296,32 +303,32 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     @Override
-    public void moveMT(short angVel1, short angle1, short angVel2, short angle2) {
+    public void moveMT(int angVel1, int angle1, int angVel2, int angle2) {
         this.roboCom.moveMT(angVel1, angle1, angVel2, angle2);
     }
 
     @Override
-    public void moveMT(short angVel1, short angVel2, long time) {
+    public void moveMT(int angVel1, int angVel2, long time) {
         this.roboCom.moveMT(angVel1, angVel2, time);
     }
 
     @Override
-    public void movePan(short angVel, short angle) {
+    public void movePan(int angVel, int angle) {
         this.roboCom.movePan(angVel, angle);
     }
 
     @Override
-    public void movePan(short angVel, long time) {
+    public void movePan(int angVel, long time) {
         this.roboCom.movePan(angVel, time);
     }
 
     @Override
-    public void moveTilt(short angVel, short angle) {
+    public void moveTilt(int angVel, int angle) {
         this.roboCom.moveTilt(angVel, angle);
     }
 
     @Override
-    public void moveTilt(short angVel, long time) {
+    public void moveTilt(int angVel, long time) {
         this.roboCom.moveTilt(angVel, time);
     }
 

@@ -475,7 +475,7 @@ public class DefaultRoboTest {
 
         defaultRob.movePan(angVel, time);
 
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, time);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, (int) time);
 
         verify(communicationChannel).send(movePanTiltMessage);
 
@@ -495,7 +495,7 @@ public class DefaultRoboTest {
 
         defaultRob.moveTilt(angVel, time);
 
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, angVel, 0, time);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, angVel, 0, (int) time);
 
         verify(communicationChannel).send(movePanTiltMessage);
 

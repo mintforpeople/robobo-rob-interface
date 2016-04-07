@@ -12,7 +12,6 @@ package com.mytechia.robobo.rob.comm;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-
 import static com.mytechia.robobo.rob.comm.MessageType.SetRobStatusPeriodMessage;
 
 /**

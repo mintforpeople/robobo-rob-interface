@@ -52,7 +52,7 @@ public class SmpRobComm implements IRobComm{
 
     private int numberSequence=0;
     
-    private final byte[] buffer= new byte[Command.MAX_MESSAGE_SIZE];
+
     
     private final StreamProcessor bluetoothStreamProcessor;
     
@@ -123,7 +123,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(short angVel1, short angle1, short angVel2, short angle2) {
+    public void moveMT(int angVel1, int angle1, int angVel2, int angle2) {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
         
@@ -132,7 +132,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(short angVel1, short angVel2, long time)  {
+    public void moveMT(int angVel1, int angVel2, long time)  {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
         
@@ -141,7 +141,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(short angVel, short angle) {
+    public void movePan(int angVel, int angle) {
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, angle, 0);
         
@@ -149,16 +149,16 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(short angVel, long time) {
+    public void movePan(int angVel, long time) {
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, time);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, (int) time);
         
         sendCommand(movePanTiltMessage);
         
     }
 
     @Override
-    public void moveTilt(short angVel, short angle) {
+    public void moveTilt(int angVel, int angle) {
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, angVel, angle, 0);
         
@@ -167,9 +167,9 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveTilt(short angVel, long time) {
+    public void moveTilt(int angVel, long time) {
         
-        MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, angVel, 0, time);
+        MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, angVel, 0, (int) time);
 
         sendCommand(movePanTiltMessage);
         
@@ -186,10 +186,12 @@ public class SmpRobComm implements IRobComm{
     }
 
 
+    @Override
     public void addRobStatusListener(IRobCommStatusListener rsListener) {
         dispatcherRobCommStatusListener.subscribeToRobCommStatus(rsListener);
     }
     
+    @Override
     public void removeRobStatusListener(IRobCommStatusListener rsListener){
         dispatcherRobCommStatusListener.unsubscribeFromRobCommStatus(rsListener);
     }
@@ -238,7 +240,12 @@ public class SmpRobComm implements IRobComm{
             boolean receivedAck=this.connectionRob.receivedAck((AckMessage)command);
             
             if(receivedAck){
-                LOGGER.debug("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
+                AckMessage ackMessage= (AckMessage) command;
+                if(ackMessage.getErrorCode()!=0){
+                    LOGGER.debug("Received Ack[sequenceNumber={}, error={}]", command.getSequenceNumber(), command.getErrorCode());
+                }else{
+                    LOGGER.debug("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
+                }
             }
             
             return;
@@ -246,8 +253,11 @@ public class SmpRobComm implements IRobComm{
 
         if(command.getCommandType()== RobStatusMessage.commandType){
             dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
+            return;
         }
 
+        LOGGER.debug("Received Command[sequenceNumber={}]. This command is not processed.", command.getSequenceNumber());
+        
     }
 
 
@@ -274,13 +284,15 @@ public class SmpRobComm implements IRobComm{
 
     void handleReceivedCommand() throws CommunicationException, MessageFormatException {
 
+        byte[] buffer= new byte[Command.MAX_MESSAGE_SIZE];
+        
         int readedBytes=communicationChannel.receive(buffer);
         
         this.bluetoothStreamProcessor.push(buffer, 0, readedBytes);
         
         List<RoboCommand> roboCommands = this.bluetoothStreamProcessor.process();
         
-        if(roboCommands==null){
+        if((roboCommands==null) || (roboCommands.isEmpty())){
             return;
         }
         

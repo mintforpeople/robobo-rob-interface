@@ -26,6 +26,35 @@ public class StreamProcessorTest {
     public void initTest(){
     }
     
+    
+        @Test
+    public void dividedTwoPartsAckMessageMustBeReaded() throws MessageFormatException, FullByteQueueException{
+        
+        int sequenceNumber = 56;
+        
+        StreamProcessor arrayByteQueueProcessor= new StreamProcessor(new RoboCommandFactory());
+        
+        AckMessage ackMessage= new AckMessage();
+        ackMessage.setSequenceNumber(sequenceNumber);
+        
+        byte[] codedAckMessage=ackMessage.codeMessage();
+        
+        arrayByteQueueProcessor.push(codedAckMessage, 0, 1);
+        
+        arrayByteQueueProcessor.push(codedAckMessage, 1, codedAckMessage.length-1);
+        
+        List<RoboCommand> roboCommands = arrayByteQueueProcessor.process();
+        
+        RoboCommand roboCommand = roboCommands.get(0);
+        
+        assertTrue(roboCommand instanceof AckMessage);
+        
+        assertTrue(ackMessage.getSequenceNumber()==sequenceNumber);
+
+        
+    }
+    
+    
     @Test
     public void ackMessageMustBeReaded() throws MessageFormatException, FullByteQueueException{
         

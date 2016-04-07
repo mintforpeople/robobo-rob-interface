@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public abstract class RoboCommand extends  Command{
 
-    public static final long DEFAULT_TIME_TO_WAIT=2000;//20 ms
+    public static final long DEFAULT_TIME_TO_WAIT=10000;//20 ms
 
     public static final int DEFAULT_MAX_NUMBER_TRANSMISSIONS =3;
 

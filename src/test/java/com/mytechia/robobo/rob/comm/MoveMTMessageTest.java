@@ -15,10 +15,10 @@ public class MoveMTMessageTest {
 
         MoveMTMessage originalMessage =
                 new MoveMTMessage(
-                        2.1,
-                        45.7,
-                        1.1,
-                        -30.2,
+                        2,
+                        45,
+                        1,
+                        -30,
                         405);
 
         final byte[] messageData = originalMessage.codeMessage();

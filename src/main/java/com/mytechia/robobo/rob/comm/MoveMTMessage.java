@@ -22,22 +22,22 @@ import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
  */
 public class MoveMTMessage extends RoboCommand {
 
-    private double angVel1;
+    private int angVel1;
 
-    private double angle1;
+    private int angle1;
 
-    private double angVel2;
+    private int angVel2;
 
-    private double angle2;
+    private int angle2;
 
     private long time;
 
 
     public MoveMTMessage(
-            double angVel1,
-            double angle1,
-            double angVel2,
-            double angle2,
+            int angVel1,
+            int angle1,
+            int angVel2,
+            int angle2,
             long time) {
 
         super();
@@ -62,15 +62,15 @@ public class MoveMTMessage extends RoboCommand {
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeDouble(this.angVel1, "angVel1");
+        messageCoder.writeInt(this.angVel1, "angVel1");
 
-        messageCoder.writeDouble(this.angle1, "angle1");
+        messageCoder.writeInt(this.angle1, "angle1");
 
-        messageCoder.writeDouble(this.angVel2, "angVel2");
+        messageCoder.writeInt(this.angVel2, "angVel2");
 
-        messageCoder.writeDouble(this.angle2, "angle2");
+        messageCoder.writeInt(this.angle2, "angle2");
 
-        messageCoder.writeLong(this.time, "time");
+        messageCoder.writeInt((int) this.time, "time");
 
         return messageCoder.getBytes();
     }
@@ -79,15 +79,15 @@ public class MoveMTMessage extends RoboCommand {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.angVel1 = messageDecoder.readDouble("angVel1");
+        this.angVel1 = messageDecoder.readInt("angVel1");
 
-        this.angle1 = messageDecoder.readDouble("angle1");
+        this.angle1 = messageDecoder.readInt("angle1");
 
-        this.angVel2 = messageDecoder.readDouble("angVel2");
+        this.angVel2 = messageDecoder.readInt("angVel2");
 
-        this.angle2 = messageDecoder.readDouble("angle2");
+        this.angle2 = messageDecoder.readInt("angle2");
 
-        this.time = messageDecoder.readLong("time");
+        this.time = messageDecoder.readInt("time");
 
         return messageDecoder.getArrayIndex();
     }

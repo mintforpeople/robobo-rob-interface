@@ -24,18 +24,18 @@ public class MovePanTiltMessage extends RoboCommand {
 
     private byte panTilt;
 
-    private double angVel;
+    private int angVel;
 
-    private double angle;
+    private int angle;
 
-    private long time;
+    private int time;
 
 
     public MovePanTiltMessage(
             byte panTilt,
-            double angVel,
-            double angle,
-            long time) {
+            int angVel,
+            int angle,
+            int time) {
 
         super();
         this.setCommandType(MovePanTiltMessage.commandType);
@@ -61,11 +61,11 @@ public class MovePanTiltMessage extends RoboCommand {
 
         messageCoder.writeByte(this.panTilt, "panTilt");
 
-        messageCoder.writeDouble(this.angVel, "angVel");
+        messageCoder.writeInt(this.angVel, "angVel");
 
-        messageCoder.writeDouble(this.angle, "angle");
+        messageCoder.writeInt(this.angle, "angle");
 
-        messageCoder.writeLong(this.time, "time");
+        messageCoder.writeInt(this.time, "time");
 
         return messageCoder.getBytes();
 
@@ -78,11 +78,11 @@ public class MovePanTiltMessage extends RoboCommand {
 
         this.panTilt = messageDecoder.readByte("panTilt");
 
-        this.angVel = messageDecoder.readDouble("angVel");
+        this.angVel = messageDecoder.readInt("angVel");
 
-        this.angle = messageDecoder.readDouble("angle");
+        this.angle = messageDecoder.readInt("angle");
 
-        this.time = messageDecoder.readLong("time");
+        this.time = messageDecoder.readInt("time");
 
         return messageDecoder.getArrayIndex();
 
