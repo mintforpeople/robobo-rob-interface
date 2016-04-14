@@ -130,10 +130,10 @@ public class RobStatusMessage extends RoboCommand {
 
         messageCoder.writeIntArray(this.motorVoltages, MOTOR_VOLTAGES);
 
-        messageCoder.writeInt(this.baterryLevel, BATERRY_LEVEL);
-
-        byte byteDockConnection= (byte) (this.dockConnection? 1: 0);
-        messageCoder.writeByte(byteDockConnection, DOCK_CONNECTION);
+//        messageCoder.writeInt(this.baterryLevel, BATERRY_LEVEL);
+//
+//        byte byteDockConnection= (byte) (this.dockConnection? 1: 0);
+//        messageCoder.writeByte(byteDockConnection, DOCK_CONNECTION);
 
         return messageCoder.getBytes();
         
@@ -164,11 +164,11 @@ public class RobStatusMessage extends RoboCommand {
         this.motorVoltages = messageDecoder.readIntArray(MOTOR_VOLTAGES, MotorStatus.MotorStatusId.values().length);
     
 
-        this.baterryLevel = messageDecoder.readInt(BATERRY_LEVEL);
+//        this.baterryLevel = messageDecoder.readInt(BATERRY_LEVEL);
+//
+//        byte byteDocConnection = messageDecoder.readByte(DOCK_CONNECTION);
 
-        byte byteDocConnection = messageDecoder.readByte(DOCK_CONNECTION);
-
-        this.dockConnection = (byteDocConnection == 1);
+//        this.dockConnection = (byteDocConnection == 1);
 
         return messageDecoder.getArrayIndex();
     }

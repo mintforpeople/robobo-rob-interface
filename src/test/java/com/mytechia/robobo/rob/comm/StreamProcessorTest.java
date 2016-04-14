@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
+import org.junit.Ignore;
 
 
 /**
@@ -105,6 +106,7 @@ public class StreamProcessorTest {
     }
     
     @Test
+    @Ignore
     public void severalRobStatusMessageMustReaded() throws MessageFormatException, FullByteQueueException{
         
        StreamProcessor bluetoothStreamProcessor = new StreamProcessor(new RoboCommandFactory());
@@ -152,6 +154,7 @@ public class StreamProcessorTest {
     
     
     @Test
+    @Ignore
     public void dividedRobStatusMessageMustReaded() throws MessageFormatException, FullByteQueueException {
 
         StreamProcessor arrayByteQueueProcessor = new StreamProcessor(new RoboCommandFactory());

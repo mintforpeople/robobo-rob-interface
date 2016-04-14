@@ -107,7 +107,7 @@ public class StreamProcessor {
             
             int numReaderMessageBytes= dataQueue.get(fullMessageData, 0, fullMessageSize);
             
-            if(dataFieldSize > numReaderMessageBytes){
+            if(fullMessageSize> numReaderMessageBytes){
                 LOGGER.debug("Not enough data to read");
                 return roboCommands;
             }

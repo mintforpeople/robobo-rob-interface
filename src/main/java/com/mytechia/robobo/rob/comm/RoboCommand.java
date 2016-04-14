@@ -39,19 +39,14 @@ public abstract class RoboCommand extends  Command{
 
 
     public RoboCommand() {
-    }
-
-    public RoboCommand(Endianness endianness) {
-        super(endianness);
+        super(Endianness.BIG_ENDIAN);
     }
 
     public RoboCommand(byte[] message) throws MessageFormatException {
-        super(message);
+        super(Endianness.BIG_ENDIAN, message);
     }
 
-    public RoboCommand(Endianness endianness, byte[] message) throws MessageFormatException {
-        super(endianness, message);
-    }
+    
 
     @Override
     public void setSequenceNumber(int sequenceNumber){
@@ -143,6 +138,10 @@ public abstract class RoboCommand extends  Command{
     }
     
     private static class CommandUtil extends Command{
+        
+        public CommandUtil(){
+            super(Endianness.BIG_ENDIAN);
+        }
 
         @Override
         protected int decodeMessageData(byte[] bytes, int initIndex) throws MessageFormatException {

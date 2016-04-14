@@ -26,7 +26,7 @@ public class ObstacleSensorStatus extends RobDeviceStatus<ObstacleSensorStatusId
     }
     
     public enum ObstacleSensorStatusId{
-        Obstable1,Obstable2,Obstable3,Obstable4, Obstable5,Obstable6,Obstable7;
+        Obstable1,Obstable2,Obstable3,Obstable4;
     }
 
     @Override

@@ -252,6 +252,7 @@ public class SmpRobComm implements IRobComm{
         }
 
         if(command.getCommandType()== RobStatusMessage.commandType){
+            LOGGER.debug("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
             dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
             return;
         }
