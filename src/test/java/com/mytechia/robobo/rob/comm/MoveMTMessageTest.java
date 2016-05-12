@@ -15,9 +15,10 @@ public class MoveMTMessageTest {
 
         MoveMTMessage originalMessage =
                 new MoveMTMessage(
-                        2,
+                        (byte) 4,
+                        (byte)2,
                         45,
-                        1,
+                        (byte)1,
                         -30,
                         405);
 

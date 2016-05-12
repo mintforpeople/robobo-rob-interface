@@ -6,6 +6,8 @@
  */
 package com.mytechia.robobo.rob;
 
+import java.util.Collection;
+
 public interface IRobStatusListener {
 
     void statusMotorsMT(MotorStatus left, MotorStatus right);
@@ -14,13 +16,9 @@ public interface IRobStatusListener {
 
     void statusMotorTilt(MotorStatus status);
 
-    void statusGaps(GapStatus gap1, GapStatus gap2);
+    void statusGaps(Collection<GapStatus> gaps);
 
-    void statusFalls(FallStatus fall1, FallStatus fall2);
-
-    void statusBumps(BumpStatus bump1, BumpStatus bump2);
-
-    void statusObstacle(ObstacleSensorStatus obs1, ObstacleSensorStatus obs2);
+    void statusFalls(Collection<FallStatus> fall);
 
     void statusBattery(BatteryStatus battery);
 

@@ -16,17 +16,27 @@ public interface IRob {
 
 	 void setLEDsMode(LEDsModeEnum mode);
 
-	 void moveMT(int angVel1, int angle1, int angVel2, int angle2);
+	 void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2);
 
-	 void moveMT(int angVel1, int angVel2, long time);
+	 void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time);
 
-	 void movePan(int angVel, int angle);
+         /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
+          * 
+          * @param angVel the velocity (0-255)
+          * @param angle  the angle (0-90)
+          */
+	 void movePan(short angVel, int angle);
 
-	 void movePan(int angVel, long time);
+	 void movePan(short angVel, long time);
 
-	 void moveTilt(int angVel, int angle);
+         /** Moves the TILT of the ROB at 'angVel' velocity until reaching 'angle'
+          * 
+          * @param angVel the velocity (0-255)
+          * @param angle  the angle (0-90)
+          */
+	 void moveTilt(short angVel, int angle);
 
-	 void moveTilt(int angVel, long time);
+	 void moveTilt(short angVel, long time);
 
 	 void resetPanTiltOffset();
 
@@ -43,6 +53,8 @@ public interface IRob {
 	 List<ObstacleSensorStatus> getLastStatusObstacles();
 
 	 BatteryStatus getLastStatusBattery();
+         
+         void setRobStatusPeriod(int period);
 
 	 void addRobStatusListener(IRobStatusListener listener);
 

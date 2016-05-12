@@ -22,11 +22,13 @@ import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
  */
 public class MoveMTMessage extends RoboCommand {
 
-    private int angVel1;
+    private byte mode;
+    
+    private short angVel1;
 
     private int angle1;
 
-    private int angVel2;
+    private short angVel2;
 
     private int angle2;
 
@@ -34,14 +36,16 @@ public class MoveMTMessage extends RoboCommand {
 
 
     public MoveMTMessage(
-            int angVel1,
+            byte mode,
+            short angVel1,
             int angle1,
-            int angVel2,
+            short angVel2,
             int angle2,
             long time) {
 
         super();
         this.setCommandType(MoveMTMessage.commandType);
+        this.mode = mode;
         this.angVel1 = angVel1;
         this.angle1 = angle1;
         this.angVel2 = angVel2;
@@ -61,16 +65,20 @@ public class MoveMTMessage extends RoboCommand {
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeInt(this.angVel1, "angVel1");
+        
+        messageCoder.writeByte(this.mode, "mode");
 
         messageCoder.writeInt(this.angle1, "angle1");
-
-        messageCoder.writeInt(this.angVel2, "angVel2");
+        
+        messageCoder.writeShort(this.angVel1, "angVel1");
+        
+        messageCoder.writeInt((int) this.time, "time1");
 
         messageCoder.writeInt(this.angle2, "angle2");
+        
+        messageCoder.writeShort(this.angVel2, "angVel2");
 
-        messageCoder.writeInt((int) this.time, "time");
+        messageCoder.writeInt((int) this.time, "time2");
 
         return messageCoder.getBytes();
     }
@@ -79,19 +87,34 @@ public class MoveMTMessage extends RoboCommand {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.angVel1 = messageDecoder.readInt("angVel1");
+        this.mode = messageDecoder.readByte("mode");
 
         this.angle1 = messageDecoder.readInt("angle1");
-
-        this.angVel2 = messageDecoder.readInt("angVel2");
-
+        
+        this.angVel1 = messageDecoder.readShort("angVel1");
+        
+        this.time = messageDecoder.readInt("time1");
+        
         this.angle2 = messageDecoder.readInt("angle2");
 
-        this.time = messageDecoder.readInt("time");
+        this.angVel2 = messageDecoder.readShort("angVel2");
+
+        this.time = messageDecoder.readInt("time2");
 
         return messageDecoder.getArrayIndex();
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.mode;
+        hash = 23 * hash + this.angVel1;
+        hash = 23 * hash + this.angle1;
+        hash = 23 * hash + this.angVel2;
+        hash = 23 * hash + this.angle2;
+        hash = 23 * hash + (int) (this.time ^ (this.time >>> 32));
+        return hash;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -100,6 +123,7 @@ public class MoveMTMessage extends RoboCommand {
 
         MoveMTMessage that = (MoveMTMessage) o;
 
+        if (Byte.compare(that.mode, mode) != 0) return false;
         if (Double.compare(that.angVel1, angVel1) != 0) return false;
         if (Double.compare(that.angle1, angle1) != 0) return false;
         if (Double.compare(that.angVel2, angVel2) != 0) return false;
@@ -109,19 +133,5 @@ public class MoveMTMessage extends RoboCommand {
     }
 
 
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(angVel1);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angle1);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angVel2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angle2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (time ^ (time >>> 32));
-        return result;
-    }
+    
 }

@@ -7,6 +7,7 @@
 package com.mytechia.robobo.rob;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -57,37 +58,22 @@ public class DispatcherRobStatusListener {
         }
     }
 
-    void fireStatusGaps(GapStatus gap1, GapStatus gap2) {
+    void fireStatusGaps(Collection<GapStatus> gap) {
         
         for (IRobStatusListener robStatusListener : robStatusListeners) {
-            robStatusListener.statusGaps(gap1, gap2);
+            robStatusListener.statusGaps(gap);
             
         }
     }
 
-    void fireStatusFalls(FallStatus fall1, FallStatus fall2) {
+    void fireStatusFalls(Collection<FallStatus> fall) {
         
         for (IRobStatusListener robStatusListener : robStatusListeners) {
-            robStatusListener.statusFalls(fall1, fall2);
+            robStatusListener.statusFalls(fall);
             
         }
     }
 
-    void fireStatusBumps(BumpStatus bump1, BumpStatus bump2) {
-        
-        for (IRobStatusListener robStatusListener : robStatusListeners) {
-            robStatusListener.statusBumps(bump1, bump2);
-            
-        }
-    }
-
-    void fireStatusObstacle(ObstacleSensorStatus obs1, ObstacleSensorStatus obs2) {
-        
-        for (IRobStatusListener robStatusListener : robStatusListeners) {
-            robStatusListener.statusObstacle(obs1, obs2);
-            
-        }
-    }
 
     void fireStatusBattery(BatteryStatus battery) {
         

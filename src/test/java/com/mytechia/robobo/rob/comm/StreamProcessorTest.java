@@ -89,7 +89,7 @@ public class StreamProcessorTest {
                         new short[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                         new short[]{1, 2, 3, 4, 5, 6, 7},
                         new short[]{1, 2, 3, 4},
-                        new int[]{1, 2, 3, 4},
+                        new short[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4}, 10,
                         false);
@@ -117,7 +117,7 @@ public class StreamProcessorTest {
                         new short[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                         new short[]{1, 2, 3, 4, 5, 6, 7},
                         new short[]{1, 2, 3, 4},
-                        new int[]{1, 2, 3, 4},
+                        new short[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4}, 10,
                         false);
@@ -134,7 +134,7 @@ public class StreamProcessorTest {
                         new short[]{1, 2, 37, 4, 5, 6, 7, 8, 9},
                         new short[]{10, 20, 30, 40, 57, 63, 7},
                         new short[]{1, 2, 3, 4},
-                        new int[]{1, 2, 3, 4},
+                        new short[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4},
                         new int[]{11, 2, 13, 4}, 10,
                         true);
@@ -164,7 +164,7 @@ public class StreamProcessorTest {
                         new short[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                         new short[]{1, 2, 3, 4, 5, 6, 7},
                         new short[]{1, 2, 3, 4},
-                        new int[]{1, 2, 3, 4},
+                        new short[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4},
                         new int[]{1, 2, 3, 4}, 10,
                         false);

@@ -4,6 +4,7 @@
  * 
  *  This file is part of robobo-rob-interface.
  */
+
 package com.mytechia.robobo.rob;
 
 import static com.mytechia.robobo.rob.BumpStatus.BumpStatusId;
@@ -28,6 +29,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
+    private static final int MOTOR_COUNT = 4;
+    
     private IRobComm roboCom;
 
     private BatteryStatus battery= new BatteryStatus();
@@ -42,7 +45,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private final List<IRSensorStatus> irSensors = new ArrayList<IRSensorStatus>();
 
-    private final List<MotorStatus> motors = new ArrayList<MotorStatus>();
+    private MotorStatus panMotor, tiltMotor, leftMotor, rightMotor;
 
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
     
@@ -80,9 +83,10 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     private void initMotors() {
-        for (MotorStatusId motorId: MotorStatusId.values()) {
-            motors.add(new MotorStatus(motorId));
-        }
+        this.panMotor = new MotorStatus(MotorStatusId.Pan);
+        this.tiltMotor = new MotorStatus(MotorStatusId.Tilt);
+        this.leftMotor = new MotorStatus(MotorStatusId.Left);
+        this.rightMotor = new MotorStatus(MotorStatusId.Right);        
     }
 
     private void initGaps() {
@@ -132,7 +136,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
         this.updateObstacles(robStatusMessage, updateDate);
 
-        this.updateMotorStatus(robStatusMessage, updateDate);
+        this.updateAllMotorStatus(robStatusMessage, updateDate);
 
         this.updateBateryStatus(robStatusMessage, updateDate);
 
@@ -163,6 +167,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             gap.setLastUpdate(updateDate);
 
         }
+        
+        this.dispatcherRobStatusListener.fireStatusGaps(new ArrayList(this.gaps));
 
     }
 
@@ -183,6 +189,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             irSensorStatus.setLastUpdate(updateDate);
 
         }
+        
+        
 
     }
     
@@ -211,84 +219,85 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             fall.setLastUpdate(updateDate);
 
         }
+        
+        this.dispatcherRobStatusListener.fireStatusFalls(new ArrayList(this.falls));
 
     }
 
     private void updateBumps(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        short[] bumpsValues = robStatusMessage.getBumps();
-
-        if ((bumpsValues == null) || (bumpsValues.length == 0)) {
-            return;
-        }
-
-        for (int i = 0; i < bumpsValues.length; i++) {
-
-            BumpStatus bump = bumps.get(i);
-
-            bump.setDistance(bumpsValues[i]);
-            
-            bump.setLastUpdate(updateDate);
-
-        }
+//        short[] bumpsValues = robStatusMessage.getBumps();
+//
+//        if ((bumpsValues == null) || (bumpsValues.length == 0)) {
+//            return;
+//        }
+//
+//        for (int i = 0; i < bumpsValues.length; i++) {
+//
+//            BumpStatus bump = bumps.get(i);
+//
+//            bump.setDistance(bumpsValues[i]);
+//            
+//            bump.setLastUpdate(updateDate);
+//
+//        }
 
     }
 
     private void updateObstacles(RobStatusMessage robStatusMessage, Date updateDate) {
         
-        short[] obstablesValues = robStatusMessage.getObstacles();
-        
-        if ((obstablesValues == null) || (obstablesValues.length == 0)) {
-            return;
-        }
-        
-        for (int i = 0; i < obstablesValues.length; i++) {
-            
-            ObstacleSensorStatus obstacle = obstacles.get(i);
-            
-            obstacle.setDistance(obstablesValues[i]);
-            
-            obstacle.setLastUpdate(updateDate);
-            
-        }
+//        short[] obstablesValues = robStatusMessage.getObstacles();
+//        
+//        if ((obstablesValues == null) || (obstablesValues.length == 0)) {
+//            return;
+//        }
+//        
+//        for (int i = 0; i < obstablesValues.length; i++) {
+//            
+//            ObstacleSensorStatus obstacle = obstacles.get(i);
+//            
+//            obstacle.setDistance(obstablesValues[i]);
+//            
+//            obstacle.setLastUpdate(updateDate);
+//            
+//        }
         
     }
 
-    private void updateMotorStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+    private void updateAllMotorStatus(RobStatusMessage roStatusMessage, Date updateDate) {
 
         int[] motorAngle = roStatusMessage.getMotorAngles();
 
-        int[] motorVelocities = roStatusMessage.getMotorVelocities();
+        short[] motorVelocities = roStatusMessage.getMotorVelocities();
 
         int[] motorVoltages = roStatusMessage.getMotorVoltages();
-
-        for (int i = 0; i < MotorStatusId.values().length; i++) {
-
-            MotorStatus motorStatus = motors.get(i);
-
-            boolean updatepMotorStatus= false;
+        
+        
+        if ((motorAngle.length == MOTOR_COUNT) && (motorVelocities.length == MOTOR_COUNT)
+                && (motorVoltages.length == MOTOR_COUNT)) {
             
-            if ((motorAngle != null) && (motorAngle.length > i)) {
-                motorStatus.setVariationAngle(motorAngle[i]);
-                updatepMotorStatus= true;
-            }
-
-            if ((motorVelocities != null) && (motorVelocities.length > i)) {
-                motorStatus.setAngularVelocity(motorVelocities[i]);
-                updatepMotorStatus= true;
-            }
-
-            if ((motorVoltages != null) && (motorVoltages.length > i)) {
-                motorStatus.setVoltage(motorVoltages[i]);
-                updatepMotorStatus= true;
-            }
+            updateMotorStatus(panMotor, 0, motorAngle, motorVelocities, motorVoltages);
+            updateMotorStatus(tiltMotor, 1, motorAngle, motorVelocities, motorVoltages);
+            updateMotorStatus(leftMotor, 2, motorAngle, motorVelocities, motorVoltages);
+            updateMotorStatus(rightMotor, 3, motorAngle, motorVelocities, motorVoltages);
             
-            if(updatepMotorStatus){
-               motorStatus.setLastUpdate(updateDate);
-            }
-
         }
+        
+        this.dispatcherRobStatusListener.fireStatusMotorPan(panMotor);
+        this.dispatcherRobStatusListener.fireStatusMotorTilt(tiltMotor);
+        this.dispatcherRobStatusListener.fireStatusMotorsMT(leftMotor, rightMotor);
 
+    }
+    
+    
+    private void updateMotorStatus(
+            MotorStatus ms, int index, 
+            int[] motorAngle, short[] motorVelocities, int[] motorVoltages) {
+        
+        ms.setVariationAngle(motorAngle[index]);
+        ms.setAngularVelocity(motorVelocities[index]);
+        ms.setVoltage(motorVoltages[index]);
+        
     }
     
 
@@ -303,32 +312,32 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     @Override
-    public void moveMT(int angVel1, int angle1, int angVel2, int angle2) {
-        this.roboCom.moveMT(angVel1, angle1, angVel2, angle2);
+    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) {
+        this.roboCom.moveMT(mode.getMode(), angVel1, angle1, angVel2, angle2);
     }
 
     @Override
-    public void moveMT(int angVel1, int angVel2, long time) {
-        this.roboCom.moveMT(angVel1, angVel2, time);
+    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) {
+        this.roboCom.moveMT(mode.getMode(), angVel1, angVel2, time);
     }
 
     @Override
-    public void movePan(int angVel, int angle) {
+    public void movePan(short angVel, int angle) {
         this.roboCom.movePan(angVel, angle);
     }
 
     @Override
-    public void movePan(int angVel, long time) {
+    public void movePan(short angVel, long time) {
         this.roboCom.movePan(angVel, time);
     }
 
     @Override
-    public void moveTilt(int angVel, int angle) {
+    public void moveTilt(short angVel, int angle) {
         this.roboCom.moveTilt(angVel, angle);
     }
 
     @Override
-    public void moveTilt(int angVel, long time) {
+    public void moveTilt(short angVel, long time) {
         this.roboCom.moveTilt(angVel, time);
     }
 
@@ -336,10 +345,21 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     public void resetPanTiltOffset() {
         this.roboCom.resetPanTiltOffset();
     }
-
+    
+    @Override
+    public void setRobStatusPeriod(int period) {
+        this.roboCom.setRobStatusPeriod(period);
+    }
+    
+    
     @Override
     public List<MotorStatus> getLastStatusMotors() {
-        return new ArrayList<MotorStatus>(this.motors);
+        ArrayList<MotorStatus> motors = new ArrayList<MotorStatus>();
+        motors.add(panMotor);
+        motors.add(tiltMotor);
+        motors.add(leftMotor);
+        motors.add(rightMotor);
+        return motors;
     }
 
     @Override

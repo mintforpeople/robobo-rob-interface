@@ -14,7 +14,7 @@ public class MovePanTiltMessageTest {
     public void testCodeMessageData() throws Exception {
 
         MovePanTiltMessage originalMessage =
-                new MovePanTiltMessage((byte)3, 4, 60, 15000);
+                new MovePanTiltMessage((byte)3, (short)4, 60, 15000);
 
         final byte[] messageData = originalMessage.codeMessage();
 

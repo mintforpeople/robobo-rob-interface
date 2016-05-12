@@ -37,6 +37,7 @@ public class SmpRobComm implements IRobComm{
     private static final Logger LOGGER= LoggerFactory.getLogger(SmpRobComm.class);
 
     public static final int TIME_CHECK_MESSAGE = 1000;
+    private static final short MAX_ANG_VEL = 255;
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
@@ -105,6 +106,19 @@ public class SmpRobComm implements IRobComm{
         this.bluetoothStreamProcessor= new StreamProcessor(messageFactory);
     }
     
+    
+    private short limitAngVel(short angVel) {
+        if (angVel > MAX_ANG_VEL)
+            return MAX_ANG_VEL;
+        else 
+            return angVel;
+    }
+    
+    
+    private int convertAngle(int angle) {
+        return angle * 10000;
+    }
+    
 
     @Override
     public void setLEDColor(int ledId, int r, int g, int b) {
@@ -123,53 +137,54 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(int angVel1, int angle1, int angVel2, int angle2) {
+    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
-        
-        sendCommand(moveMTMessage);
-        
-    }
-
-    @Override
-    public void moveMT(int angVel1, int angVel2, long time)  {
-        
-        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, limitAngVel(angVel1), convertAngle(angle1), limitAngVel(angVel2), convertAngle(angle2), 0);
         
         sendCommand(moveMTMessage);
         
     }
 
     @Override
-    public void movePan(int angVel, int angle) {
+    public void moveMT(byte mode, short angVel1, short angVel2, long time)  {
         
+        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, limitAngVel(angVel1), 0, limitAngVel(angVel2), 0, time);
+        
+        sendCommand(moveMTMessage);
+        
+    }
+
+    @Override
+    public void movePan(short angVel, int angle) {
+        
+        angVel = limitAngVel(angVel);
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, angle, 0);
         
         sendCommand(movePanTiltMessage);
     }
 
     @Override
-    public void movePan(int angVel, long time) {
+    public void movePan(short angVel, long time) {
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, 0, (int) time);
-        
-        sendCommand(movePanTiltMessage);
-        
-    }
-
-    @Override
-    public void moveTilt(int angVel, int angle) {
-        
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, angVel, angle, 0);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, limitAngVel(angVel), 0, (int) time);
         
         sendCommand(movePanTiltMessage);
         
     }
 
     @Override
-    public void moveTilt(int angVel, long time) {
+    public void moveTilt(short angVel, int angle) {
         
-        MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, angVel, 0, (int) time);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, limitAngVel(angVel), convertAngle(angle), 0);
+        
+        sendCommand(movePanTiltMessage);
+        
+    }
+
+    @Override
+    public void moveTilt(short angVel, long time) {
+        
+        MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, limitAngVel(angVel), 0, (int) time);
 
         sendCommand(movePanTiltMessage);
         

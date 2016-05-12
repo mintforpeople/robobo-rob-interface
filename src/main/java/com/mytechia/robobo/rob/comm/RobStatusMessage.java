@@ -45,15 +45,15 @@ public class RobStatusMessage extends RoboCommand {
 
     private short[] irs;               // 9 * short
 
-    private short[] obstacles;         // 8 * short
+    //private short[] obstacles;         // 8 * short
 
-    private short[] bumps;             // 4 * short
+    //private short[] bumps;             // 4 * short
 
-    private int[] motorVelocities;   // 4 * (4 bytes)
+    private short[] motorVelocities;   // 4 * (2 bytes)
 
-    private int[] motorAngles;       // 4 * (4 bytes)
+    private int[] motorAngles;       // 4 * (2 bytes)
 
-    private int[] motorVoltages;     // 4 * (4 bytes)
+    private int[] motorVoltages;     // 4 * (2 bytes)
 
     private int baterryLevel;
 
@@ -65,7 +65,7 @@ public class RobStatusMessage extends RoboCommand {
             short[] irs,
             short[] obstacles,
             short[] bumps,
-            int[] motorVelocities,
+            short[] motorVelocities,
             int[] motorAngles,
             int[] motorVoltages,
             int baterryLevel,
@@ -76,8 +76,8 @@ public class RobStatusMessage extends RoboCommand {
         this.gaps = gaps;
         this.falls = falls;
         this.irs = irs;
-        this.obstacles = obstacles;
-        this.bumps = bumps;
+        //this.obstacles = obstacles;
+        //this.bumps = bumps;
         this.motorVelocities = motorVelocities;
         this.motorAngles = motorAngles;
         this.motorVoltages = motorVoltages;
@@ -120,11 +120,11 @@ public class RobStatusMessage extends RoboCommand {
         
         messageCoder.writeShortArray(this.irs, IRS);
 
-        messageCoder.writeShortArray(this.obstacles, OBSTACLES);
+        //messageCoder.writeShortArray(this.obstacles, OBSTACLES);
 
-        messageCoder.writeShortArray(this.bumps, BUMPS);
+        //messageCoder.writeShortArray(this.bumps, BUMPS);
 
-        messageCoder.writeIntArray(this.motorVelocities, MOTOR_VELOCITIES);
+        messageCoder.writeShortArray(this.motorVelocities, MOTOR_VELOCITIES);
 
         messageCoder.writeIntArray(this.motorAngles, MOTOR_ANGLES);
 
@@ -150,13 +150,12 @@ public class RobStatusMessage extends RoboCommand {
         this.irs = messageDecoder.readShortArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
   
 
-        this.obstacles = messageDecoder.readShortArray(OBSTACLES, ObstacleSensorStatus.ObstacleSensorStatusId.values().length);
-     
+        //this.obstacles = messageDecoder.readShortArray(OBSTACLES, ObstacleSensorStatus.ObstacleSensorStatusId.values().length);
 
-        this.bumps = messageDecoder.readShortArray(BUMPS, BumpStatus.BumpStatusId.values().length);
-      
+        //this.bumps = messageDecoder.readShortArray(BUMPS, BumpStatus.BumpStatusId.values().length);
+    
 
-        this.motorVelocities = messageDecoder.readIntArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
+        this.motorVelocities = messageDecoder.readShortArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
   
 
         this.motorAngles = messageDecoder.readIntArray(MOTOR_ANGLES, MotorStatus.MotorStatusId.values().length);
@@ -171,6 +170,7 @@ public class RobStatusMessage extends RoboCommand {
 //        this.dockConnection = (byteDocConnection == 1);
 
         return messageDecoder.getArrayIndex();
+        
     }
 
     public static String getGAPS() {
@@ -217,6 +217,7 @@ public class RobStatusMessage extends RoboCommand {
         return irs;
     }
 
+    /*
     public short[] getObstacles() {
         return obstacles;
     }
@@ -224,8 +225,9 @@ public class RobStatusMessage extends RoboCommand {
     public short[] getBumps() {
         return bumps;
     }
+    */
 
-    public int[] getMotorVelocities() {
+    public short[] getMotorVelocities() {
         return motorVelocities;
     }
 
@@ -277,12 +279,12 @@ public class RobStatusMessage extends RoboCommand {
         if (!Arrays.equals(irs, that.irs)) {
             return false;
         }
-        if (!Arrays.equals(obstacles, that.obstacles)) {
+        /*if (!Arrays.equals(obstacles, that.obstacles)) {
             return false;
         }
         if (!Arrays.equals(bumps, that.bumps)) {
             return false;
-        }
+        }*/
         if (!Arrays.equals(motorVelocities, that.motorVelocities)) {
             return false;
         }
@@ -299,8 +301,8 @@ public class RobStatusMessage extends RoboCommand {
         int result = (int) gaps;
         result = 31 * result + (int) falls;
         result = 31 * result + Arrays.hashCode(irs);
-        result = 31 * result + Arrays.hashCode(obstacles);
-        result = 31 * result + Arrays.hashCode(bumps);
+        //result = 31 * result + Arrays.hashCode(obstacles);
+        //result = 31 * result + Arrays.hashCode(bumps);
         result = 31 * result + Arrays.hashCode(motorVelocities);
         result = 31 * result + Arrays.hashCode(motorAngles);
         result = 31 * result + Arrays.hashCode(motorVoltages);

@@ -69,7 +69,7 @@ public class MotorStatus extends RobDeviceStatus<MotorStatusId> {
     }
 
     public static enum MotorStatusId{
-        Left,Right,Pan,Tilt;
+        Pan,Tilt,Left,Right;
     }
 
 }

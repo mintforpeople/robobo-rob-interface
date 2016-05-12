@@ -23,7 +23,7 @@ public class RobStatusMessageTest {
                         new short[] {1,2,3,4,5,6,7,8,9},
                         new short[] {1,2,3,4,5,6, 7},
                         new short[] {1,2,3,4},
-                        new int[] {1,2,3,4},
+                        new short[] {1,2,3,4},
                         new int[] {1,2,3,4},
                         new int[] {1,2,3,4}, 10, false);
 
