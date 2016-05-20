@@ -6,6 +6,9 @@
  */
 package com.mytechia.robobo.rob.comm;
 
+import static com.mytechia.robobo.rob.comm.MessageType.MaxValueMotors;
+import static com.mytechia.robobo.rob.comm.MessageType.OperationModeMessage;
+
 import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.IMessageBuilder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
@@ -35,6 +38,12 @@ public class RoboCommandFactory extends MessageFactory {
         registerMovePanTilMessageBuilder();
 
         registerResetPanTiltOffsetMessageBuilder();
+        
+        registerMaxValueMotorsBuilder();
+        
+        registerInfraredConfigurationMessageBuilder();
+        
+        registerOperationModeMessageBuilder();
 
     }
     
@@ -175,5 +184,68 @@ public class RoboCommandFactory extends MessageFactory {
         );
 
     }
+    
+    private void registerMaxValueMotorsBuilder() {
+
+        registerMessageBuilder(
+                new IMessageBuilder() {
+
+            @Override
+            public byte type() {
+                return MaxValueMotors.commandType;
+            }
+
+            @Override
+            public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                return new MaxValueMotors(bytes);
+            }
+        }
+        );
+
+    }
+    
+    
+    private void registerInfraredConfigurationMessageBuilder() {
+
+        registerMessageBuilder(
+                new IMessageBuilder() {
+
+            @Override
+            public byte type() {
+                return MessageType.InfraredConfigurationMessage.commandType;
+            }
+
+            @Override
+            public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                return new InfraredConfigurationMessage(bytes);
+            }
+        }
+        );
+
+    }
+    
+    
+    
+    
+    private void registerOperationModeMessageBuilder() {
+
+        registerMessageBuilder(
+                new IMessageBuilder() {
+
+            @Override
+            public byte type() {
+                return MessageType.OperationModeMessage.commandType;
+            }
+
+            @Override
+            public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                return new OperationModeMessage(bytes);
+            }
+        }
+        );
+
+    }
+    
+    
 
 }

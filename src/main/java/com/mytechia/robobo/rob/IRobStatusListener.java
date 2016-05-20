@@ -19,6 +19,8 @@ public interface IRobStatusListener {
     void statusGaps(Collection<GapStatus> gaps);
 
     void statusFalls(Collection<FallStatus> fall);
+    
+    void statusIRSensorStatus(Collection<IRSensorStatus> irSensorStatus);
 
     void statusBattery(BatteryStatus battery);
 

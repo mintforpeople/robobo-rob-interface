@@ -20,7 +20,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.MovePanTiltMessage;
  *
  * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
  */
-public class MovePanTiltMessage extends RoboCommand {
+public class OldMovePanTiltMessage extends RoboCommand {
 
     private byte panTilt;
 
@@ -31,7 +31,7 @@ public class MovePanTiltMessage extends RoboCommand {
     private int time;
 
 
-    public MovePanTiltMessage(
+    public OldMovePanTiltMessage(
             byte panTilt,
             short angVel,
             int angle,
@@ -47,7 +47,7 @@ public class MovePanTiltMessage extends RoboCommand {
     }
 
 
-    public MovePanTiltMessage(byte [] messageData) throws MessageFormatException {
+    public OldMovePanTiltMessage(byte [] messageData) throws MessageFormatException {
 
         super(messageData);
 
@@ -94,7 +94,7 @@ public class MovePanTiltMessage extends RoboCommand {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MovePanTiltMessage that = (MovePanTiltMessage) o;
+        OldMovePanTiltMessage that = (OldMovePanTiltMessage) o;
 
         if (panTilt != that.panTilt) return false;
         if (Double.compare(that.angVel, angVel) != 0) return false;

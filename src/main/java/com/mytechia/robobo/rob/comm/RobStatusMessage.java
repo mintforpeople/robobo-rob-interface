@@ -28,7 +28,9 @@ import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
  */
 public class RobStatusMessage extends RoboCommand {
     
-    private static final String GAPS = "gaps";
+    private static final String WALL_CONNECTION = "wallConnection";
+	private static final String BATERRY_INFORMATION = "baterryInformation";
+	private static final String GAPS = "gaps";
     private static final String FALLS = "falls";
     private static final String IRS = "irs";
     private static final String OBSTACLES = "obstacles";
@@ -36,18 +38,12 @@ public class RobStatusMessage extends RoboCommand {
     private static final String MOTOR_VOLTAGES = "motorVoltages";
     private static final String MOTOR_ANGLES = "motorAngles";
     private static final String MOTOR_VELOCITIES = "motorVelocities";
-    private static final String BATERRY_LEVEL = "bateryLevel";
-    private static final String DOCK_CONNECTION="dockConnection";
-
+    
     private byte gaps;
 
     private byte falls;
 
     private short[] irs;               // 9 * short
-
-    //private short[] obstacles;         // 8 * short
-
-    //private short[] bumps;             // 4 * short
 
     private short[] motorVelocities;   // 4 * (2 bytes)
 
@@ -55,9 +51,9 @@ public class RobStatusMessage extends RoboCommand {
 
     private int[] motorVoltages;     // 4 * (2 bytes)
 
-    private int baterryLevel;
+    private byte wallConnection;
 
-    private boolean dockConnection;
+    private short batteryLevel;
 
     public RobStatusMessage(
             byte gaps,
@@ -68,8 +64,8 @@ public class RobStatusMessage extends RoboCommand {
             short[] motorVelocities,
             int[] motorAngles,
             int[] motorVoltages,
-            int baterryLevel,
-            boolean dockConnection) {
+            byte wallConnection,
+            short batteryInformation) {
 
         super();
         this.setCommandType(RobStatusMessage.commandType);
@@ -81,8 +77,8 @@ public class RobStatusMessage extends RoboCommand {
         this.motorVelocities = motorVelocities;
         this.motorAngles = motorAngles;
         this.motorVoltages = motorVoltages;
-        this.baterryLevel= baterryLevel;
-        this.dockConnection= dockConnection;
+        this.wallConnection= wallConnection;
+        this.batteryLevel= batteryInformation;
 
     }
 
@@ -148,26 +144,16 @@ public class RobStatusMessage extends RoboCommand {
         this.falls = messageDecoder.readByte(FALLS);
 
         this.irs = messageDecoder.readShortArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
-  
-
-        //this.obstacles = messageDecoder.readShortArray(OBSTACLES, ObstacleSensorStatus.ObstacleSensorStatusId.values().length);
-
-        //this.bumps = messageDecoder.readShortArray(BUMPS, BumpStatus.BumpStatusId.values().length);
-    
 
         this.motorVelocities = messageDecoder.readShortArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
-  
 
         this.motorAngles = messageDecoder.readIntArray(MOTOR_ANGLES, MotorStatus.MotorStatusId.values().length);
         
         this.motorVoltages = messageDecoder.readIntArray(MOTOR_VOLTAGES, MotorStatus.MotorStatusId.values().length);
-    
-
-//        this.baterryLevel = messageDecoder.readInt(BATERRY_LEVEL);
-//
-//        byte byteDocConnection = messageDecoder.readByte(DOCK_CONNECTION);
-
-//        this.dockConnection = (byteDocConnection == 1);
+        
+        this.wallConnection= messageDecoder.readByte(WALL_CONNECTION);
+        
+        this.batteryLevel= messageDecoder.readShort(BATERRY_INFORMATION);
 
         return messageDecoder.getArrayIndex();
         
@@ -247,67 +233,33 @@ public class RobStatusMessage extends RoboCommand {
         this.gaps = gaps;
     }
 
-    public int getBateryLevel() {
-        return baterryLevel;
-    }
+	public byte getWallConnection() {
+		return wallConnection;
+	}
 
-    public void setBaterryLevel(int baterryLevel) {
-        this.baterryLevel = baterryLevel;
-    }
+	public void setWallConnection(byte wallConnection) {
+		this.wallConnection = wallConnection;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+	public void setMotorVoltages(int[] motorVoltages) {
+		this.motorVoltages = motorVoltages;
+	}
 
-        RobStatusMessage that = (RobStatusMessage) o;
 
-        if (gaps != that.gaps) {
-            return false;
-        }
-        if (falls != that.falls) {
-            return false;
-        }
 
-        if(this.baterryLevel!= that.baterryLevel){
-            return false;
-        }
-        if (!Arrays.equals(irs, that.irs)) {
-            return false;
-        }
-        /*if (!Arrays.equals(obstacles, that.obstacles)) {
-            return false;
-        }
-        if (!Arrays.equals(bumps, that.bumps)) {
-            return false;
-        }*/
-        if (!Arrays.equals(motorVelocities, that.motorVelocities)) {
-            return false;
-        }
-        if (!Arrays.equals(motorAngles, that.motorAngles)) {
-            return false;
-        }
+	public void setBatteryLevel(short batteryLevel) {
+		this.batteryLevel = batteryLevel;
+	}
 
-        return Arrays.equals(motorVoltages, that.motorVoltages);
+	public short getBatteryLevel() {
+		return batteryLevel;
+	}
 
-    }
 
-    @Override
-    public int hashCode() {
-        int result = (int) gaps;
-        result = 31 * result + (int) falls;
-        result = 31 * result + Arrays.hashCode(irs);
-        //result = 31 * result + Arrays.hashCode(obstacles);
-        //result = 31 * result + Arrays.hashCode(bumps);
-        result = 31 * result + Arrays.hashCode(motorVelocities);
-        result = 31 * result + Arrays.hashCode(motorAngles);
-        result = 31 * result + Arrays.hashCode(motorVoltages);
-        return result;
-    }
+
+
+
+
 
 }
 

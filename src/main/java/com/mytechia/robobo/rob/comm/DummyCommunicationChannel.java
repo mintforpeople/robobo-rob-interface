@@ -126,7 +126,7 @@ public class DummyCommunicationChannel implements INetworkBasicCommunicationChan
                     }
 
                     public Command buildMessage(byte[] bytes) throws MessageFormatException {
-                        return new MovePanTiltMessage(bytes);
+                        return new OldMovePanTiltMessage(bytes);
                     }
                 }
         );

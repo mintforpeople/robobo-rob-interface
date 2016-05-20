@@ -13,12 +13,12 @@ public class MovePanTiltMessageTest {
     @Test
     public void testCodeMessageData() throws Exception {
 
-        MovePanTiltMessage originalMessage =
-                new MovePanTiltMessage((byte)3, (short)4, 60, 15000);
+        OldMovePanTiltMessage originalMessage =
+                new OldMovePanTiltMessage((byte)3, (short)4, 60, 15000);
 
         final byte[] messageData = originalMessage.codeMessage();
 
-        MovePanTiltMessage decodedMessage = new MovePanTiltMessage(messageData);
+        OldMovePanTiltMessage decodedMessage = new OldMovePanTiltMessage(messageData);
 
         assertEquals(originalMessage, decodedMessage);
 

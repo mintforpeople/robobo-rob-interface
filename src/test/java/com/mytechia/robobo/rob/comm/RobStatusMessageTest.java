@@ -16,6 +16,7 @@ public class RobStatusMessageTest {
    @Ignore
     public void testCodeMessageData() throws Exception {
 
+    	/*
         RobStatusMessage originalMessage =
                 new RobStatusMessage(
                         (byte)4,
@@ -36,6 +37,7 @@ public class RobStatusMessageTest {
         assertTrue(!originalMessage.getCodingMessageInfo().isEmpty());
 
         assertTrue(!decodedMessage.getDecodingMessageInfo().isEmpty());
+        */
 
     }
 

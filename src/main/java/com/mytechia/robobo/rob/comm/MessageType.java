@@ -20,7 +20,10 @@ public enum MessageType {
     RobSetLEDsModeMessage((byte)4),
     MoveMTMessage((byte)5),
     MovePanTiltMessage((byte)6),
-    ResetPanTiltOffsetMessage((byte)7);
+    ResetPanTiltOffsetMessage((byte)7),
+    InfraredConfigurationMessage((byte)8),
+    OperationModeMessage((byte)9), 
+    MaxValueMotors((byte)10);
 
     public final byte commandType;
 

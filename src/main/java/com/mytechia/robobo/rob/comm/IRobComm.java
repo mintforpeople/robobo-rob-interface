@@ -79,12 +79,7 @@ public interface IRobComm {
      */
     public void movePan(short angVel, int angle);
 
-    /** Sends a move command to the motor in charge of the smartphone PAN movement.
-     *
-     * @param angVel angular velocity of the motor
-     * @param time total time duration of the movement
-     */
-    public void movePan(short angVel, long time);
+
 
 
     /** Sends a move command to the motor in charge of the smartphone TILT movement.
@@ -94,12 +89,7 @@ public interface IRobComm {
      */
     public void moveTilt(short angVel, int angle);
 
-    /** Sends a move command to the motor in charge of the smartphone TILT movement.
-     *
-     * @param angVel angular velocity of the motor
-     * @param time total time duration of the movement
-     */
-    public void moveTilt(short angVel, long time);
+
 
 
     /** Resets the pan & tilt offset...
@@ -117,5 +107,13 @@ public interface IRobComm {
     void addRobStatusListener(IRobCommStatusListener rsListener);
     
     void removeRobStatusListener(IRobCommStatusListener rsListener);
+
+
+	void setOperationMode(byte operationMode);
+	
+	void infraredConfiguration(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh);
+	
+	void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
+			int tiltTension, int tiltTime);
 
 }

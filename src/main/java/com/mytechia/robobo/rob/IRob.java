@@ -27,7 +27,7 @@ public interface IRob {
           */
 	 void movePan(short angVel, int angle);
 
-	 void movePan(short angVel, long time);
+
 
          /** Moves the TILT of the ROB at 'angVel' velocity until reaching 'angle'
           * 
@@ -36,7 +36,8 @@ public interface IRob {
           */
 	 void moveTilt(short angVel, int angle);
 
-	 void moveTilt(short angVel, long time);
+	 void setOperationMode(byte operationMode);
+
 
 	 void resetPanTiltOffset();
 
@@ -59,5 +60,11 @@ public interface IRob {
 	 void addRobStatusListener(IRobStatusListener listener);
 
 	 void removeRobStatusListener(IRobStatusListener listener);
-
+	 
+	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh);
+	 
+	 
+	 void maxValueMotors(int m1Tension, int m1Time, 
+			 			int m2Tension, int m2Time, int panTension, int panTime,
+			 			int tiltTension, int tiltTime);
 }

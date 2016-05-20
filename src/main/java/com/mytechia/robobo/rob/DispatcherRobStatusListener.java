@@ -65,6 +65,16 @@ public class DispatcherRobStatusListener {
             
         }
     }
+    
+    void fireStatusIRSensorStatus(Collection<IRSensorStatus> irSensorStatus) {
+        
+        for (IRobStatusListener robStatusListener : robStatusListeners) {
+            robStatusListener.statusIRSensorStatus(irSensorStatus);
+            
+        }
+    }
+    
+    
 
     void fireStatusFalls(Collection<FallStatus> fall) {
         

@@ -46,6 +46,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     private final List<IRSensorStatus> irSensors = new ArrayList<IRSensorStatus>();
 
     private MotorStatus panMotor, tiltMotor, leftMotor, rightMotor;
+    
+    private WallConnectionStatus wallConnectonStatus= new WallConnectionStatus();
 
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
     
@@ -139,12 +141,23 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         this.updateAllMotorStatus(robStatusMessage, updateDate);
 
         this.updateBateryStatus(robStatusMessage, updateDate);
+        
+        this.updateWallConnection(robStatusMessage, updateDate);
 
     }
 
-    private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+    private void updateWallConnection(RobStatusMessage robStatusMessage, Date updateDate) {
+		
+    	
+    	this.wallConnectonStatus.setWallConnetion(robStatusMessage.getWallConnection());
+    	this.wallConnectonStatus.setLastUpdate(updateDate);
+    	
+    	
+	}
 
-        int bateryLevel=roStatusMessage.getBateryLevel();
+	private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+
+        int bateryLevel=roStatusMessage.getBatteryLevel();
 
         this.battery.setBattery(bateryLevel);
 
@@ -179,6 +192,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         if ((irs == null) || (irs.length == 0)) {
             return;
         }
+        
+        List<IRSensorStatus> listIrSensorStatus= new ArrayList<IRSensorStatus>();
 
         for (int i = 0; i < irs.length; i++) {
 
@@ -187,10 +202,12 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             irSensorStatus.setDistance(irs[i]);
             
             irSensorStatus.setLastUpdate(updateDate);
+            
+            listIrSensorStatus.add(irSensorStatus);
 
         }
         
-        
+       this.dispatcherRobStatusListener.fireStatusIRSensorStatus(listIrSensorStatus);
 
     }
     
@@ -326,20 +343,14 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         this.roboCom.movePan(angVel, angle);
     }
 
-    @Override
-    public void movePan(short angVel, long time) {
-        this.roboCom.movePan(angVel, time);
-    }
+
 
     @Override
     public void moveTilt(short angVel, int angle) {
         this.roboCom.moveTilt(angVel, angle);
     }
 
-    @Override
-    public void moveTilt(short angVel, long time) {
-        this.roboCom.moveTilt(angVel, time);
-    }
+
 
     @Override
     public void resetPanTiltOffset() {
@@ -353,6 +364,24 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     
     
     @Override
+	public void setOperationMode(byte operationMode) {
+    	this.roboCom.setOperationMode(operationMode);
+		
+	}
+
+	@Override
+	public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) {
+		this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
+	}
+
+	@Override
+	public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
+			int tiltTension, int tiltTime) {
+		this.roboCom.maxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime);
+		
+	}
+
+	@Override
     public List<MotorStatus> getLastStatusMotors() {
         ArrayList<MotorStatus> motors = new ArrayList<MotorStatus>();
         motors.add(panMotor);

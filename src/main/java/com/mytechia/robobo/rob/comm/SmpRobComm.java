@@ -158,37 +158,23 @@ public class SmpRobComm implements IRobComm{
     public void movePan(short angVel, int angle) {
         
         angVel = limitAngVel(angVel);
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, angVel, angle, 0);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle, (short) 0, 0);
         
         sendCommand(movePanTiltMessage);
     }
 
-    @Override
-    public void movePan(short angVel, long time) {
-        
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)0, limitAngVel(angVel), 0, (int) time);
-        
-        sendCommand(movePanTiltMessage);
-        
-    }
+
 
     @Override
     public void moveTilt(short angVel, int angle) {
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((byte)1, limitAngVel(angVel), convertAngle(angle), 0);
+    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, limitAngVel(angVel), convertAngle(angle));
         
         sendCommand(movePanTiltMessage);
         
     }
 
-    @Override
-    public void moveTilt(short angVel, long time) {
-        
-        MovePanTiltMessage movePanTiltMessage = new MovePanTiltMessage((byte) 1, limitAngVel(angVel), 0, (int) time);
 
-        sendCommand(movePanTiltMessage);
-        
-    }
 
     @Override
     public void resetPanTiltOffset() {
@@ -202,6 +188,39 @@ public class SmpRobComm implements IRobComm{
 
 
     @Override
+	public void setOperationMode(byte operationMode) {
+		sendCommand(new OperationModeMessage(operationMode));
+	}
+
+
+	@Override
+	public void infraredConfiguration(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) {
+		sendCommand(new InfraredConfigurationMessage(infraredId, commandCode, dataByteLow, dataByteHigh));
+	
+	}
+
+
+	@Override
+	public void maxValueMotors(int m1Tension, 
+			int m1Time, 
+			int m2Tension, 
+			int m2Time, 
+			int panTension, 
+			int panTime,
+			int tiltTension, 
+			int tiltTime) {
+		
+		/*
+		if(m1Tension<0){
+			throw new IllegalArgumentException("The m1Tension= cannot be negative");
+		}*/
+		
+		sendCommand(new MaxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime));
+		
+	}
+
+
+	@Override
     public void addRobStatusListener(IRobCommStatusListener rsListener) {
         dispatcherRobCommStatusListener.subscribeToRobCommStatus(rsListener);
     }

@@ -25,9 +25,7 @@ public class RobDeviceStatus<T extends Enum<T>> {
         return id;
     }
 
-    public void setId(T id) {
-        this.id = id;
-    }
+
 
     public Date getLastUpdate() {
         return lastUpdate;
