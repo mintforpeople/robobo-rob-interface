@@ -9,7 +9,7 @@ package com.mytechia.robobo.rob;
 public enum LEDsModeEnum {
     
     
-    NONE((byte) 0), BATTERY((byte)1), IR((byte)2), PID((byte)3), FALL((byte)4), GAP((byte)5);
+    NONE((byte) 0), SHOW_FUNCTIONAL_INFRARED((byte)1), INFRARED((byte)2), DETECT_FALL((byte)4), INFRARED_AND_DETECT_FALL((byte)8), ON_SECUENCE_COLORS((byte)22);
 
     LEDsModeEnum(byte code) {
         this.code = code;

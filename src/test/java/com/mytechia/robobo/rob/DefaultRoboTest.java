@@ -363,7 +363,7 @@ public class DefaultRoboTest {
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
 
-        LEDsModeEnum mode= LEDsModeEnum.FALL;
+        LEDsModeEnum mode= LEDsModeEnum.INFRARED_AND_DETECT_FALL;
 
         defaultRob.setLEDsMode(mode);
 
