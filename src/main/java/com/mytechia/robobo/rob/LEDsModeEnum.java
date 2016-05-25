@@ -15,7 +15,19 @@ public enum LEDsModeEnum {
         this.code = code;
     }
 
-    final byte code;
+    public final byte code;
+    
+    public static LEDsModeEnum toLEDMode(byte code){
+        
+        for (LEDsModeEnum value : values()) {
+            if(value.code==code){
+                return value;
+            }
+        }
+        
+        return null;
+        
+    }
      
      
 

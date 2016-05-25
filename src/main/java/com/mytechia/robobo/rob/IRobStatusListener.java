@@ -23,5 +23,7 @@ public interface IRobStatusListener {
     void statusIRSensorStatus(Collection<IRSensorStatus> irSensorStatus);
 
     void statusBattery(BatteryStatus battery);
+    
+    void statusWallConnectionStatus(WallConnectionStatus wallConnectionStatus);
 
 }

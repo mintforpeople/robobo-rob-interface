@@ -83,6 +83,15 @@ public class DispatcherRobStatusListener {
             
         }
     }
+    
+    
+    void fireStatusWallConnection(WallConnectionStatus battery) {
+        
+        for (IRobStatusListener robStatusListener : robStatusListeners) {
+            robStatusListener.statusWallConnectionStatus(battery);
+            
+        }
+    }
 
 
     void fireStatusBattery(BatteryStatus battery) {
