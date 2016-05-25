@@ -30,6 +30,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
     private static final int MOTOR_COUNT = 4;
+    private static final int ANGLE_CONVERSION_FACTOR = 10000;
+    private static final short MAX_ANG_VEL = 255;
     
     private IRobComm roboCom;
 
@@ -169,15 +171,21 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
         byte gapsValue = robStatusMessage.getGaps();
 
+        int indexGap=1;
+        
         for (int i = 0; i < GapStatusId.values().length; i++) {
 
-            byte gapValue = readBitAtPosition(gapsValue, i);
+            
+            
+            byte gapValue = readBitAtPosition(gapsValue, indexGap);
 
             GapStatus gap = gaps.get(i);
             
             gap.setGap((gapValue == 1));
             
             gap.setLastUpdate(updateDate);
+            
+            indexGap+=2;
 
         }
         
@@ -225,15 +233,19 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
         byte fallsValue = robStatusMessage.getFalls();
 
+        int indexFall=1;
+        
         for (int i = 0; i < FallStatusId.values().length; i++) {
 
-            byte fallValue = readBitAtPosition(fallsValue, i);
+            byte fallValue = readBitAtPosition(fallsValue, indexFall);
 
             FallStatus fall = falls.get(i);
             
             fall.setFall((fallValue == 1));
             
             fall.setLastUpdate(updateDate);
+            
+            indexFall+=2;
 
         }
         
@@ -311,7 +323,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             MotorStatus ms, int index, 
             int[] motorAngle, short[] motorVelocities, int[] motorVoltages) {
         
-        ms.setVariationAngle(motorAngle[index]);
+        ms.setVariationAngle(convertAngleROB2OBO(motorAngle[index]));
         ms.setAngularVelocity(motorVelocities[index]);
         ms.setVoltage(motorVoltages[index]);
         
@@ -330,24 +342,24 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) {
-        this.roboCom.moveMT(mode.getMode(), angVel1, angle1, angVel2, angle2);
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), convertAngleOBO2ROB(angle1), limitAngVel(angVel2), convertAngleOBO2ROB(angle2));
     }
 
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) {
-        this.roboCom.moveMT(mode.getMode(), angVel1, angVel2, time);
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), limitAngVel(angVel2), time);
     }
 
     @Override
-    public void movePan(short angVel, int angle) {
-        this.roboCom.movePan(angVel, angle);
+    public void movePan(short angVel, int angle) {        
+        this.roboCom.movePan(limitAngVel(angVel), convertAngleOBO2ROB(angle));
     }
 
 
 
     @Override
     public void moveTilt(short angVel, int angle) {
-        this.roboCom.moveTilt(angVel, angle);
+        this.roboCom.moveTilt(limitAngVel(angVel), convertAngleOBO2ROB(angle));
     }
 
 
@@ -434,6 +446,19 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
 
 
-
+    private int convertAngleOBO2ROB(int angle) {
+        return angle*ANGLE_CONVERSION_FACTOR;
+    }
+    
+    private int convertAngleROB2OBO(int angle) {
+        return angle/ANGLE_CONVERSION_FACTOR;
+    }
+    
+    private short limitAngVel(short angVel) {
+        if (angVel > MAX_ANG_VEL)
+            return MAX_ANG_VEL;
+        else 
+            return angVel;
+    }
 
 }

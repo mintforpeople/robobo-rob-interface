@@ -28,7 +28,7 @@ public class FallStatus extends RobDeviceStatus<FallStatusId> {
     }
     
     public static enum FallStatusId{
-        Fall1, Fall2, Fall3, Fall4, Fall5, Fall6, Fall7, Fall8;
+        Fall1, Fall2, Fall3, Fall4;
     }
     
 

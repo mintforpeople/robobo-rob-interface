@@ -37,7 +37,7 @@ public class SmpRobComm implements IRobComm{
     private static final Logger LOGGER= LoggerFactory.getLogger(SmpRobComm.class);
 
     public static final int TIME_CHECK_MESSAGE = 1000;
-    private static final short MAX_ANG_VEL = 255;
+    
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
@@ -107,17 +107,7 @@ public class SmpRobComm implements IRobComm{
     }
     
     
-    private short limitAngVel(short angVel) {
-        if (angVel > MAX_ANG_VEL)
-            return MAX_ANG_VEL;
-        else 
-            return angVel;
-    }
     
-    
-    private int convertAngle(int angle) {
-        return angle * 10000;
-    }
     
 
     @Override
@@ -139,7 +129,7 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, limitAngVel(angVel1), convertAngle(angle1), limitAngVel(angVel2), convertAngle(angle2), 0);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1, angVel2, angle2, 0);
         
         sendCommand(moveMTMessage);
         
@@ -148,7 +138,7 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void moveMT(byte mode, short angVel1, short angVel2, long time)  {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, limitAngVel(angVel1), 0, limitAngVel(angVel2), 0, time);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
         
         sendCommand(moveMTMessage);
         
@@ -157,7 +147,8 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void movePan(short angVel, int angle) {
         
-        angVel = limitAngVel(angVel);
+        System.out.println("PAN: "+angVel+" - "+angle);
+        
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle, (short) 0, 0);
         
         sendCommand(movePanTiltMessage);
@@ -168,7 +159,9 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void moveTilt(short angVel, int angle) {
         
-    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, limitAngVel(angVel), convertAngle(angle));
+        System.out.println("TILT: "+angVel+" - "+angle);
+        
+    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, angVel, angle);
         
         sendCommand(movePanTiltMessage);
         

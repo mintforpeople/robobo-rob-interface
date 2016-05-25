@@ -25,7 +25,7 @@ public class GapStatus extends RobDeviceStatus<GapStatusId> {
     }
     
     public static enum GapStatusId{
-        Gap1, Gap2, Gap3, Gap4, Gap5, Gap6, Gap7, Gap8;
+        Gap1, Gap2, Gap3, Gap4;
     }
 
     @Override
