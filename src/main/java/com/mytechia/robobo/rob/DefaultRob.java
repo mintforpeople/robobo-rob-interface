@@ -149,21 +149,23 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     private void updateWallConnection(RobStatusMessage robStatusMessage, Date updateDate) {
-		
-    	
-    	this.wallConnectonStatus.setWallConnetion(robStatusMessage.getWallConnection());
-    	this.wallConnectonStatus.setLastUpdate(updateDate);
-    	
-    	
-	}
+        
+        this.wallConnectonStatus.setWallConnetion(robStatusMessage.getWallConnection());
+        this.wallConnectonStatus.setLastUpdate(updateDate);
+        
+        this.dispatcherRobStatusListener.fireStatusWallConnection(wallConnectonStatus);
+        
+    }
 
-	private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+    private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
 
-        int bateryLevel=roStatusMessage.getBatteryLevel();
+        int bateryLevel = roStatusMessage.getBatteryLevel();
 
         this.battery.setBattery(bateryLevel);
 
         this.battery.setLastUpdate(updateDate);
+        
+       this.dispatcherRobStatusListener.fireStatusBattery(battery);
 
     }
 
