@@ -9,6 +9,7 @@
  */
 package com.mytechia.robobo.rob.comm;
 
+import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
 import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
@@ -35,6 +36,18 @@ public class ResetPanTiltOffsetMessage extends RoboCommand {
     @Override
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         return 0;
+    }
+    
+    
+    @Override
+    protected byte[] codeMessageData() throws MessageFormatException {
+
+        MessageCoder messageCoder = this.getMessageCoder();
+
+        messageCoder.writeByte((byte)0, "NONE");
+
+        return messageCoder.getBytes();
+
     }
 
 
