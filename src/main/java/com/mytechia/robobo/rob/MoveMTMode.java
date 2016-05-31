@@ -31,6 +31,17 @@ public enum MoveMTMode
         return this.mode;
     }
     
+    public static MoveMTMode toMoveMTMode(byte mode){
+        
+        for (MoveMTMode moveMtMode : MoveMTMode.values()) {
+            if(moveMtMode.getMode()== mode){
+                return moveMtMode;
+            }
+        }
+        
+        return null;
+    }
+    
     private byte mode;
     
 }
