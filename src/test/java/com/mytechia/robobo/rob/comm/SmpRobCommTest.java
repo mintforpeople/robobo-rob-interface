@@ -24,7 +24,7 @@ public class SmpRobCommTest {
 
 
     @Test
-    public void testSendCommand(){
+    public void testSendCommand() throws CommunicationException{
 
         IBasicCommunicationChannel basicCommunicationChannel= mock(IBasicCommunicationChannel.class);
 

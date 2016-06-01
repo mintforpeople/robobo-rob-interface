@@ -6,6 +6,7 @@
  */
 package com.mytechia.robobo.rob;
 
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -98,6 +99,14 @@ public class DispatcherRobStatusListener {
         
         for (IRobStatusListener robStatusListener : robStatusListeners) {
             robStatusListener.statusBattery(battery);
+            
+        }
+    }
+    
+    void fireInternalError(CommunicationException ex){
+        
+        for (IRobStatusListener robStatusListener : robStatusListeners) {
+            robStatusListener.robCommunicationError(ex);
             
         }
     }

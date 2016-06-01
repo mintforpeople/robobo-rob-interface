@@ -6,26 +6,28 @@
  */
 package com.mytechia.robobo.rob;
 
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.robobo.util.Color;
 
 import java.util.List;
 
 public interface IRob {
 
-	 void setLEDColor(int led, Color color);
+	 void setLEDColor(int led, Color color) throws InternalErrorException;
 
-	 void setLEDsMode(LEDsModeEnum mode);
+	 void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2);
+	 void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time);
+	 void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException;
 
          /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
           * 
           * @param angVel the velocity (0-255)
           * @param angle  the angle (0-90)
           */
-	 void movePan(short angVel, int angle);
+	 void movePan(short angVel, int angle) throws InternalErrorException;
 
 
 
@@ -34,12 +36,12 @@ public interface IRob {
           * @param angVel the velocity (0-255)
           * @param angle  the angle (0-90)
           */
-	 void moveTilt(short angVel, int angle);
+	 void moveTilt(short angVel, int angle) throws InternalErrorException;
 
-	 void setOperationMode(byte operationMode);
+	 void setOperationMode(byte operationMode) throws InternalErrorException;
 
 
-	 void resetPanTiltOffset();
+	 void resetPanTiltOffset() throws InternalErrorException;
 
 	 List<MotorStatus> getLastStatusMotors();
 
@@ -55,16 +57,16 @@ public interface IRob {
 
 	 BatteryStatus getLastStatusBattery();
          
-         void setRobStatusPeriod(int period);
+         void setRobStatusPeriod(int period) throws InternalErrorException;
 
 	 void addRobStatusListener(IRobStatusListener listener);
 
 	 void removeRobStatusListener(IRobStatusListener listener);
 	 
-	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh);
+	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException;
 	 
 	 
 	 void maxValueMotors(int m1Tension, int m1Time, 
 			 			int m2Tension, int m2Time, int panTension, int panTime,
-			 			int tiltTension, int tiltTime);
+			 			int tiltTension, int tiltTime) throws InternalErrorException;
 }

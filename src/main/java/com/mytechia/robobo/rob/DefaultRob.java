@@ -7,6 +7,8 @@
 
 package com.mytechia.robobo.rob;
 
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import static com.mytechia.robobo.rob.BumpStatus.BumpStatusId;
 import static com.mytechia.robobo.rob.FallStatus.FallStatusId;
 import static com.mytechia.robobo.rob.GapStatus.GapStatusId;
@@ -333,67 +335,84 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     
 
     @Override
-    public void setLEDColor(int led, Color color) {
+    public void setLEDColor(int led, Color color) throws InternalErrorException {
+        
         this.roboCom.setLEDColor(led, color.getRed(), color.getGreen(), color.getBlue());
+     
     }
 
     @Override
-    public void setLEDsMode(LEDsModeEnum mode) {
-        this.roboCom.setLEDsMode(mode.code);
+    public void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException {
+        
+            this.roboCom.setLEDsMode(mode.code);
+   
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) {
+    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
+        
         this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), convertAngleOBO2ROB(angle1), limitAngVel(angVel2), convertAngleOBO2ROB(angle2));
+    
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) {
+    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
+        
         this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), limitAngVel(angVel2), time);
+        
     }
 
     @Override
-    public void movePan(short angVel, int angle) {        
+    public void movePan(short angVel, int angle) throws InternalErrorException {        
+        
         this.roboCom.movePan(limitAngVel(angVel), convertAngleOBO2ROB(angle));
+      
     }
 
 
 
     @Override
-    public void moveTilt(short angVel, int angle) {
+    public void moveTilt(short angVel, int angle) throws InternalErrorException {
+        
         this.roboCom.moveTilt(limitAngVel(angVel), convertAngleOBO2ROB(angle));
+    
     }
 
 
 
     @Override
-    public void resetPanTiltOffset() {
+    public void resetPanTiltOffset() throws InternalErrorException {
         this.roboCom.resetPanTiltOffset();
     }
     
     @Override
-    public void setRobStatusPeriod(int period) {
+    public void setRobStatusPeriod(int period) throws InternalErrorException {
+
         this.roboCom.setRobStatusPeriod(period);
+
     }
-    
-    
+
     @Override
-	public void setOperationMode(byte operationMode) {
-    	this.roboCom.setOperationMode(operationMode);
-		
-	}
+    public void setOperationMode(byte operationMode) throws InternalErrorException {
 
-	@Override
-	public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) {
-		this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
-	}
+        this.roboCom.setOperationMode(operationMode);
 
-	@Override
-	public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
-			int tiltTension, int tiltTime) {
-		this.roboCom.maxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime);
-		
-	}
+    }
+
+    @Override
+    public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException {
+
+        this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
+
+    }
+
+    @Override
+    public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
+            int tiltTension, int tiltTime) throws InternalErrorException {
+
+        this.roboCom.maxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime);
+
+    }
 
 	@Override
     public List<MotorStatus> getLastStatusMotors() {
@@ -461,6 +480,11 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             return MAX_ANG_VEL;
         else 
             return angVel;
+    }
+
+    @Override
+    public void robCommunicationError(CommunicationException ex) {
+        dispatcherRobStatusListener.fireInternalError(ex);
     }
 
 }

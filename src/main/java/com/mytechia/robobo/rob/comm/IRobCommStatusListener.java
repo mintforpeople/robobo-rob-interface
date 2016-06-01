@@ -9,12 +9,16 @@
  */
 package com.mytechia.robobo.rob.comm;
 
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+
 
 /**
  * Callback interface to receive ROB-STATUS messages.
  */
 public interface IRobCommStatusListener {
 
-    public void robStatus(RobStatusMessage rs);
+    void robStatus(RobStatusMessage rs);
+    
+    void robCommunicationError(CommunicationException ex);
 
 }

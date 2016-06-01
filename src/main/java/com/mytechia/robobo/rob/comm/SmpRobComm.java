@@ -111,7 +111,7 @@ public class SmpRobComm implements IRobComm{
     
 
     @Override
-    public void setLEDColor(int ledId, int r, int g, int b) {
+    public void setLEDColor(int ledId, int r, int g, int b) throws CommunicationException {
         
         SetLEDColorMessage setLEDColorMessage = new SetLEDColorMessage((byte) ledId, (short)r, (short)g, (short)b);
         
@@ -119,7 +119,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void setLEDsMode(byte mode) {
+    public void setLEDsMode(byte mode) throws CommunicationException {
         
         RobSetLEDsModeMessage robSetLEDsModeMessage= new RobSetLEDsModeMessage(mode);
         
@@ -127,7 +127,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) {
+    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1, angVel2, angle2, 0);
         
@@ -136,7 +136,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, short angVel1, short angVel2, long time)  {
+    public void moveMT(byte mode, short angVel1, short angVel2, long time) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
         
@@ -145,7 +145,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(short angVel, int angle) {
+    public void movePan(short angVel, int angle) throws CommunicationException {
         
         System.out.println("PAN: "+angVel+" - "+angle);
         
@@ -157,7 +157,7 @@ public class SmpRobComm implements IRobComm{
 
 
     @Override
-    public void moveTilt(short angVel, int angle) {
+    public void moveTilt(short angVel, int angle) throws CommunicationException{
         
         System.out.println("TILT: "+angVel+" - "+angle);
         
@@ -170,24 +170,24 @@ public class SmpRobComm implements IRobComm{
 
 
     @Override
-    public void resetPanTiltOffset() {
+    public void resetPanTiltOffset() throws CommunicationException{
         sendCommand(new ResetPanTiltOffsetMessage());
     }
 
     @Override
-    public void setRobStatusPeriod(int period) {
+    public void setRobStatusPeriod(int period) throws CommunicationException{
         sendCommand(new SetRobStatusPeriodMessage(period));
     }
 
 
     @Override
-	public void setOperationMode(byte operationMode) {
+	public void setOperationMode(byte operationMode) throws CommunicationException{
 		sendCommand(new OperationModeMessage(operationMode));
 	}
 
 
 	@Override
-	public void infraredConfiguration(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) {
+	public void infraredConfiguration(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws CommunicationException{
 		sendCommand(new InfraredConfigurationMessage(infraredId, commandCode, dataByteLow, dataByteHigh));
 	
 	}
@@ -201,7 +201,7 @@ public class SmpRobComm implements IRobComm{
 			int panTension, 
 			int panTime,
 			int tiltTension, 
-			int tiltTime) {
+			int tiltTime) throws CommunicationException{
 		
 		/*
 		if(m1Tension<0){
@@ -224,7 +224,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     
-    void sendCommand(RoboCommand roboCommand) {
+    void sendCommand(RoboCommand roboCommand) throws CommunicationException {
 
         if (roboCommand == null) {
             return;
@@ -302,6 +302,7 @@ public class SmpRobComm implements IRobComm{
                     LOGGER.error("Error format command", ex);
                 }catch (CommunicationException ex) {
                     LOGGER.error("Error receiving command", ex);
+                    dispatcherRobCommStatusListener.fireRobCommunicationError(ex);
                     return;
                 }
             }

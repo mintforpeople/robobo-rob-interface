@@ -6,6 +6,8 @@
  */
 package com.mytechia.robobo.rob;
 
+import com.mytechia.commons.framework.exception.InternalErrorException;
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import java.util.Collection;
 
 public interface IRobStatusListener {
@@ -25,5 +27,7 @@ public interface IRobStatusListener {
     void statusBattery(BatteryStatus battery);
     
     void statusWallConnectionStatus(WallConnectionStatus wallConnectionStatus);
+    
+    void robCommunicationError(InternalErrorException ex);
 
 }
