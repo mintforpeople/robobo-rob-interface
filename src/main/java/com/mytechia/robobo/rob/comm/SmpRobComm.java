@@ -147,7 +147,7 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void movePan(short angVel, int angle) throws CommunicationException {
         
-        System.out.println("PAN: "+angVel+" - "+angle);
+        
         
         MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle, (short) 0, 0);
         
@@ -158,8 +158,6 @@ public class SmpRobComm implements IRobComm{
 
     @Override
     public void moveTilt(short angVel, int angle) throws CommunicationException{
-        
-        System.out.println("TILT: "+angVel+" - "+angle);
         
     	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, angVel, angle);
         
@@ -239,6 +237,7 @@ public class SmpRobComm implements IRobComm{
             
         } catch (CommunicationException ex) {
             LOGGER.error("Error sending command", ex);
+            throw ex;
         }
 
         roboCommand.setLastTransmissionTime(System.currentTimeMillis());
