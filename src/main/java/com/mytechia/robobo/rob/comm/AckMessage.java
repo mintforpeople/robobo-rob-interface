@@ -18,7 +18,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 /**
  *  Implementation for AckMessage
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo
  */
 public class AckMessage extends RoboCommand {
 

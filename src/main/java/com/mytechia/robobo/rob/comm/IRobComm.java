@@ -39,8 +39,8 @@ public interface IRobComm {
      * Sends a move command to the two motors in charge of wheel movement.
      *
      * The 'mode' paramter configures the direction of movement of the motors: -
-     * 0 --> STOP | STOP - 1 --> REVERSE | REVERSE - 2 --> FORWARD | FORWARD - 4
-     * --> FORWARD | REVERSE - 8 --> REVERSE | FORWARD
+     * 0 --- STOP | STOP - 1 --- REVERSE | REVERSE - 2 --- FORWARD | FORWARD - 4
+     * --- FORWARD | REVERSE - 8 --- REVERSE | FORWARD
      *
      * @param mode direction of movement of the motors
      * @param angVel1 angular velocity of the motor 1
@@ -54,8 +54,8 @@ public interface IRobComm {
      * Sends a move command to the two motors in charge of wheel movement.
      *
      * The 'mode' paramter configures the direction of movement of the motors: -
-     * 0 --> STOP | STOP - 1 --> REVERSE | REVERSE - 2 --> FORWARD | FORWARD - 4
-     * --> FORWARD | REVERSE - 8 --> REVERSE | FORWARD
+     * 0 --- STOP | STOP - 1 --- REVERSE | REVERSE - 2 --- FORWARD | FORWARD - 4
+     * --- FORWARD | REVERSE - 8 --- REVERSE | FORWARD
      *
      * @param mode direction of movement of the motors
      * @param angVel1 angular velocity of the motor 1
@@ -83,7 +83,7 @@ public interface IRobComm {
     public void moveTilt(short angVel, int angle) throws CommunicationException;
 
     /**
-     * Resets the pan & tilt offset...
+     * Resets the pan and tilt offset...
      *
      */
     public void resetPanTiltOffset() throws CommunicationException;

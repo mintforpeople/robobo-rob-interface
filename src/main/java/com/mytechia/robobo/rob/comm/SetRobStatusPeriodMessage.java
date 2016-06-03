@@ -18,7 +18,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.SetRobStatusPeriodMessage
 /**
  *  Implementation for SetRobStatusPeriodMessage.
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class SetRobStatusPeriodMessage extends RoboCommand {
 

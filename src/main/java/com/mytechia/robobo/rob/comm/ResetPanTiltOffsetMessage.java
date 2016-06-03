@@ -16,7 +16,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage
 
 /**
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class ResetPanTiltOffsetMessage extends RoboCommand {
 

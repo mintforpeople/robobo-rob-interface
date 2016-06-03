@@ -20,7 +20,7 @@ import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFor
 
 /**
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class DummyCommunicationChannel implements INetworkBasicCommunicationChannel {
 

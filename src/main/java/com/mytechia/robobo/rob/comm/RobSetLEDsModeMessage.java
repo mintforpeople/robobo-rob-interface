@@ -18,7 +18,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.RobSetLEDsModeMessage;
 /**
  *  Implementation for SetLEDsModeMessage
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class RobSetLEDsModeMessage  extends RoboCommand {
 

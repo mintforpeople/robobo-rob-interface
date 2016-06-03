@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Ignore;
 
 /**
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo
  */
 public class RobStatusMessageTest {
 

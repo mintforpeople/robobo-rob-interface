@@ -24,7 +24,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
 /**
  * Implementation for RobStatusMessage.
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class RobStatusMessage extends RoboCommand {
     

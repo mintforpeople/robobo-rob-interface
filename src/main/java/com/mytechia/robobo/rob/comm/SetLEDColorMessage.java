@@ -20,7 +20,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.SetLEDColorMessage;
 /**
  *  Implementation for SetLEDColorMessage.
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
 public class SetLEDColorMessage extends RoboCommand {
 
