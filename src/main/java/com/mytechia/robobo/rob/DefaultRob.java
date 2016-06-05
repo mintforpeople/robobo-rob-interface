@@ -1,9 +1,25 @@
-/*
+/*******************************************************************************
+ *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright 2016 Julio Gomez <julio.gomez@mytechia.com>
- * 
- *  This file is part of robobo-rob-interface.
- */
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *
+ *   This file is part of Robobo ROB Interface Library.
+ *
+ *   Robobo ROB Interface Library is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Robobo ROB Interface Library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 
 package com.mytechia.robobo.rob;
 
@@ -33,7 +49,12 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 255;
+    private static final short MAX_ANG_VEL = 127;
+    private static final short PT_ANG_VEL = 6;
+    private static final int MAX_PAN_ANGLE = 180;
+    private static final int MIN_PAN_ANGLE = 0;
+    private static final int MAX_TILT_ANGLE = 150;
+    private static final int MIN_TILT_ANGLE = 20;
     
     private IRobComm roboCom;
 
@@ -365,7 +386,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void movePan(short angVel, int angle) throws InternalErrorException {        
         
-        this.roboCom.movePan(limitAngVel(angVel), convertAngleOBO2ROB(angle));
+        this.roboCom.movePan(PT_ANG_VEL, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
       
     }
 
@@ -374,7 +395,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void moveTilt(short angVel, int angle) throws InternalErrorException {
         
-        this.roboCom.moveTilt(limitAngVel(angVel), convertAngleOBO2ROB(angle));
+        this.roboCom.moveTilt(PT_ANG_VEL, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
     
     }
 
@@ -480,6 +501,18 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             return MAX_ANG_VEL;
         else 
             return angVel;
+    }
+    
+    private int limitAngle(int angle, int max, int min) {
+        if (angle > max) {
+            return max;
+        }
+        else if (angle < min) {
+            return min;
+        }
+        else {
+            return angle;
+        }
     }
 
     @Override
