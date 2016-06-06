@@ -372,21 +372,21 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), convertAngleOBO2ROB(angle1), limitAngVel(angVel2), convertAngleOBO2ROB(angle2));
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL), convertAngleOBO2ROB(angle2));
     
     }
 
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1), limitAngVel(angVel2), time);
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL), time);
         
     }
 
     @Override
     public void movePan(short angVel, int angle) throws InternalErrorException {        
         
-        this.roboCom.movePan(PT_ANG_VEL, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
+        this.roboCom.movePan(limitAngVel(angVel, PT_ANG_VEL), convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
       
     }
 
@@ -395,7 +395,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void moveTilt(short angVel, int angle) throws InternalErrorException {
         
-        this.roboCom.moveTilt(PT_ANG_VEL, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
+        this.roboCom.moveTilt(limitAngVel(angVel, PT_ANG_VEL), convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
     
     }
 
@@ -496,12 +496,13 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         return angle/ANGLE_CONVERSION_FACTOR;
     }
     
-    private short limitAngVel(short angVel) {
-        if (angVel > MAX_ANG_VEL)
-            return MAX_ANG_VEL;
+    private short limitAngVel(short angVel, short max) {
+        if (angVel > max)
+            return max;
         else 
             return angVel;
     }
+
     
     private int limitAngle(int angle, int max, int min) {
         if (angle > max) {
