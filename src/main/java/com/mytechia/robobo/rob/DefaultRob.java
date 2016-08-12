@@ -49,9 +49,9 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 127;
+    private static final short MAX_ANG_VEL = 350;
     private static final short PT_ANG_VEL = 6;
-    private static final int MAX_PAN_ANGLE = 180;
+    private static final int MAX_PAN_ANGLE = 359;
     private static final int MIN_PAN_ANGLE = 0;
     private static final int MAX_TILT_ANGLE = 150;
     private static final int MIN_TILT_ANGLE = 20;
@@ -386,7 +386,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void movePan(short angVel, int angle) throws InternalErrorException {        
         
-        this.roboCom.movePan(limitAngVel(angVel, PT_ANG_VEL), convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
+        this.roboCom.movePan(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
       
     }
 
@@ -395,7 +395,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void moveTilt(short angVel, int angle) throws InternalErrorException {
         
-        this.roboCom.moveTilt(limitAngVel(angVel, PT_ANG_VEL), convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
+        this.roboCom.moveTilt(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
     
     }
 
