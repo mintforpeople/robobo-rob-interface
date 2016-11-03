@@ -49,12 +49,13 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 350;
+    private static final short MAX_ANG_VEL = 250;
+    private static final short MIN_ANG_VEL = 10;
     private static final short PT_ANG_VEL = 6;
-    private static final int MAX_PAN_ANGLE = 359;
-    private static final int MIN_PAN_ANGLE = 0;
-    private static final int MAX_TILT_ANGLE = 150;
-    private static final int MIN_TILT_ANGLE = 20;
+    private static final int MAX_PAN_ANGLE = 340;
+    private static final int MIN_PAN_ANGLE = 25;
+    private static final int MAX_TILT_ANGLE = 110;
+    private static final int MIN_TILT_ANGLE = 25;
     
     private IRobComm roboCom;
 
@@ -372,14 +373,14 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL), convertAngleOBO2ROB(angle2));
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle2));
     
     }
 
     @Override
     public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL), time);
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), time);
         
     }
 
@@ -496,10 +497,12 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         return angle/ANGLE_CONVERSION_FACTOR;
     }
     
-    private short limitAngVel(short angVel, short max) {
+    private short limitAngVel(short angVel, short max, short min) {
         if (angVel > max)
             return max;
-        else 
+        else if (angVel < min)
+            return min;
+        else        
             return angVel;
     }
 
