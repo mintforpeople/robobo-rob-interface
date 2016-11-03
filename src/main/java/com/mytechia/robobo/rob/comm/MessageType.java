@@ -22,45 +22,29 @@
 
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-
-import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
-
 /**
- *  Implementation for AckMessage
  *
- * Created by Victor Sonora Pombo
+ *
+ * @author Julio Alberto Gomez Fernandez
  */
-public class AckMessage extends RoboCommand {
+public enum MessageType {
 
+    AckMessage((byte)0),
+    RobStatusMessage((byte)1),
+    SetRobStatusPeriodMessage((byte)2),
+    SetLEDColorMessage((byte)3),
+    RobSetLEDsModeMessage((byte)4),
+    MoveMTMessage((byte)5),
+    MovePanTiltMessage((byte)6),
+    ResetPanTiltOffsetMessage((byte)7),
+    InfraredConfigurationMessage((byte)8),
+    OperationModeMessage((byte)9), 
+    MaxValueMotors((byte)10);
 
-    public AckMessage() {
-        super();
-        this.setCommandType(AckMessage.commandType);
+    public final byte commandType;
+
+    MessageType(byte code){
+        this.commandType = code;
     }
-
-
-    public AckMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
-    }
-
-
-    @Override
-    protected final byte[] codeMessageData() throws MessageFormatException {
-        MessageCoder messageCoder = this.getMessageCoder();
-        return messageCoder.getBytes();
-    }
-
-    @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        
-        MessageDecoder messageDecoder = this.getMessageDecoder();
-
-        return messageDecoder.getArrayIndex();
-    }
-
-
 
 }

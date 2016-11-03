@@ -1,120 +1,126 @@
-/**
- * *****************************************************************************
- * <p>
- * Copyright (C) 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- * Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
- * <p>
- * This file is part of robobo-rob-interface.
- * ****************************************************************************
- */
+/*******************************************************************************
+ *
+ *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *
+ *   This file is part of Robobo ROB Interface Library.
+ *
+ *   Robobo ROB Interface Library is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Robobo ROB Interface Library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
-/**
- *  Implementation for MovePanTiltMessage
- *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
- */
-public class MovePanTiltMessage extends Command {
+public class MovePanTiltMessage extends RoboCommand {
 
-    private byte panTilt;
+    private static final String TILT_ANGLE = "tiltAngle";
 
-    private double angVel;
+    private static final String TILT_ANGULAR_VELOCITY = "tiltAngularVelocity";
 
-    private double angle;
+    private static final String PAN_ANGLE = "panAngle";
 
-    private long time;
+    private static final String PAN_ANGULAR_VELOCITY = "panAngularVelocity";
 
+    private short panAngularVelocity;
 
-    public MovePanTiltMessage(
-            byte panTilt,
-            double angVel,
-            double angle,
-            long time) {
+    private int panAngle;
 
+    private short tiltAngularVelocity;
+
+    private int tiltAngle;
+
+    public MovePanTiltMessage(short panAngularVelocity, int panAngle, short tiltAngularVelocity, int tiltAngle) {
         super();
-        this.setCommandType((byte)6);
-        this.panTilt = panTilt;
-        this.angVel = angVel;
-        this.angle = angle;
-        this.time = time;
-
+        super.setCommandType(MessageType.MovePanTiltMessage.commandType);
+        this.panAngularVelocity = panAngularVelocity;
+        this.panAngle = panAngle;
+        this.tiltAngularVelocity = tiltAngularVelocity;
+        this.tiltAngle = tiltAngle;
     }
 
-
-    public MovePanTiltMessage(byte [] messageData) throws MessageFormatException {
-
-        super(messageData);
-
+    public MovePanTiltMessage(byte[] message) throws MessageFormatException {
+        super(message);
+        super.setCommandType(MessageType.MovePanTiltMessage.commandType);
     }
-
 
     @Override
-    protected final byte[] codeMessageData() throws MessageFormatException {
+    protected byte[] codeMessageData() throws MessageFormatException {
 
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeByte(this.panTilt, "panTilt");
+        messageCoder.writeShort(panAngularVelocity, PAN_ANGULAR_VELOCITY);
 
-        messageCoder.writeDouble(this.angVel, "angVel");
+        messageCoder.writeInt(panAngle, PAN_ANGLE);
 
-        messageCoder.writeDouble(this.angle, "angle");
+        messageCoder.writeShort(tiltAngularVelocity, TILT_ANGULAR_VELOCITY);
 
-        messageCoder.writeLong(this.time, "time");
+        messageCoder.writeInt(tiltAngle, TILT_ANGLE);
 
         return messageCoder.getBytes();
 
     }
 
     @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
+    protected int decodeMessageData(byte[] binaryMessage, int arg1) throws MessageFormatException {
 
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.panTilt = messageDecoder.readByte("panTilt");
+        this.panAngularVelocity = messageDecoder.readShort(PAN_ANGULAR_VELOCITY);
 
-        this.angVel = messageDecoder.readDouble("angVel");
+        this.panAngle = messageDecoder.readInt(PAN_ANGLE);
 
-        this.angle = messageDecoder.readDouble("angle");
+        this.tiltAngularVelocity = messageDecoder.readShort(TILT_ANGULAR_VELOCITY);
 
-        this.time = messageDecoder.readLong("time");
+        this.tiltAngle = messageDecoder.readInt(TILT_ANGLE);
 
-        return messageDecoder.getArrayIndex();
-
+        return this.getMessageDecoder().getArrayIndex();
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MovePanTiltMessage that = (MovePanTiltMessage) o;
-
-        if (panTilt != that.panTilt) return false;
-        if (Double.compare(that.angVel, angVel) != 0) return false;
-        if (Double.compare(that.angle, angle) != 0) return false;
-        return time == that.time;
-
+    public short getPanAngularVelocity() {
+        return panAngularVelocity;
     }
 
-
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = (int) panTilt;
-        temp = Double.doubleToLongBits(angVel);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angle);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (time ^ (time >>> 32));
-        return result;
+    public void setPanAngularVelocity(short panAngularVelocity) {
+        this.panAngularVelocity = panAngularVelocity;
     }
 
+    public int getPanAngle() {
+        return panAngle;
+    }
+
+    public void setPanAngle(int panAngle) {
+        this.panAngle = panAngle;
+    }
+
+    public short getTiltAngularVelocity() {
+        return tiltAngularVelocity;
+    }
+
+    public void setTiltAngularVelocity(short tiltAngularVelocity) {
+        this.tiltAngularVelocity = tiltAngularVelocity;
+    }
+
+    public int getTiltAngle() {
+        return tiltAngle;
+    }
+
+    public void setTiltAngle(int tiltAngle) {
+        this.tiltAngle = tiltAngle;
+    }
 
 }

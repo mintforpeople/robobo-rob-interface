@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -20,47 +20,63 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
+package com.mytechia.robobo.rob;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-
-import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
-
-/**
- *  Implementation for AckMessage
- *
- * Created by Victor Sonora Pombo
- */
-public class AckMessage extends RoboCommand {
+import java.util.Date;
 
 
-    public AckMessage() {
+
+public class RobDeviceStatus<T extends Enum<T>> {
+
+    private T id;
+
+    private Date lastUpdate;
+
+    public RobDeviceStatus(T id) {
         super();
-        this.setCommandType(AckMessage.commandType);
+        this.id = id;
+    }
+
+    public T getId() {
+        return id;
     }
 
 
-    public AckMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
+
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 
     @Override
-    protected final byte[] codeMessageData() throws MessageFormatException {
-        MessageCoder messageCoder = this.getMessageCoder();
-        return messageCoder.getBytes();
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.id.hashCode();
+        return hash;
     }
 
     @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RobDeviceStatus<?> other = (RobDeviceStatus<?>) obj;
         
-        MessageDecoder messageDecoder = this.getMessageDecoder();
-
-        return messageDecoder.getArrayIndex();
+        return (this.id == other.id) || (this.id != null && this.id.equals(other.id));
+        
     }
 
 
 
+    
+    
 }

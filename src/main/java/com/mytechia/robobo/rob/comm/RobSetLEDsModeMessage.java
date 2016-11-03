@@ -1,25 +1,39 @@
-/**
- * *****************************************************************************
- * <p>
- * Copyright (C) 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- * Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
- * <p>
- * This file is part of robobo-rob-interface.
- * ****************************************************************************
- */
+/*******************************************************************************
+ *
+ *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *
+ *   This file is part of Robobo ROB Interface Library.
+ *
+ *   Robobo ROB Interface Library is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Robobo ROB Interface Library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
+import static com.mytechia.robobo.rob.comm.MessageType.RobSetLEDsModeMessage;
+
 /**
  *  Implementation for SetLEDsModeMessage
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
-public class RobSetLEDsModeMessage  extends Command {
+public class RobSetLEDsModeMessage  extends RoboCommand {
 
 
     private byte mode;
@@ -27,7 +41,7 @@ public class RobSetLEDsModeMessage  extends Command {
 
     public RobSetLEDsModeMessage(byte mode) {
         super();
-        this.setCommandType((byte)4);
+        this.setCommandType(RobSetLEDsModeMessage.commandType);
         this.mode = mode;
     }
 

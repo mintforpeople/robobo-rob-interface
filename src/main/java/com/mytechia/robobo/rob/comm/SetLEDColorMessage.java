@@ -1,41 +1,64 @@
-/**
- * *****************************************************************************
- * <p>
- * Copyright (C) 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- * Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
- * <p>
- * This file is part of robobo-rob-interface.
- * ****************************************************************************
- */
+/*******************************************************************************
+ *
+ *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *
+ *   This file is part of Robobo ROB Interface Library.
+ *
+ *   Robobo ROB Interface Library is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Robobo ROB Interface Library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
-import java.util.Arrays;
+
+import static com.mytechia.robobo.rob.comm.MessageType.SetLEDColorMessage;
 
 /**
  *  Implementation for SetLEDColorMessage.
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
-public class SetLEDColorMessage extends Command {
+public class SetLEDColorMessage extends RoboCommand {
 
+    public static final String BLUE = "blue";
+    public static final String GREEN = "green";
+    public static final String RED = "red";
+    public static final String LED_ID = "ledId";
     private byte ledId;
 
-    private byte[] ledColor;    // 6 * byte
+    private short red;
+
+    private short green;
+
+    private short blue;
 
 
     public SetLEDColorMessage(
             byte ledId,
-            byte[] ledColor) {
+            short red, short green, short blue) {
 
         super();
-        this.setCommandType((byte)3);
+        this.setCommandType(SetLEDColorMessage.commandType);
         this.ledId = ledId;
-        this.ledColor = ledColor;
+        this.red= red;
+        this.green= green;
+        this.blue= blue;
 
     }
 
@@ -51,9 +74,14 @@ public class SetLEDColorMessage extends Command {
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeByte(this.ledId, "ledId");
+        messageCoder.writeByte(this.ledId, LED_ID);
 
-        messageCoder.writeByteArrayWithSize(this.ledColor, "ledColor");
+        messageCoder.writeShort(red, RED);
+
+        messageCoder.writeShort(green, GREEN);
+
+        messageCoder.writeShort(blue, BLUE);
+
 
         return messageCoder.getBytes();
     }
@@ -62,9 +90,14 @@ public class SetLEDColorMessage extends Command {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.ledId = messageDecoder.readByte("ledId");
 
-        this.ledColor = messageDecoder.readByteArray("ledColor");
+        this.ledId = messageDecoder.readByte(LED_ID);
+
+        red= messageDecoder.readShort(RED);
+
+        green= messageDecoder.readShort(GREEN);
+
+        blue= messageDecoder.readShort(BLUE);
 
         return messageDecoder.getArrayIndex();
     }
@@ -78,16 +111,18 @@ public class SetLEDColorMessage extends Command {
         SetLEDColorMessage that = (SetLEDColorMessage) o;
 
         if (ledId != that.ledId) return false;
-        return Arrays.equals(ledColor, that.ledColor);
+        if (red != that.red) return false;
+        if (green != that.green) return false;
+        return blue == that.blue;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) ledId;
-        result = 31 * result + Arrays.hashCode(ledColor);
+        result = 31 * result + (int) red;
+        result = 31 * result + (int) green;
+        result = 31 * result + (int) blue;
         return result;
     }
-
-
 }

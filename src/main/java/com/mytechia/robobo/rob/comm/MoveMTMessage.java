@@ -1,46 +1,64 @@
-/**
- * *****************************************************************************
- * <p>
- * Copyright (C) 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- * Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
- * <p>
- * This file is part of robobo-rob-interface.
- * ****************************************************************************
- */
+/*******************************************************************************
+ *
+ *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *
+ *   This file is part of Robobo ROB Interface Library.
+ *
+ *   Robobo ROB Interface Library is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Robobo ROB Interface Library is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
+import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
+
 /**
  *  Implementation for MoveMTMessage
  *
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo.
  */
-public class MoveMTMessage extends Command {
+public class MoveMTMessage extends RoboCommand {
 
-    private double angVel1;
+    private byte mode;
+    
+    private short angVel1;
 
-    private double angle1;
+    private int angle1;
 
-    private double angVel2;
+    private short angVel2;
 
-    private double angle2;
+    private int angle2;
 
     private long time;
 
 
     public MoveMTMessage(
-            double angVel1,
-            double angle1,
-            double angVel2,
-            double angle2,
+            byte mode,
+            short angVel1,
+            int angle1,
+            short angVel2,
+            int angle2,
             long time) {
 
         super();
-        this.setCommandType((byte)5);
+        this.setCommandType(MoveMTMessage.commandType);
+        this.mode = mode;
         this.angVel1 = angVel1;
         this.angle1 = angle1;
         this.angVel2 = angVel2;
@@ -60,16 +78,20 @@ public class MoveMTMessage extends Command {
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
+        
+        messageCoder.writeByte(this.mode, "mode");
 
-        messageCoder.writeDouble(this.angVel1, "angVel1");
+        messageCoder.writeInt(this.angle1, "angle1");
+        
+        messageCoder.writeShort(this.angVel1, "angVel1");
+        
+        messageCoder.writeInt((int) this.time, "time1");
 
-        messageCoder.writeDouble(this.angle1, "angle1");
+        messageCoder.writeInt(this.angle2, "angle2");
+        
+        messageCoder.writeShort(this.angVel2, "angVel2");
 
-        messageCoder.writeDouble(this.angVel2, "angVel2");
-
-        messageCoder.writeDouble(this.angle2, "angle2");
-
-        messageCoder.writeLong(this.time, "time");
+        messageCoder.writeInt((int) this.time, "time2");
 
         return messageCoder.getBytes();
     }
@@ -78,19 +100,34 @@ public class MoveMTMessage extends Command {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.angVel1 = messageDecoder.readDouble("angVel1");
+        this.mode = messageDecoder.readByte("mode");
 
-        this.angle1 = messageDecoder.readDouble("angle1");
+        this.angle1 = messageDecoder.readInt("angle1");
+        
+        this.angVel1 = messageDecoder.readShort("angVel1");
+        
+        this.time = messageDecoder.readInt("time1");
+        
+        this.angle2 = messageDecoder.readInt("angle2");
 
-        this.angVel2 = messageDecoder.readDouble("angVel2");
+        this.angVel2 = messageDecoder.readShort("angVel2");
 
-        this.angle2 = messageDecoder.readDouble("angle2");
-
-        this.time = messageDecoder.readLong("time");
+        this.time = messageDecoder.readInt("time2");
 
         return messageDecoder.getArrayIndex();
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.mode;
+        hash = 23 * hash + this.angVel1;
+        hash = 23 * hash + this.angle1;
+        hash = 23 * hash + this.angVel2;
+        hash = 23 * hash + this.angle2;
+        hash = 23 * hash + (int) (this.time ^ (this.time >>> 32));
+        return hash;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -99,6 +136,7 @@ public class MoveMTMessage extends Command {
 
         MoveMTMessage that = (MoveMTMessage) o;
 
+        if (Byte.compare(that.mode, mode) != 0) return false;
         if (Double.compare(that.angVel1, angVel1) != 0) return false;
         if (Double.compare(that.angle1, angle1) != 0) return false;
         if (Double.compare(that.angVel2, angVel2) != 0) return false;
@@ -108,19 +146,5 @@ public class MoveMTMessage extends Command {
     }
 
 
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(angVel1);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angle1);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angVel2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(angle2);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (int) (time ^ (time >>> 32));
-        return result;
-    }
+    
 }

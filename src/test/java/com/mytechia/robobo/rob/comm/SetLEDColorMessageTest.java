@@ -2,10 +2,11 @@ package com.mytechia.robobo.rob.comm;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo
  */
 public class SetLEDColorMessageTest {
 
@@ -15,7 +16,7 @@ public class SetLEDColorMessageTest {
         SetLEDColorMessage originalMessage =
                 new SetLEDColorMessage(
                         (byte)7,
-                        new byte[] {1, 5, 4, 3, 2});
+                        (short)1, (short)5, (short)4);
 
         final byte[] messageData = originalMessage.codeMessage();
 

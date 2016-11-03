@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -22,46 +22,14 @@
 
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-
-import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
-
 /**
+ * Concrete implementations of this interfaces containts the logic to
+ * process different types of messages
  *
- * Created by Victor Sonora Pombo.
+ * @author Julio Alberto Gomez Fernandez
  */
-public class ResetPanTiltOffsetMessage extends RoboCommand {
-
-
-    public ResetPanTiltOffsetMessage() {
-
-        super();
-        this.setCommandType(ResetPanTiltOffsetMessage.commandType);
-
-    }
-
-
-    public ResetPanTiltOffsetMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
-    }
-
-    @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        return 0;
-    }
+public interface ICommandHandler {
     
+     void receivedAck(AckMessage msgAck) throws UnsupportedMessageTypeException;
     
-    @Override
-    protected byte[] codeMessageData() throws MessageFormatException {
-
-        MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeByte((byte)0, "NONE");
-
-        return messageCoder.getBytes();
-
-    }
-
-
 }

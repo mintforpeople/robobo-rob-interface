@@ -2,10 +2,11 @@ package com.mytechia.robobo.rob.comm;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Victor Sonora Pombo <victor.pombo@mytechia.com>.
+ * Created by Victor Sonora Pombo
  */
 public class MoveMTMessageTest {
 
@@ -14,10 +15,11 @@ public class MoveMTMessageTest {
 
         MoveMTMessage originalMessage =
                 new MoveMTMessage(
-                        2.1,
-                        45.7,
-                        1.1,
-                        -30.2,
+                        (byte) 4,
+                        (byte)2,
+                        45,
+                        (byte)1,
+                        -30,
                         405);
 
         final byte[] messageData = originalMessage.codeMessage();

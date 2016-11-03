@@ -22,68 +22,81 @@
 
 package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.Endianness;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
+import static com.mytechia.robobo.rob.comm.MessageType.OperationModeMessage;
+
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-import static com.mytechia.robobo.rob.comm.MessageType.SetRobStatusPeriodMessage;
 
-/**
- *  Implementation for SetRobStatusPeriodMessage.
- *
- * Created by Victor Sonora Pombo.
- */
-public class SetRobStatusPeriodMessage extends RoboCommand {
+public class OperationModeMessage extends RoboCommand {
 
-    private int period;
+    private static final String COMMAND_CODE = "commandCode";
 
+    private byte commandCode;
 
-    public SetRobStatusPeriodMessage(int period) {
-        super();
-        this.setCommandType(SetRobStatusPeriodMessage.commandType);
-        this.period = period;
+    public OperationModeMessage(byte commandCode) {
+        this.setCommandType(OperationModeMessage.commandType);
+        this.commandCode = commandCode;
     }
 
-
-    public SetRobStatusPeriodMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
+    public OperationModeMessage(byte[] message) throws MessageFormatException {
+        super(message);
+        this.setCommandType(OperationModeMessage.commandType);
     }
-
 
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
+
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeInt(this.period, "period");
+        messageCoder.writeByte(commandCode, COMMAND_CODE);
 
         return messageCoder.getBytes();
+
     }
 
     @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        MessageDecoder messageDecoder = this.getMessageDecoder();
+    protected int decodeMessageData(byte[] binaryMessage, int arg1) throws MessageFormatException {
 
-        this.period = messageDecoder.readInt("period");
+        MessageDecoder decoder = this.getMessageDecoder();
 
-        return messageDecoder.getArrayIndex();
+        this.commandCode = decoder.readByte(COMMAND_CODE);
+
+        return decoder.getArrayIndex();
     }
 
+    public byte getCommandCode() {
+        return commandCode;
+    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        SetRobStatusPeriodMessage that = (SetRobStatusPeriodMessage) o;
-
-        return period == that.period;
-
+    public void setCommandCode(byte commandCode) {
+        this.commandCode = commandCode;
     }
 
     @Override
     public int hashCode() {
-        return period;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + commandCode;
+        return result;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        OperationModeMessage other = (OperationModeMessage) obj;
+        if (commandCode != other.commandCode) {
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -1,7 +1,8 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *   Copyright 2016 Gervasio Varela <gervasio.varela@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -20,48 +21,44 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
-import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
+package com.mytechia.robobo.rob;
 
 /**
+ * Enumeration of movement modes for the MT motors.
  *
- * Created by Victor Sonora Pombo.
+ * @author Gervasio Varela
  */
-public class ResetPanTiltOffsetMessage extends RoboCommand {
+public enum MoveMTMode 
+{
 
-
-    public ResetPanTiltOffsetMessage() {
-
-        super();
-        this.setCommandType(ResetPanTiltOffsetMessage.commandType);
-
-    }
-
-
-    public ResetPanTiltOffsetMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
-    }
-
-    @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        return 0;
-    }
+    STOP_STOP((byte) 0),
+    REVERSE_REVERSE((byte) 1),
+    FORWARD_FORWARD((byte) 2),
+    FORWARD_REVERSE((byte) 4),
+    REVERSE_FORWARD((byte) 8);
     
     
-    @Override
-    protected byte[] codeMessageData() throws MessageFormatException {
-
-        MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeByte((byte)0, "NONE");
-
-        return messageCoder.getBytes();
-
+    MoveMTMode(byte mode) {
+        this.mode = mode;
     }
 
-
+    public byte getMode() {
+        return this.mode;
+    }
+    
+    public static MoveMTMode toMoveMTMode(byte mode){
+        
+        for (MoveMTMode moveMtMode : MoveMTMode.values()) {
+            if(moveMtMode.getMode()== mode){
+                return moveMtMode;
+            }
+        }
+        
+        return null;
+    }
+    
+    private byte mode;
+    
 }

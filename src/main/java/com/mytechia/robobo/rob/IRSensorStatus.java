@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -20,48 +20,35 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
+package com.mytechia.robobo.rob;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+import com.mytechia.robobo.rob.IRSensorStatus.IRSentorStatusId;
 
-import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
+public class IRSensorStatus extends RobDeviceStatus<IRSentorStatusId> {
 
-/**
- *
- * Created by Victor Sonora Pombo.
- */
-public class ResetPanTiltOffsetMessage extends RoboCommand {
+    private short distance;
 
 
-    public ResetPanTiltOffsetMessage() {
-
-        super();
-        this.setCommandType(ResetPanTiltOffsetMessage.commandType);
-
+    public IRSensorStatus(IRSentorStatusId id) {
+        super(id);
     }
 
 
-    public ResetPanTiltOffsetMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
+
+    public short getDistance() {
+        return distance;
     }
 
-    @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        return 0;
+    public void setDistance(short distance) {
+        this.distance = distance;
+    }
+    
+    public static enum IRSentorStatusId{
+        IRSensorStatus1, IRSensorStatus2, IRSensorStatus3, 
+        IRSensorStatus4, IRSensorStatus5, IRSensorStatus6, 
+        IRSensorStatus7, IRSensorStatus8, IRSensorStatus9;
     }
     
     
-    @Override
-    protected byte[] codeMessageData() throws MessageFormatException {
-
-        MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeByte((byte)0, "NONE");
-
-        return messageCoder.getBytes();
-
-    }
-
 
 }

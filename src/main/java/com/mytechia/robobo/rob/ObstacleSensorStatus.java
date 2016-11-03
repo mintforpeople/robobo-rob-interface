@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -20,48 +20,42 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
+package com.mytechia.robobo.rob;
 
-import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+import com.mytechia.robobo.rob.ObstacleSensorStatus.ObstacleSensorStatusId;
 
-import static com.mytechia.robobo.rob.comm.MessageType.ResetPanTiltOffsetMessage;
+public class ObstacleSensorStatus extends RobDeviceStatus<ObstacleSensorStatusId> {
 
-/**
- *
- * Created by Victor Sonora Pombo.
- */
-public class ResetPanTiltOffsetMessage extends RoboCommand {
+    private short distance;
 
-
-    public ResetPanTiltOffsetMessage() {
-
-        super();
-        this.setCommandType(ResetPanTiltOffsetMessage.commandType);
+    public ObstacleSensorStatus(ObstacleSensorStatusId id) {
+        super(id);
 
     }
 
+    public short getDistance() {
+        return distance;
+    }
 
-    public ResetPanTiltOffsetMessage(byte [] messageData) throws MessageFormatException {
-        super(messageData);
+    public void setDistance(short distance) {
+        this.distance = distance;
+    }
+    
+    public enum ObstacleSensorStatusId{
+        Obstable1,Obstable2,Obstable3,Obstable4;
     }
 
     @Override
-    protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
-        return 0;
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ObstacleSensorStatus [getId()=");
+        builder.append(getId());
+        builder.append(", getLastUpdate()=");
+        builder.append(getLastUpdate());
+        builder.append(", distance=");
+        builder.append(distance);
+        builder.append("]");
+        return builder.toString();
     }
-    
-    
-    @Override
-    protected byte[] codeMessageData() throws MessageFormatException {
-
-        MessageCoder messageCoder = this.getMessageCoder();
-
-        messageCoder.writeByte((byte)0, "NONE");
-
-        return messageCoder.getBytes();
-
-    }
-
 
 }
