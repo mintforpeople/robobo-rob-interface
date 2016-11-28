@@ -501,7 +501,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         if (angVel > max)
             return max;
         else if (angVel < min)
-            return min;
+            return 0;
         else        
             return angVel;
     }
