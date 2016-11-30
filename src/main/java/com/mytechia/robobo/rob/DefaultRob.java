@@ -529,7 +529,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             min_battery = value;
         }
 
-        return (Math.round((value-min_battery)/(max_battery-min_battery)));
+        return (Math.round((value-min_battery)/(max_battery-min_battery))*100);
 
     }
 
