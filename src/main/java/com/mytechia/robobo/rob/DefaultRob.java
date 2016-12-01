@@ -59,6 +59,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private int min_battery = 574;
     private int max_battery = 802;
+
     private IRobComm roboCom;
 
     private BatteryStatus battery= new BatteryStatus();
@@ -183,9 +184,9 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         
     }
 
-    private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+    private void updateBateryStatus(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        int batteryLevel = roStatusMessage.getBatteryLevel();
+        int batteryLevel = robStatusMessage.getBatteryLevel();
 
         this.battery.setBattery(calcBattery(batteryLevel));
 
@@ -529,7 +530,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             min_battery = value;
         }
 
-        return (Math.round((value-min_battery)/(max_battery-min_battery))*100);
+        return Math.round(((float)(value-min_battery)/(float)(max_battery-min_battery))*100.0f);
 
     }
 
