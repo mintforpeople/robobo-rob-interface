@@ -93,6 +93,8 @@ public class MoveMTMessage extends RoboCommand {
 
         messageCoder.writeInt((int) this.time, "time2");
 
+
+
         return messageCoder.getBytes();
     }
 

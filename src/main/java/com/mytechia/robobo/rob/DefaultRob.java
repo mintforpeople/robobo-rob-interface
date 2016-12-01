@@ -49,7 +49,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 250;
+    private static final short MAX_ANG_VEL = 127;
     private static final short MIN_ANG_VEL = 10;
     private static final short PT_ANG_VEL = 6;
     private static final int MAX_PAN_ANGLE = 339;
