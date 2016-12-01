@@ -49,14 +49,17 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 250;
+    private static final short MAX_ANG_VEL = 127;
     private static final short MIN_ANG_VEL = 10;
     private static final short PT_ANG_VEL = 6;
-    private static final int MAX_PAN_ANGLE = 340;
-    private static final int MIN_PAN_ANGLE = 25;
-    private static final int MAX_TILT_ANGLE = 110;
-    private static final int MIN_TILT_ANGLE = 25;
-    
+    private static final int MAX_PAN_ANGLE = 339;
+    private static final int MIN_PAN_ANGLE = 27;
+    private static final int MAX_TILT_ANGLE = 109;
+    private static final int MIN_TILT_ANGLE = 26;
+
+    private int min_battery = 574;
+    private int max_battery = 802;
+
     private IRobComm roboCom;
 
     private BatteryStatus battery= new BatteryStatus();
@@ -181,11 +184,11 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         
     }
 
-    private void updateBateryStatus(RobStatusMessage roStatusMessage, Date updateDate) {
+    private void updateBateryStatus(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        int bateryLevel = roStatusMessage.getBatteryLevel();
+        int batteryLevel = robStatusMessage.getBatteryLevel();
 
-        this.battery.setBattery(bateryLevel);
+        this.battery.setBattery(calcBattery(batteryLevel));
 
         this.battery.setLastUpdate(updateDate);
         
@@ -501,7 +504,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         if (angVel > max)
             return max;
         else if (angVel < min)
-            return min;
+            return 0;
         else        
             return angVel;
     }
@@ -517,6 +520,18 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         else {
             return angle;
         }
+    }
+
+    private int calcBattery(int value){
+
+        if (value > max_battery){
+            max_battery = value;
+        }else if (value < min_battery){
+            min_battery = value;
+        }
+
+        return Math.round(((float)(value-min_battery)/(float)(max_battery-min_battery))*100.0f);
+
     }
 
     @Override
