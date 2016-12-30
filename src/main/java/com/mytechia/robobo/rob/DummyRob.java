@@ -115,6 +115,11 @@ public class DummyRob implements IRob{
     }
 
     @Override
+    public StopWarningType getLastStopWarning() {
+        return null;
+    }
+
+    @Override
     public void setRobStatusPeriod(int period) throws InternalErrorException {
         LOGGER.info("Call method ({} arguments={})");
     }

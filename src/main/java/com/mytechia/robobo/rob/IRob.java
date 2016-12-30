@@ -72,8 +72,10 @@ public interface IRob {
 	 List<ObstacleSensorStatus> getLastStatusObstacles();
 
 	 BatteryStatus getLastStatusBattery();
+
+	StopWarningType getLastStopWarning();
          
-         void setRobStatusPeriod(int period) throws InternalErrorException;
+	 void setRobStatusPeriod(int period) throws InternalErrorException;
 
 	 void addRobStatusListener(IRobStatusListener listener);
 

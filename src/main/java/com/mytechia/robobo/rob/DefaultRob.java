@@ -31,9 +31,8 @@ import static com.mytechia.robobo.rob.GapStatus.GapStatusId;
 import static com.mytechia.robobo.rob.IRSensorStatus.IRSentorStatusId;
 import static com.mytechia.robobo.rob.MotorStatus.MotorStatusId;
 import static com.mytechia.robobo.rob.ObstacleSensorStatus.ObstacleSensorStatusId;
-import com.mytechia.robobo.rob.comm.IRobComm;
-import com.mytechia.robobo.rob.comm.IRobCommStatusListener;
-import com.mytechia.robobo.rob.comm.RobStatusMessage;
+
+import com.mytechia.robobo.rob.comm.*;
 import com.mytechia.robobo.util.Color;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,13 +42,13 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class DefaultRob implements IRobCommStatusListener, IRob {
+public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, IRob {
     
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 127;
+    private static final short MAX_ANG_VEL = 250;
     private static final short MIN_ANG_VEL = 10;
     private static final short PT_ANG_VEL = 6;
     private static final int MAX_PAN_ANGLE = 339;
@@ -79,8 +78,9 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     private WallConnectionStatus wallConnectonStatus= new WallConnectionStatus();
 
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
-    
-    
+
+    private final DispatcherStopWarningListener dispatcherStopWarningListener = new DispatcherStopWarningListener();
+    private StopWarningType lastStopWarning;
     
     public DefaultRob(IRobComm roboCom){
         
@@ -103,6 +103,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         this.roboCom = roboCom;
         
         this.roboCom.addRobStatusListener(this);
+        this.roboCom.addStopWarningListener(this);
         
         
     }
@@ -480,6 +481,11 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     @Override
+    public StopWarningType getLastStopWarning() {
+        return lastStopWarning;
+    }
+
+    @Override
     public void addRobStatusListener(IRobStatusListener listener) {
         dispatcherRobStatusListener.subscribetoContentChanges(listener);
     }
@@ -539,4 +545,8 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         dispatcherRobStatusListener.fireInternalError(ex);
     }
 
+    @Override
+    public void stopWarning(StopWarningMessage sw) {
+        lastStopWarning = sw.getMessage();
+    }
 }

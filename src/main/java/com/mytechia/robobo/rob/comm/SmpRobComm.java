@@ -28,6 +28,7 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+import com.mytechia.robobo.rob.IStopWarningListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,8 @@ import java.util.TimerTask;
 
 import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
+import static com.mytechia.robobo.rob.comm.MessageType.StopWarning;
+
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -58,6 +61,7 @@ public class SmpRobComm implements IRobComm{
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
+    private final DispatcherStopWarningListener dispatcherStopWarningListener = new DispatcherStopWarningListener();
     protected final ConnectionRob connectionRob = new ConnectionRob();
 
     private final IBasicCommunicationChannel communicationChannel;
@@ -238,7 +242,17 @@ public class SmpRobComm implements IRobComm{
         dispatcherRobCommStatusListener.unsubscribeFromRobCommStatus(rsListener);
     }
 
-    
+    @Override
+    public void addStopWarningListener(IStopWarningListener swListener) {
+
+    }
+
+    @Override
+    public void removeStopWarningListener(IStopWarningListener swListener) {
+
+    }
+
+
     void sendCommand(RoboCommand roboCommand) throws CommunicationException {
 
         if (roboCommand == null) {
@@ -297,6 +311,11 @@ public class SmpRobComm implements IRobComm{
         if(command.getCommandType()== RobStatusMessage.commandType){
             LOGGER.debug("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
             dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
+            return;
+        }
+        if(command.getCommandType()== StopWarning.commandType){
+            LOGGER.debug("Received StopWarning[sequenceNumber={}].", command.getSequenceNumber());
+            dispatcherStopWarningListener.fireReceivedStopWarning((StopWarningMessage) command);
             return;
         }
 

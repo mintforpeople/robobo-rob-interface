@@ -39,7 +39,9 @@ public enum MessageType {
     ResetPanTiltOffsetMessage((byte)7),
     InfraredConfigurationMessage((byte)8),
     OperationModeMessage((byte)9), 
-    MaxValueMotors((byte)10);
+    MaxValueMotors((byte)10),
+    StopWarning((byte)11),
+    ControlValues((byte)12);
 
     public final byte commandType;
 

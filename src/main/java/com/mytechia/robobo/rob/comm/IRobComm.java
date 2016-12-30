@@ -23,6 +23,7 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import com.mytechia.robobo.rob.IStopWarningListener;
 
 /**
  * This is the low level communication interface between the smartphone (OBO)
@@ -112,6 +113,10 @@ public interface IRobComm {
     void addRobStatusListener(IRobCommStatusListener rsListener);
 
     void removeRobStatusListener(IRobCommStatusListener rsListener);
+
+    void addStopWarningListener(IStopWarningListener swListener);
+
+    void removeStopWarningListener(IStopWarningListener swListener);
 
     void setOperationMode(byte operationMode) throws CommunicationException;
 
