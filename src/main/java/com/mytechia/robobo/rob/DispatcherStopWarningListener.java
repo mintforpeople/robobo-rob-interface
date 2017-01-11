@@ -54,7 +54,7 @@ public class DispatcherStopWarningListener {
     void fireStatusBattery(StopWarningMessage swmsg) {
 
         for (IStopWarningListener swListener : stopWarningListeners) {
-            swListener.stopWarning(swmsg);
+            swListener.stopWarning(swmsg.getMessage());
 
         }
     }

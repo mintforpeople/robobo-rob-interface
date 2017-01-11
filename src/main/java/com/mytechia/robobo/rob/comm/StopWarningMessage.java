@@ -38,7 +38,7 @@ public class StopWarningMessage extends RoboCommand {
     private static final String WARNING_DETAILS = "warningDetails";
     private StopWarningType message;
 
-    //TODO SEGUIR CON ESTO
+
     private static final String COMMAND_CODE = "commandCode";
 
     private byte commandCode;
@@ -70,5 +70,24 @@ public class StopWarningMessage extends RoboCommand {
 
     public void setMessage(StopWarningType message) {
         this.message = message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StopWarningMessage that = (StopWarningMessage) o;
+
+        if (commandCode != that.commandCode) return false;
+        return message == that.message;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = message != null ? message.hashCode() : 0;
+        result = 31 * result + (int) commandCode;
+        return result;
     }
 }

@@ -68,4 +68,29 @@ public class ControlValuesMessage extends RoboCommand {
         return this.getMessageDecoder().getArrayIndex();
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ControlValuesMessage that = (ControlValuesMessage) o;
+
+        if (motorId != that.motorId) return false;
+        if (startki != that.startki) return false;
+        if (perturbationski != that.perturbationski) return false;
+        if (stopki != that.stopki) return false;
+        return commandCode == that.commandCode;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) motorId;
+        result = 31 * result + startki;
+        result = 31 * result + perturbationski;
+        result = 31 * result + stopki;
+        result = 31 * result + (int) commandCode;
+        return result;
+    }
 }
