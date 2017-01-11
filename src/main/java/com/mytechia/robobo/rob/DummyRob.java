@@ -49,23 +49,23 @@ public class DummyRob implements IRob{
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException {
         LOGGER.info("Call method {}(mode={}, angVel1={}, angle1={}, angVel2={}, angle2={})", "moveMT", mode, angVel1, angle1, angVel2, angle2);
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException {
         LOGGER.info("Call method {}(mode={}, angVel1={}, angVel2={}, time={})", "moveMT", mode, angVel1, angVel2, time);
         
     }
 
     @Override
-    public void movePan(short angVel, int angle) throws InternalErrorException {
+    public void movePan(int angVel, int angle) throws InternalErrorException {
         LOGGER.info("Call method {}(angVel={}, angle={})", "movePan", angVel, angle);
     }
 
     @Override
-    public void moveTilt(short angVel, int angle) throws InternalErrorException {
+    public void moveTilt(int angVel, int angle) throws InternalErrorException {
         LOGGER.info("Call method {}(angVel={}, angle={})", "moveTilt", angVel, angle);
     }
 
@@ -126,7 +126,17 @@ public class DummyRob implements IRob{
 
     @Override
     public void addRobStatusListener(IRobStatusListener listener) {
-        
+        LOGGER.info("Call method ({} arguments={})");
+    }
+
+    @Override
+    public void addStopWarningListener(IStopWarningListener listener) {
+        LOGGER.info("Call method ({} arguments={})");
+    }
+
+    @Override
+    public void removeStopWarningListener(IStopWarningListener listener) {
+
     }
 
     @Override
@@ -137,6 +147,12 @@ public class DummyRob implements IRob{
     @Override
     public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException {
         LOGGER.info("Call method {}(infraredId={}, commandCode={}, dataByteLow={}, dataByteHigh={})", "configureInfrared",  infraredId,  commandCode,  dataByteLow,  dataByteHigh);
+    }
+
+    @Override
+    public void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) {
+        LOGGER.info("Call method {}(motorId={}, startki={}, perturbationki={}, stopki={})", "configureInfrared",  motorId,  startki,  perturbationski, stopki );
+
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
-import com.mytechia.robobo.rob.IStopWarningListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +60,7 @@ public class SmpRobComm implements IRobComm{
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
-    private final DispatcherStopWarningListener dispatcherStopWarningListener = new DispatcherStopWarningListener();
+    private final DispatcherRobCommStopWarningListener dispatcherRobCommStopWarningListener = new DispatcherRobCommStopWarningListener();
     protected final ConnectionRob connectionRob = new ConnectionRob();
 
     private final IBasicCommunicationChannel communicationChannel;
@@ -148,7 +147,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException {
+    public void moveMT(byte mode, int angVel1, int angle1, int angVel2, int angle2) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1, angVel2, angle2, 0);
         
@@ -157,7 +156,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, short angVel1, short angVel2, long time) throws CommunicationException {
+    public void moveMT(byte mode, int angVel1, int angVel2, long time) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
         
@@ -166,11 +165,11 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void movePan(short angVel, int angle) throws CommunicationException {
+    public void movePan(int angVel, int angle) throws CommunicationException {
         
         
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle, (short) 0, 0);
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle,  0, 0);
         
         sendCommand(movePanTiltMessage);
     }
@@ -178,9 +177,9 @@ public class SmpRobComm implements IRobComm{
 
 
     @Override
-    public void moveTilt(short angVel, int angle) throws CommunicationException{
+    public void moveTilt(int angVel, int angle) throws CommunicationException{
         
-    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, angVel, angle);
+    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(0, 0, angVel, angle);
         
         sendCommand(movePanTiltMessage);
         
@@ -211,8 +210,13 @@ public class SmpRobComm implements IRobComm{
 	
 	}
 
+    @Override
+    public void setControlValues(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException {
+        sendCommand(new ControlValuesMessage(motorId,startki,perturbationski,stopki));
+    }
 
-	@Override
+
+    @Override
 	public void maxValueMotors(int m1Tension, 
 			int m1Time, 
 			int m2Tension, 
@@ -243,13 +247,13 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void addStopWarningListener(IStopWarningListener swListener) {
-
+    public void addStopWarningListener(IRobCommStopWarningListener swListener) {
+        dispatcherRobCommStopWarningListener.subscribeToStopWarning(swListener);
     }
 
     @Override
-    public void removeStopWarningListener(IStopWarningListener swListener) {
-
+    public void removeStopWarningListener(IRobCommStopWarningListener swListener) {
+        dispatcherRobCommStopWarningListener.unsuscribeFromStopWarning(swListener);
     }
 
 
@@ -292,6 +296,7 @@ public class SmpRobComm implements IRobComm{
 
 
     void processReceivedCommand(RoboCommand command){
+        System.out.println(command.toString());
 
         if(command.getCommandType()== AckMessage.commandType){
             boolean receivedAck=this.connectionRob.receivedAck((AckMessage)command);
@@ -315,7 +320,7 @@ public class SmpRobComm implements IRobComm{
         }
         if(command.getCommandType()== StopWarning.commandType){
             LOGGER.debug("Received StopWarning[sequenceNumber={}].", command.getSequenceNumber());
-            dispatcherStopWarningListener.fireReceivedStopWarning((StopWarningMessage) command);
+            dispatcherRobCommStopWarningListener.fireReceivedStopWarning((StopWarningMessage) command);
             return;
         }
 
@@ -361,7 +366,12 @@ public class SmpRobComm implements IRobComm{
         }
         
         for (RoboCommand roboCommand : roboCommands) {
-            processReceivedCommand(roboCommand);
+            if (roboCommand == null){
+                System.err.println("Null COmmand");
+            }
+            else {
+                processReceivedCommand(roboCommand);
+            }
         }
         
 

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, IRob {
+public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningListener, IRob {
     
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
@@ -375,21 +375,21 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException {
         
         this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle2));
     
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException {
         
         this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), time);
         
     }
 
     @Override
-    public void movePan(short angVel, int angle) throws InternalErrorException {        
+    public void movePan(int angVel, int angle) throws InternalErrorException {
         
         this.roboCom.movePan(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
       
@@ -398,7 +398,7 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
 
 
     @Override
-    public void moveTilt(short angVel, int angle) throws InternalErrorException {
+    public void moveTilt(int angVel, int angle) throws InternalErrorException {
         
         this.roboCom.moveTilt(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
     
@@ -430,6 +430,11 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
 
         this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
 
+    }
+
+    @Override
+    public void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException {
+        this.roboCom.setControlValues(motorId, startki, perturbationski, stopki);
     }
 
     @Override
@@ -491,6 +496,17 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
     }
 
     @Override
+    public void addStopWarningListener(IStopWarningListener listener) {
+        dispatcherStopWarningListener.subscribetoStopWarnings(listener);
+    }
+
+    @Override
+    public void removeStopWarningListener(IStopWarningListener listener) {
+        dispatcherStopWarningListener.unsubscribeFromStopWarnings(listener);
+
+    }
+
+    @Override
     public void removeRobStatusListener(IRobStatusListener listener) {
         dispatcherRobStatusListener.unsubscribeFromContentChanges(listener);
     }
@@ -506,7 +522,7 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
         return angle/ANGLE_CONVERSION_FACTOR;
     }
     
-    private short limitAngVel(short angVel, short max, short min) {
+    private int limitAngVel(int angVel, short max, short min) {
         if (angVel > max)
             return max;
         else if (angVel < min)
@@ -548,5 +564,7 @@ public class DefaultRob implements IRobCommStatusListener,IStopWarningListener, 
     @Override
     public void stopWarning(StopWarningMessage sw) {
         lastStopWarning = sw.getMessage();
+        dispatcherStopWarningListener.fireStatusBattery(sw);
+
     }
 }

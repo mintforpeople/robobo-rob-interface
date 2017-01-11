@@ -26,6 +26,7 @@ package com.mytechia.robobo.rob.comm;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 import com.mytechia.robobo.rob.StopWarningType;
+import static com.mytechia.robobo.rob.comm.MessageType.StopWarning;
 
 /**
  * Implementation for StopWarningMessage.
@@ -35,9 +36,22 @@ import com.mytechia.robobo.rob.StopWarningType;
 public class StopWarningMessage extends RoboCommand {
     private static final String WARNING_TYPE = "warningType";
     private static final String WARNING_DETAILS = "warningDetails";
-
-
     private StopWarningType message;
+
+    //TODO SEGUIR CON ESTO
+    private static final String COMMAND_CODE = "commandCode";
+
+    private byte commandCode;
+
+    public StopWarningMessage(byte commandCode) {
+        this.setCommandType(StopWarning.commandType);
+        this.commandCode = commandCode;
+    }
+    public StopWarningMessage(byte[] message) throws MessageFormatException {
+        super(message);
+        this.setCommandType(StopWarning.commandType);
+    }
+
     @Override
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();

@@ -6,11 +6,9 @@
 
     <groupId>com.mytechia</groupId>
     <artifactId>robobo-rob-interface</artifactId>
-<<<<<<< HEAD
+
     <version>0.2.9-SNAPSHOT</version>
-=======
-    <version>0.2.8</version>
->>>>>>> dd0f0e6294588235f5f55f315922d773493083f3
+
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

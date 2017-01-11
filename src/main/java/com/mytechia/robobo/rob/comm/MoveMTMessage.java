@@ -37,11 +37,11 @@ public class MoveMTMessage extends RoboCommand {
 
     private byte mode;
     
-    private short angVel1;
+    private int angVel1;
 
     private int angle1;
 
-    private short angVel2;
+    private int angVel2;
 
     private int angle2;
 
@@ -50,9 +50,9 @@ public class MoveMTMessage extends RoboCommand {
 
     public MoveMTMessage(
             byte mode,
-            short angVel1,
+            int angVel1,
             int angle1,
-            short angVel2,
+            int angVel2,
             int angle2,
             long time) {
 
@@ -78,18 +78,19 @@ public class MoveMTMessage extends RoboCommand {
     @Override
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
+
         
         messageCoder.writeByte(this.mode, "mode");
 
         messageCoder.writeInt(this.angle1, "angle1");
         
-        messageCoder.writeShort(this.angVel1, "angVel1");
+        messageCoder.writeUShort(this.angVel1, "angVel1");
         
         messageCoder.writeInt((int) this.time, "time1");
 
         messageCoder.writeInt(this.angle2, "angle2");
         
-        messageCoder.writeShort(this.angVel2, "angVel2");
+        messageCoder.writeUShort(this.angVel2, "angVel2");
 
         messageCoder.writeInt((int) this.time, "time2");
 

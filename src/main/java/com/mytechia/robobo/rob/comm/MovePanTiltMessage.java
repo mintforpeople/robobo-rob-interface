@@ -36,15 +36,15 @@ public class MovePanTiltMessage extends RoboCommand {
 
     private static final String PAN_ANGULAR_VELOCITY = "panAngularVelocity";
 
-    private short panAngularVelocity;
+    private int panAngularVelocity;
 
     private int panAngle;
 
-    private short tiltAngularVelocity;
+    private int tiltAngularVelocity;
 
     private int tiltAngle;
 
-    public MovePanTiltMessage(short panAngularVelocity, int panAngle, short tiltAngularVelocity, int tiltAngle) {
+    public MovePanTiltMessage(int panAngularVelocity, int panAngle, int tiltAngularVelocity, int tiltAngle) {
         super();
         super.setCommandType(MessageType.MovePanTiltMessage.commandType);
         this.panAngularVelocity = panAngularVelocity;
@@ -63,11 +63,11 @@ public class MovePanTiltMessage extends RoboCommand {
 
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeShort(panAngularVelocity, PAN_ANGULAR_VELOCITY);
+        messageCoder.writeUShort(panAngularVelocity, PAN_ANGULAR_VELOCITY);
 
         messageCoder.writeInt(panAngle, PAN_ANGLE);
 
-        messageCoder.writeShort(tiltAngularVelocity, TILT_ANGULAR_VELOCITY);
+        messageCoder.writeUShort(tiltAngularVelocity, TILT_ANGULAR_VELOCITY);
 
         messageCoder.writeInt(tiltAngle, TILT_ANGLE);
 
@@ -91,7 +91,7 @@ public class MovePanTiltMessage extends RoboCommand {
         return this.getMessageDecoder().getArrayIndex();
     }
 
-    public short getPanAngularVelocity() {
+    public int getPanAngularVelocity() {
         return panAngularVelocity;
     }
 
@@ -107,7 +107,7 @@ public class MovePanTiltMessage extends RoboCommand {
         this.panAngle = panAngle;
     }
 
-    public short getTiltAngularVelocity() {
+    public int getTiltAngularVelocity() {
         return tiltAngularVelocity;
     }
 

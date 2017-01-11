@@ -20,14 +20,42 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
+package com.mytechia.robobo.rob;
 
-import com.mytechia.robobo.rob.StopWarningType;
+import com.mytechia.robobo.rob.comm.StopWarningMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by luis on 30/12/16.
+ * This class is used to manage instances of StopWarningListener. And it
+ * implements methods to fire events of StopWarningListener.
+ *
+ * @author Luis Felipe Llamas Luaces
  */
-public interface IRobCommStopWarningListener {
+public class DispatcherStopWarningListener {
 
-    void stopWarning(StopWarningMessage msg);
+    private final List<IStopWarningListener> stopWarningListeners = new ArrayList<IStopWarningListener>();
+
+
+    public void subscribetoStopWarnings(IStopWarningListener swListener) {
+        if (swListener == null) {
+            return;
+        }
+
+        this.stopWarningListeners.add(swListener);
+    }
+
+    void unsubscribeFromStopWarnings(IStopWarningListener swListener) {
+        this.stopWarningListeners.remove(swListener);
+    }
+
+
+    void fireStatusBattery(StopWarningMessage swmsg) {
+
+        for (IStopWarningListener swListener : stopWarningListeners) {
+            swListener.stopWarning(swmsg);
+
+        }
+    }
 }

@@ -13,14 +13,17 @@ public class MoveMTMessageTest {
     @Test
     public void testCodeMessageData() throws Exception {
 
+        Integer vel1 = 2;
+        Integer vel2 = 1;
         MoveMTMessage originalMessage =
-                new MoveMTMessage(
+                new MoveMTMessage((byte) 4, 655 ,45,1, -30, 405);
+                /*new MoveMTMessage(
                         (byte) 4,
                         (byte)2,
                         45,
                         (byte)1,
                         -30,
-                        405);
+                        405);*/
 
         final byte[] messageData = originalMessage.codeMessage();
 

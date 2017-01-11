@@ -34,16 +34,16 @@ public interface IRob {
 
 	 void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException;
+	 void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException;
+	 void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException;
 
          /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
           * 
           * @param angVel the velocity (0-255)
           * @param angle  the angle (0-90)
           */
-	 void movePan(short angVel, int angle) throws InternalErrorException;
+	 void movePan(int angVel, int angle) throws InternalErrorException;
 
 
 
@@ -52,7 +52,7 @@ public interface IRob {
           * @param angVel the velocity (0-255)
           * @param angle  the angle (0-90)
           */
-	 void moveTilt(short angVel, int angle) throws InternalErrorException;
+	 void moveTilt(int angVel, int angle) throws InternalErrorException;
 
 	 void setOperationMode(byte operationMode) throws InternalErrorException;
 
@@ -79,9 +79,16 @@ public interface IRob {
 
 	 void addRobStatusListener(IRobStatusListener listener);
 
+	void addStopWarningListener(IStopWarningListener listener);
+
+	void removeStopWarningListener(IStopWarningListener listener);
+
 	 void removeRobStatusListener(IRobStatusListener listener);
 	 
 	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException;
+
+
+	void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException;
 	 
 	 
 	 void maxValueMotors(int m1Tension, int m1Time, 

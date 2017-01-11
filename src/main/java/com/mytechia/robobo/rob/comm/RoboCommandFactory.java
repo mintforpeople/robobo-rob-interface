@@ -61,6 +61,10 @@ public class RoboCommandFactory extends MessageFactory {
         
         registerOperationModeMessageBuilder();
 
+        registerStopWarningMessageBuilder();
+
+        registerControlValuesMessageBuilder();
+
     }
     
 
@@ -261,7 +265,44 @@ public class RoboCommandFactory extends MessageFactory {
         );
 
     }
-    
+
+    private void registerStopWarningMessageBuilder() {
+
+        registerMessageBuilder(
+                new IMessageBuilder() {
+
+                    @Override
+                    public byte type() {
+                        return MessageType.StopWarning.commandType;
+                    }
+
+                    @Override
+                    public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                        return new StopWarningMessage(bytes);
+                    }
+                }
+        );
+
+    }
+    private void registerControlValuesMessageBuilder() {
+
+        registerMessageBuilder(
+                new IMessageBuilder() {
+
+                    @Override
+                    public byte type() {
+                        return MessageType.ControlValues.commandType;
+                    }
+
+                    @Override
+                    public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                        return new ControlValuesMessage(bytes);
+                    }
+                }
+        );
+
+    }
+
     
 
 }
