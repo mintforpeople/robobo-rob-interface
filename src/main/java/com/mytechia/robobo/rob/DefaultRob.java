@@ -374,20 +374,43 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
    
     }
 
+    /**
+     * Moves the motors by degrees
+     * @param mode Movement Mode R_L
+     * @param angVelR Angular Speed of the right Motor
+     * @param angleR Angle of the right Motor
+     * @param angVelL Angular Speed of the left Motor
+     * @param angleL Angle of the left Motor
+     * @throws InternalErrorException
+     */
     @Override
-    public void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle2));
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleR));
     
     }
 
+    /**
+     * Moves the motors by time
+     * @param mode Movement Mode R_L
+     * @param angVelR Angular speed of the right motor
+     * @param angVelL Angular speed of the left motor
+     * @param time Time in milliseconds
+     * @throws InternalErrorException
+     */
     @Override
-    public void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException {
+    public void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), time);
+        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), time);
         
     }
 
+    /**
+     *
+     * @param angVel the velocity (0-255)
+     * @param angle  the angle (0-90)
+     * @throws InternalErrorException
+     */
     @Override
     public void movePan(int angVel, int angle) throws InternalErrorException {
         

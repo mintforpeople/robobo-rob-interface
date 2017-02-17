@@ -34,9 +34,29 @@ public interface IRob {
 
 	 void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException;
 
-	 void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException;
+		/**
+		 * Moves the motors by degrees
+		 * @param mode Movement Mode R_L
+		 * @param angVelR Angular Speed of the right Motor
+		 * @param angleR Angle of the right Motor
+		 * @param angVelL Angular Speed of the left Motor
+		 * @param angleL Angle of the left Motor
+		 * @throws InternalErrorException
+		 */
+	 void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException;
+
+
+		/**
+		 * Moves the motors by time
+		 * @param mode Movement Mode R_L
+		 * @param angVelR Angular speed of the right motor
+		 * @param angVelL Angular speed of the left motor
+		 * @param time Time in milliseconds
+		 * @throws InternalErrorException
+		 */
+
+	 void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException ;
 
          /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
           * 

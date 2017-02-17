@@ -49,13 +49,13 @@ public class DummyRob implements IRob{
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, int angVel1, int angle1, int angVel2, int angle2) throws InternalErrorException {
-        LOGGER.info("Call method {}(mode={}, angVel1={}, angle1={}, angVel2={}, angle2={})", "moveMT", mode, angVel1, angle1, angVel2, angle2);
+    public void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
+        LOGGER.info("Call method {}(mode={}, angVelR={}, angleR={}, angVelL={}, angleL={})", "moveMT", mode, angVelR, angleR, angVelL, angleL);
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, int angVel1, int angVel2, long time) throws InternalErrorException {
-        LOGGER.info("Call method {}(mode={}, angVel1={}, angVel2={}, time={})", "moveMT", mode, angVel1, angVel2, time);
+    public void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException {
+        LOGGER.info("Call method {}(mode={}, angVelR={}, angVelL={}, time={})", "moveMT", mode, angVelR, angVelL, time);
         
     }
 

@@ -7,7 +7,7 @@
     <groupId>com.mytechia</groupId>
     <artifactId>robobo-rob-interface</artifactId>
 
-    <version>0.2.9</version>
+    <version>0.2.10-SNAPSHOT</version>
 
     
     <properties>
