@@ -97,7 +97,7 @@ public class StreamProcessor {
             byte[] headerMessageData = new byte[Command.COMMAND_HEADER_SIZE];
             int numReadedHeaderBytes = dataQueue.get(headerMessageData, 0, Command.COMMAND_HEADER_SIZE);
             if (numReadedHeaderBytes < Command.COMMAND_HEADER_SIZE) {
-                LOGGER.debug("Not enough data to read a header");
+                LOGGER.trace("Not enough data to read a header");
                 return roboCommands;
             }
 
@@ -115,7 +115,7 @@ public class StreamProcessor {
             
             if(fullMessageSize > MAX_ACCEPTED_MSG_SIZE){
                 dataQueue.discardBytes(1);
-                LOGGER.debug("Malformed message: too long payload");
+                LOGGER.warn("Malformed message: too long payload");
                 continue;
             }
             
@@ -124,7 +124,7 @@ public class StreamProcessor {
             int numReaderMessageBytes= dataQueue.get(fullMessageData, 0, fullMessageSize);
             
             if(fullMessageSize> numReaderMessageBytes){
-                LOGGER.debug("Not enough data to read");
+                LOGGER.trace("Not enough data to read");
                 return roboCommands;
             }
             

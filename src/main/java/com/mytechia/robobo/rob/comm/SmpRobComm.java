@@ -279,7 +279,7 @@ public class SmpRobComm implements IRobComm{
 
         roboCommand.increaseNumTransmissions();
 
-        LOGGER.debug("Sent {}", roboCommand.toTransmittingString());
+        LOGGER.trace("Sent {}", roboCommand.toTransmittingString());
 
         connectionRob.addSentRoboCommand(roboCommand);
     }
@@ -304,9 +304,9 @@ public class SmpRobComm implements IRobComm{
             if(receivedAck){
                 AckMessage ackMessage= (AckMessage) command;
                 if(ackMessage.getErrorCode()!=0){
-                    LOGGER.debug("Received Ack[sequenceNumber={}, error={}]", command.getSequenceNumber(), command.getErrorCode());
+                    LOGGER.trace("Received Ack[sequenceNumber={}, error={}]", command.getSequenceNumber(), command.getErrorCode());
                 }else{
-                    LOGGER.debug("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
+                    LOGGER.trace("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
                 }
             }
             
@@ -314,17 +314,17 @@ public class SmpRobComm implements IRobComm{
         }
 
         if(command.getCommandType()== RobStatusMessage.commandType){
-            LOGGER.debug("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
+            LOGGER.trace("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
             dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
             return;
         }
         if(command.getCommandType()== StopWarning.commandType){
-            LOGGER.debug("Received StopWarning[sequenceNumber={}].", command.getSequenceNumber());
+            LOGGER.trace("Received StopWarning[sequenceNumber={}].", command.getSequenceNumber());
             dispatcherRobCommStopWarningListener.fireReceivedStopWarning((StopWarningMessage) command);
             return;
         }
 
-        LOGGER.debug("Received Command[sequenceNumber={}]. This command is not processed.", command.getSequenceNumber());
+        LOGGER.trace("Received Command[sequenceNumber={}]. This command is not processed.", command.getSequenceNumber());
         
     }
 
@@ -367,7 +367,7 @@ public class SmpRobComm implements IRobComm{
         
         for (RoboCommand roboCommand : roboCommands) {
             if (roboCommand == null){
-                System.err.println("Null COmmand");
+                System.err.println("Null Command");
             }
             else {
                 processReceivedCommand(roboCommand);
@@ -405,7 +405,7 @@ public class SmpRobComm implements IRobComm{
                 LOGGER.error("Error retransmitting {}", roboCommand.toTransmittingString(), exception);
             }
 
-            LOGGER.debug("Retransmitted {}", roboCommand.toTransmittingString());
+            LOGGER.trace("Retransmitted {}", roboCommand.toTransmittingString());
         }
     }
 
