@@ -296,8 +296,6 @@ public class SmpRobComm implements IRobComm{
 
 
     void processReceivedCommand(RoboCommand command){
-        System.out.println(command.toString());
-
         if(command.getCommandType()== AckMessage.commandType){
             boolean receivedAck=this.connectionRob.receivedAck((AckMessage)command);
             
