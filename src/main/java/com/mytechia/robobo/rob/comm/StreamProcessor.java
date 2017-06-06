@@ -97,7 +97,6 @@ public class StreamProcessor {
             byte[] headerMessageData = new byte[Command.COMMAND_HEADER_SIZE];
             int numReadedHeaderBytes = dataQueue.get(headerMessageData, 0, Command.COMMAND_HEADER_SIZE);
             if (numReadedHeaderBytes < Command.COMMAND_HEADER_SIZE) {
-                LOGGER.trace("Not enough data to read a header");
                 return roboCommands;
             }
 
@@ -124,7 +123,6 @@ public class StreamProcessor {
             int numReaderMessageBytes= dataQueue.get(fullMessageData, 0, fullMessageSize);
             
             if(fullMessageSize> numReaderMessageBytes){
-                LOGGER.trace("Not enough data to read");
                 return roboCommands;
             }
             

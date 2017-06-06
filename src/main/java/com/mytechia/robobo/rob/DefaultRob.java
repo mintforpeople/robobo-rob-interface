@@ -154,8 +154,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     @Override
     public void robStatus(RobStatusMessage robStatusMessage) {
         
-        LOGGER.trace("Received robStatusMessage");
-        
+
         Date updateDate= new Date(System.currentTimeMillis());
 
         this.updateGaps(robStatusMessage, updateDate);
@@ -427,6 +426,12 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     
     }
 
+    @Override
+    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws InternalErrorException {
+        this.roboCom.movePanTilt(angVelPan, convertAngleOBO2ROB(limitAngle(anglePan, MAX_PAN_ANGLE, MIN_PAN_ANGLE)),
+                angVelTilt, convertAngleOBO2ROB(limitAngle(angleTilt, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
+
+    }
 
 
     @Override

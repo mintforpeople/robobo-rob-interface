@@ -185,6 +185,11 @@ public class SmpRobComm implements IRobComm{
         
     }
 
+    @Override
+    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws CommunicationException {
+        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVelPan, anglePan, angVelTilt, angleTilt);
+        sendCommand(movePanTiltMessage);
+    }
 
 
     @Override

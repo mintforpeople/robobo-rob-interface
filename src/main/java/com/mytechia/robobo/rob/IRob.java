@@ -74,6 +74,8 @@ public interface IRob {
           */
 	 void moveTilt(int angVel, int angle) throws InternalErrorException;
 
+	 void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws InternalErrorException;
+
 	 void setOperationMode(byte operationMode) throws InternalErrorException;
 
 
