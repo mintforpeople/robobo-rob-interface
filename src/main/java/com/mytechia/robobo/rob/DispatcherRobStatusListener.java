@@ -127,4 +127,12 @@ public class DispatcherRobStatusListener {
         }
     }
 
+    void fireStatusLeds(LedStatus status) {
+
+        for (IRobStatusListener robStatusListener : robStatusListeners) {
+            robStatusListener.statusLeds(status);
+
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *   Copyright 2017 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright 2017 Luis Llamas <luis.llamas@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -19,33 +19,43 @@
  *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  ******************************************************************************/
-
 package com.mytechia.robobo.rob;
 
-import com.mytechia.commons.framework.exception.InternalErrorException;
-import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
-import java.util.Collection;
+/**
+ * Class representing the color of the Rob leds
+ */
+public class LedStatus extends RobDeviceStatus<LedStatus.LedStatusId> {
 
-public interface IRobStatusListener {
+    private int[] color;
 
-    void statusMotorsMT(MotorStatus left, MotorStatus right);
+    public LedStatus(LedStatusId id) {
+        super(id);
+        color =new int[3];
+    }
 
-    void statusMotorPan(MotorStatus status);
+    /**
+     * Sets the led color
+     * @param r red channeñ
+     * @param g green channel
+     * @param b blue channel
+     */
+    public void setColor(int r, int g, int b){
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+    }
 
-    void statusMotorTilt(MotorStatus status);
+    /**
+     * Gets the led color
+     * @return int array [red, green, blue]
+     */
+    public int[] getColor(){
+        return color;
+    };
 
-    void statusGaps(Collection<GapStatus> gaps);
-
-    void statusFalls(Collection<FallStatus> fall);
-    
-    void statusIRSensorStatus(Collection<IRSensorStatus> irSensorStatus);
-
-    void statusBattery(BatteryStatus battery);
-    
-    void statusWallConnectionStatus(WallConnectionStatus wallConnectionStatus);
-    
-    void robCommunicationError(InternalErrorException ex);
-
-    void statusLeds(LedStatus led);
-
+    public enum LedStatusId{
+        LedStatus1,LedStatus2,LedStatus3,
+        LedStatus4,LedStatus5,LedStatus6,
+        LedStatus7
+    }
 }

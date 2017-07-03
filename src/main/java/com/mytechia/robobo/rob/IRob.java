@@ -30,7 +30,7 @@ import java.util.List;
 
 public interface IRob {
 
-	 void setLEDColor(int led, Color color) throws InternalErrorException;
+	 void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException;
 
 	 void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
 

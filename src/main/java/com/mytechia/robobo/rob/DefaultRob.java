@@ -73,6 +73,8 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     private final List<IRSensorStatus> irSensors = new ArrayList<IRSensorStatus>();
 
+    private final List<LedStatus> leds = new ArrayList<LedStatus>();
+
     private MotorStatus panMotor, tiltMotor, leftMotor, rightMotor;
     
     private WallConnectionStatus wallConnectonStatus= new WallConnectionStatus();
@@ -100,6 +102,8 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         
         initMotors();
 
+        initLeds();
+
         this.roboCom = roboCom;
         
         this.roboCom.addRobStatusListener(this);
@@ -111,6 +115,12 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     private void initIrSensors() {
         for (IRSentorStatusId irSensor: IRSentorStatusId.values()) {
             irSensors.add(new IRSensorStatus(irSensor));
+        }
+    }
+
+    private void initLeds() {
+        for (LedStatus.LedStatusId led: LedStatus.LedStatusId.values()) {
+            leds.add(new LedStatus(led));
         }
     }
 
@@ -357,18 +367,41 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         ms.setVoltage(motorVoltages[index]);
         
     }
-    
 
+    /**
+     * Sets the color of a led
+     * @param led Led index (1-7)
+     * @param color Led color
+     * @throws InternalErrorException
+     */
     @Override
-    public void setLEDColor(int led, Color color) throws InternalErrorException {
-        
+    public void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException {
+
+
+        if ((color.getRed()>255)||(color.getGreen()>255)||(color.getBlue()>255)){
+            throw new IllegalArgumentException("Invalid color");
+        }
+        LedStatus s ;
+        try {
+            s = new LedStatus(LedStatus.LedStatusId.values()[led-1]);
+
+            s.setColor(color.getRed(), color.getGreen(), color.getBlue());
+            this.dispatcherRobStatusListener.fireStatusLeds(s);
+
+        } catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("Invalid led id");
+        }
+
         this.roboCom.setLEDColor(led, color.getRed(), color.getGreen(), color.getBlue());
+
+
+
      
     }
 
     @Override
     public void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException {
-        
+
             this.roboCom.setLEDsMode(mode.code);
    
     }

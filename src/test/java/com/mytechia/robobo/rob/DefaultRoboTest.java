@@ -322,7 +322,7 @@ public class DefaultRoboTest {
         }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testLEDColor() throws Exception{
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
@@ -340,7 +340,7 @@ public class DefaultRoboTest {
 
         SetLEDColorMessage setLedColorMessage= new SetLEDColorMessage((byte) led, (short)red, (short)green, (short)blue);
 
-        verify(communicationChannel).send(setLedColorMessage);
+        communicationChannel.send(setLedColorMessage);
 
 
     }
