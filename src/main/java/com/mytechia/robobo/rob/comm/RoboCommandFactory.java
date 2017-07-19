@@ -23,7 +23,6 @@
 package com.mytechia.robobo.rob.comm;
 
 import static com.mytechia.robobo.rob.comm.MessageType.MaxValueMotors;
-import static com.mytechia.robobo.rob.comm.MessageType.OperationModeMessage;
 
 import com.mytechia.commons.framework.simplemessageprotocol.Command;
 import com.mytechia.commons.framework.simplemessageprotocol.IMessageBuilder;
@@ -51,7 +50,8 @@ public class RoboCommandFactory extends MessageFactory {
 
         registerMoveMTMessageBuilder();
 
-        registerMovePanTilMessageBuilder();
+        registerMovePanMessageBuilder();
+        registerMoveTiltMessageBuilder();
 
         registerResetPanTiltOffsetMessageBuilder();
         
@@ -83,17 +83,33 @@ public class RoboCommandFactory extends MessageFactory {
         );
     }
 
-    private void registerMovePanTilMessageBuilder() {
+    private void registerMovePanMessageBuilder() {
         registerMessageBuilder(
                 new IMessageBuilder() {
             @Override
             public byte type() {
-                return MessageType.MovePanTiltMessage.commandType;
+                return MessageType.MovePanMessage.commandType;
             }
 
             @Override
             public Command buildMessage(byte[] bytes) throws MessageFormatException {
-                return new MovePanTiltMessage(bytes);
+                return new MovePanMessage(bytes);
+            }
+        }
+        );
+    }
+
+    private void registerMoveTiltMessageBuilder() {
+        registerMessageBuilder(
+                new IMessageBuilder() {
+            @Override
+            public byte type() {
+                return MessageType.MoveTiltMessage.commandType;
+            }
+
+            @Override
+            public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                return new MoveTiltMessage(bytes);
             }
         }
         );

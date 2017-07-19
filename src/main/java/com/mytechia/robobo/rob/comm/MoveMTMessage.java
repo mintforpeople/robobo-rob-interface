@@ -36,11 +36,11 @@ import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
 public class MoveMTMessage extends RoboCommand {
 
 
-    private int angVel1;
+    private short angVel1;
 
     private int angle1;
 
-    private int angVel2;
+    private short angVel2;
 
     private int angle2;
 
@@ -48,9 +48,9 @@ public class MoveMTMessage extends RoboCommand {
 
 
     public MoveMTMessage(
-            int angVel1,
+            short angVel1,
             int angle1,
-            int angVel2,
+            short angVel2,
             int angle2,
             long time) {
 
@@ -79,13 +79,13 @@ public class MoveMTMessage extends RoboCommand {
 
         messageCoder.writeInt(this.angle1, "angle1");
         
-        messageCoder.writeUShort(this.angVel1, "angVel1");
+        messageCoder.writeShort(this.angVel1, "angVel1");
         
         messageCoder.writeInt((int) this.time, "time1");
 
         messageCoder.writeInt(this.angle2, "angle2");
         
-        messageCoder.writeUShort(this.angVel2, "angVel2");
+        messageCoder.writeShort(this.angVel2, "angVel2");
 
         messageCoder.writeInt((int) this.time, "time2");
 

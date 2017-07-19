@@ -59,7 +59,7 @@ public interface IRobComm {
      * @param angVel2 angular velocity of the motor 2
      * @param angle2 total angle of movement of the motor 2
      */
-    public void moveMT(int angVel1, int angle1, int angVel2, int angle2) throws CommunicationException;
+    public void moveMT(short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException;
 
     /**
      * Sends a move command to the two motors in charge of wheel movement.
@@ -72,7 +72,7 @@ public interface IRobComm {
      * @param angVel2 angular velocity o the motor 2
      * @param time total time duration of the movement
      */
-    public void moveMT(int angVel1, int angVel2, long time) throws CommunicationException;
+    public void moveMT(short angVel1, short angVel2, long time) throws CommunicationException;
 
     /**
      * Sends a move command to the motor in charge of the smartphone PAN
@@ -91,8 +91,6 @@ public interface IRobComm {
      * @param angle total angle of movement
      */
     public void moveTilt(int angVel, int angle) throws CommunicationException;
-
-    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws CommunicationException;
 
     /**
      * Resets the pan and tilt offset...

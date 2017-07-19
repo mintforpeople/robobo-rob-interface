@@ -69,10 +69,6 @@ public class DummyRob implements IRob{
         LOGGER.info("Call method {}(angVel={}, angle={})", "moveTilt", angVel, angle);
     }
 
-    @Override
-    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws InternalErrorException {
-
-    }
 
     @Override
     public void setOperationMode(byte operationMode) throws InternalErrorException {

@@ -429,7 +429,7 @@ public class DefaultRoboTest {
 
         defaultRob.movePan(angVel, angle);
 
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)0, angVel, angle, 0);
+        MovePanMessage movePanTiltMessage= new MovePanMessage(angVel, angle);
 
         verify(communicationChannel).send(movePanTiltMessage);
 
@@ -450,53 +450,14 @@ public class DefaultRoboTest {
 
         defaultRob.moveTilt(angVel, angle);
 
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)1, angVel, angle*10000, 0);
+        MoveTiltMessage movePanTiltMessage= new MoveTiltMessage(angVel, angle*10000);
 
         verify(communicationChannel).send(movePanTiltMessage);
 
     }
 
-    @Test
-    @Ignore
-    public void testMovePanTime() throws Exception{
 
-        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
-
-        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
-
-        short angVel=10;
-        long time=45;
-
-        //defaultRob.movePan(angVel, time);
-
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)0, angVel, 0, (int) time);
-
-        verify(communicationChannel).send(movePanTiltMessage);
-
-    }
-
-    @Test
-    @Ignore
-    public void testMoveTiltTime() throws Exception{
-
-        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
-
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
-
-        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
-
-        short angVel=16;
-        long time=45;
-
-        //defaultRob.moveTilt(angVel, time);
-
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)1, angVel, 0, (int) time);
-
-        verify(communicationChannel).send(movePanTiltMessage);
-
-    }
 
     @Test
     public void testResetPanTiltOffset() throws Exception{

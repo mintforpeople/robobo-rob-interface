@@ -147,7 +147,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT( int angVel1, int angle1, int angVel2, int angle2) throws CommunicationException {
+    public void moveMT( short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
         
@@ -156,7 +156,7 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(int angVel1, int angVel2, long time) throws CommunicationException {
+    public void moveMT(short angVel1, short angVel2, long time) throws CommunicationException {
         
         MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
         
@@ -169,9 +169,9 @@ public class SmpRobComm implements IRobComm{
         
         
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle,  0, 0);
+        MovePanMessage movePanMessage = new MovePanMessage(angVel, angle);
         
-        sendCommand(movePanTiltMessage);
+        sendCommand(movePanMessage);
     }
 
 
@@ -179,16 +179,10 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void moveTilt(int angVel, int angle) throws CommunicationException{
         
-    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(0, 0, angVel, angle);
+    	MovePanMessage movePanMessage = new MovePanMessage(angVel, angle);
         
-        sendCommand(movePanTiltMessage);
+        sendCommand(movePanMessage);
         
-    }
-
-    @Override
-    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws CommunicationException {
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVelPan, anglePan, angVelTilt, angleTilt);
-        sendCommand(movePanTiltMessage);
     }
 
 

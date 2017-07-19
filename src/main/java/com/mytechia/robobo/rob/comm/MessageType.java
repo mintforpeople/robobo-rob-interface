@@ -35,16 +35,16 @@ public enum MessageType {
     SetLEDColorMessage((byte)3),
     RobSetLEDsModeMessage((byte)4),
     MoveMTMessage((byte)5),
-    MovePanTiltMessage((byte)6),
+    MovePanMessage((byte)6),
     ResetPanTiltOffsetMessage((byte)7),
     InfraredConfigurationMessage((byte)8),
     OperationModeMessage((byte)9), 
     MaxValueMotors((byte)10),
     StopWarning((byte)11),
-    FirmwareVersion((byte)12),
-    ResetRob((byte)13),
-    MoveTilt((byte)14),
-    ChangeBtName((byte)15);
+    FirmwareVersionMessage((byte)12),
+    ResetRobMessage((byte)13),
+    MoveTiltMessage((byte)14),
+    ChangeBtNameMessage((byte)15);
 
     public final byte commandType;
 

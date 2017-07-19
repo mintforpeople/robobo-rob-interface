@@ -17,13 +17,7 @@ public class MoveMTMessageTest {
         Integer vel2 = 1;
         MoveMTMessage originalMessage =
                 new MoveMTMessage(655 ,45,1, -30, 405);
-                /*new MoveMTMessage(
-                        (byte) 4,
-                        (byte)2,
-                        45,
-                        (byte)1,
-                        -30,
-                        405);*/
+
 
         final byte[] messageData = originalMessage.codeMessage();
 

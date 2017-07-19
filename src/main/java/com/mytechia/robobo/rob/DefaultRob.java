@@ -49,12 +49,13 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
     private static final short MAX_ANG_VEL = 250;
-    private static final short MIN_ANG_VEL = 10;
+    private static final short MIN_ANG_VEL = -250;
     private static final short PT_ANG_VEL = 6;
     private static final int MAX_PAN_ANGLE = 339;
     private static final int MIN_PAN_ANGLE = 27;
     private static final int MAX_TILT_ANGLE = 109;
     private static final int MIN_TILT_ANGLE = 26;
+
 
     private int min_battery = 574;
     private int max_battery = 802;
@@ -416,7 +417,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      */
     @Override
     public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
-        
+        //TODO LIMITAR VELOCIDAD
         this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleR));
     
     }
@@ -455,13 +456,6 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         
         this.roboCom.moveTilt(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
     
-    }
-
-    @Override
-    public void movePanTilt(int angVelPan, int anglePan, int angVelTilt, int angleTilt) throws InternalErrorException {
-        this.roboCom.movePanTilt(angVelPan, convertAngleOBO2ROB(limitAngle(anglePan, MAX_PAN_ANGLE, MIN_PAN_ANGLE)),
-                angVelTilt, convertAngleOBO2ROB(limitAngle(angleTilt, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
-
     }
 
 
@@ -577,13 +571,13 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         return angle/ANGLE_CONVERSION_FACTOR;
     }
     
-    private int limitAngVel(int angVel, short max, short min) {
+    private short limitAngVel(int angVel, short max, short min) {
         if (angVel > max)
             return max;
         else if (angVel < min)
             return 0;
         else        
-            return angVel;
+            return (short) angVel;
     }
 
     
