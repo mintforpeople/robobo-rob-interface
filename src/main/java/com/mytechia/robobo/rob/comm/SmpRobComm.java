@@ -147,18 +147,18 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, int angVel1, int angle1, int angVel2, int angle2) throws CommunicationException {
+    public void moveMT( int angVel1, int angle1, int angVel2, int angle2) throws CommunicationException {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1, angVel2, angle2, 0);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
         
         sendCommand(moveMTMessage);
         
     }
 
     @Override
-    public void moveMT(byte mode, int angVel1, int angVel2, long time) throws CommunicationException {
+    public void moveMT(int angVel1, int angVel2, long time) throws CommunicationException {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
         
         sendCommand(moveMTMessage);
         
@@ -215,10 +215,6 @@ public class SmpRobComm implements IRobComm{
 	
 	}
 
-    @Override
-    public void setControlValues(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException {
-        sendCommand(new ControlValuesMessage(motorId,startki,perturbationski,stopki));
-    }
 
 
     @Override
@@ -317,7 +313,7 @@ public class SmpRobComm implements IRobComm{
         }
 
         if(command.getCommandType()== RobStatusMessage.commandType){
-            LOGGER.trace("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
+            //LOGGER.trace("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
             dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
             return;
         }

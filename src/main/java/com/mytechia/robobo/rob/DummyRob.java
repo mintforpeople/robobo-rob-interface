@@ -49,13 +49,13 @@ public class DummyRob implements IRob{
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
-        LOGGER.info("Call method {}(mode={}, angVelR={}, angleR={}, angVelL={}, angleL={})", "moveMT", mode, angVelR, angleR, angVelL, angleL);
+    public void moveMT(int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
+        LOGGER.info("Call method {}(angVelR={}, angleR={}, angVelL={}, angleL={})", "moveMT",  angVelR, angleR, angVelL, angleL);
     }
 
     @Override
-    public void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException {
-        LOGGER.info("Call method {}(mode={}, angVelR={}, angVelL={}, time={})", "moveMT", mode, angVelR, angVelL, time);
+    public void moveMT(int angVelR, int angVelL, long time) throws InternalErrorException {
+        LOGGER.info("Call method {}(angVelR={}, angVelL={}, time={})", "moveMT", angVelR, angVelL, time);
         
     }
 
@@ -154,11 +154,6 @@ public class DummyRob implements IRob{
         LOGGER.info("Call method {}(infraredId={}, commandCode={}, dataByteLow={}, dataByteHigh={})", "configureInfrared",  infraredId,  commandCode,  dataByteLow,  dataByteHigh);
     }
 
-    @Override
-    public void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) {
-        LOGGER.info("Call method {}(motorId={}, startki={}, perturbationki={}, stopki={})", "configureInfrared",  motorId,  startki,  perturbationski, stopki );
-
-    }
 
     @Override
     public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime, int tiltTension, int tiltTime) throws InternalErrorException {

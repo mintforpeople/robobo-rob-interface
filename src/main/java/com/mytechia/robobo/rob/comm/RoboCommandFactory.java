@@ -63,7 +63,6 @@ public class RoboCommandFactory extends MessageFactory {
 
         registerStopWarningMessageBuilder();
 
-        registerControlValuesMessageBuilder();
 
     }
     
@@ -284,24 +283,7 @@ public class RoboCommandFactory extends MessageFactory {
         );
 
     }
-    private void registerControlValuesMessageBuilder() {
 
-        registerMessageBuilder(
-                new IMessageBuilder() {
-
-                    @Override
-                    public byte type() {
-                        return MessageType.ControlValues.commandType;
-                    }
-
-                    @Override
-                    public Command buildMessage(byte[] bytes) throws MessageFormatException {
-                        return new ControlValuesMessage(bytes);
-                    }
-                }
-        );
-
-    }
 
     
 

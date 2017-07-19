@@ -35,8 +35,7 @@ import static com.mytechia.robobo.rob.comm.MessageType.MoveMTMessage;
  */
 public class MoveMTMessage extends RoboCommand {
 
-    private byte mode;
-    
+
     private int angVel1;
 
     private int angle1;
@@ -49,7 +48,6 @@ public class MoveMTMessage extends RoboCommand {
 
 
     public MoveMTMessage(
-            byte mode,
             int angVel1,
             int angle1,
             int angVel2,
@@ -58,7 +56,6 @@ public class MoveMTMessage extends RoboCommand {
 
         super();
         this.setCommandType(MoveMTMessage.commandType);
-        this.mode = mode;
         this.angVel1 = angVel1;
         this.angle1 = angle1;
         this.angVel2 = angVel2;
@@ -79,8 +76,6 @@ public class MoveMTMessage extends RoboCommand {
     protected final byte[] codeMessageData() throws MessageFormatException {
         MessageCoder messageCoder = this.getMessageCoder();
 
-        
-        messageCoder.writeByte(this.mode, "mode");
 
         messageCoder.writeInt(this.angle1, "angle1");
         
@@ -103,8 +98,6 @@ public class MoveMTMessage extends RoboCommand {
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.mode = messageDecoder.readByte("mode");
-
         this.angle1 = messageDecoder.readInt("angle1");
         
         this.angVel1 = messageDecoder.readShort("angVel1");
@@ -123,7 +116,6 @@ public class MoveMTMessage extends RoboCommand {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 23 * hash + this.mode;
         hash = 23 * hash + this.angVel1;
         hash = 23 * hash + this.angle1;
         hash = 23 * hash + this.angVel2;
@@ -139,7 +131,6 @@ public class MoveMTMessage extends RoboCommand {
 
         MoveMTMessage that = (MoveMTMessage) o;
 
-        if (Byte.compare(that.mode, mode) != 0) return false;
         if (Double.compare(that.angVel1, angVel1) != 0) return false;
         if (Double.compare(that.angle1, angle1) != 0) return false;
         if (Double.compare(that.angVel2, angVel2) != 0) return false;

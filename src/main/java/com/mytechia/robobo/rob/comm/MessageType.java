@@ -41,7 +41,10 @@ public enum MessageType {
     OperationModeMessage((byte)9), 
     MaxValueMotors((byte)10),
     StopWarning((byte)11),
-    ControlValues((byte)12);
+    FirmwareVersion((byte)12),
+    ResetRob((byte)13),
+    MoveTilt((byte)14),
+    ChangeBtName((byte)15);
 
     public final byte commandType;
 

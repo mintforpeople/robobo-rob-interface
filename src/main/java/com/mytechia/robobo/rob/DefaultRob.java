@@ -408,7 +408,6 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     /**
      * Moves the motors by degrees
-     * @param mode Movement Mode R_L
      * @param angVelR Angular Speed of the right Motor
      * @param angleR Angle of the right Motor
      * @param angVelL Angular Speed of the left Motor
@@ -416,24 +415,23 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @throws InternalErrorException
      */
     @Override
-    public void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
+    public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleR));
+        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleR));
     
     }
 
     /**
      * Moves the motors by time
-     * @param mode Movement Mode R_L
      * @param angVelR Angular speed of the right motor
      * @param angVelL Angular speed of the left motor
      * @param time Time in milliseconds
      * @throws InternalErrorException
      */
     @Override
-    public void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException {
+    public void moveMT( int angVelR, int angVelL, long time) throws InternalErrorException {
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), time);
+        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), time);
         
     }
 
@@ -493,10 +491,6 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     }
 
-    @Override
-    public void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException {
-        this.roboCom.setControlValues(motorId, startki, perturbationski, stopki);
-    }
 
     @Override
     public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,

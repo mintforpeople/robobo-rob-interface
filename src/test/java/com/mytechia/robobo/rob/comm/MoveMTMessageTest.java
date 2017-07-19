@@ -16,7 +16,7 @@ public class MoveMTMessageTest {
         Integer vel1 = 2;
         Integer vel2 = 1;
         MoveMTMessage originalMessage =
-                new MoveMTMessage((byte) 4, 655 ,45,1, -30, 405);
+                new MoveMTMessage(655 ,45,1, -30, 405);
                 /*new MoveMTMessage(
                         (byte) 4,
                         (byte)2,

@@ -37,26 +37,24 @@ public interface IRob {
 
 		/**
 		 * Moves the motors by degrees
-		 * @param mode Movement Mode R_L
 		 * @param angVelR Angular Speed of the right Motor
 		 * @param angleR Angle of the right Motor
 		 * @param angVelL Angular Speed of the left Motor
 		 * @param angleL Angle of the left Motor
 		 * @throws InternalErrorException
 		 */
-	 void moveMT(MoveMTMode mode, int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException;
+	 void moveMT(int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException;
 
 
 		/**
 		 * Moves the motors by time
-		 * @param mode Movement Mode R_L
 		 * @param angVelR Angular speed of the right motor
 		 * @param angVelL Angular speed of the left motor
 		 * @param time Time in milliseconds
 		 * @throws InternalErrorException
 		 */
 
-	 void moveMT(MoveMTMode mode, int angVelR, int angVelL, long time) throws InternalErrorException ;
+	 void moveMT(int angVelR, int angVelL, long time) throws InternalErrorException ;
 
          /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
           * 
@@ -108,10 +106,6 @@ public interface IRob {
 	 void removeRobStatusListener(IRobStatusListener listener);
 	 
 	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException;
-
-
-	void configureMotorSControlValue(byte motorId, int startki, int perturbationski, int stopki) throws CommunicationException;
-	 
 	 
 	 void maxValueMotors(int m1Tension, int m1Time, 
 			 			int m2Tension, int m2Time, int panTension, int panTime,
