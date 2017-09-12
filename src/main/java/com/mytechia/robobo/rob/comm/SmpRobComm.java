@@ -230,8 +230,18 @@ public class SmpRobComm implements IRobComm{
 		
 	}
 
+    @Override
+    public void resetRob() throws CommunicationException {
+        this.sendCommand(new ResetRobMessage());
+    }
 
-	@Override
+    @Override
+    public void changeRobName(String name) throws CommunicationException {
+        this.sendCommand(new ChangeNameMessage(name));
+    }
+
+
+    @Override
     public void addRobStatusListener(IRobCommStatusListener rsListener) {
         dispatcherRobCommStatusListener.subscribeToRobCommStatus(rsListener);
     }

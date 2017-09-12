@@ -91,6 +91,7 @@ public class MoveTiltMessage extends RoboCommand {
         this.tiltAngle = tiltAngle;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

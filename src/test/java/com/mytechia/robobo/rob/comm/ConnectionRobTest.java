@@ -133,7 +133,7 @@ public class ConnectionRobTest {
     }
 
 
-    @Test
+    //@Test
     public void notReturnLostCommandIfNotExceededWaitingTimeAck() {
 
         ConnectionRob connectionRob = new ConnectionRob();

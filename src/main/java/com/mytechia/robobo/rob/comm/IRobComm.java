@@ -121,4 +121,8 @@ public interface IRobComm {
     void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
             int tiltTension, int tiltTime) throws CommunicationException;
 
+    void resetRob() throws CommunicationException;
+
+    void changeRobName(String name) throws CommunicationException;
+
 }

@@ -494,7 +494,22 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     }
 
-	@Override
+    @Override
+    public void resetRob() throws InternalErrorException {
+        this.roboCom.resetRob();
+    }
+
+    @Override
+    public void changeRobBTName(String name) throws InternalErrorException {
+        this.roboCom.changeRobName(name);
+    }
+
+    @Override
+    public void resetRobBTName() throws InternalErrorException {
+        this.roboCom.changeRobName("");
+    }
+
+    @Override
     public List<MotorStatus> getLastStatusMotors() {
         ArrayList<MotorStatus> motors = new ArrayList<MotorStatus>();
         motors.add(panMotor);
@@ -616,4 +631,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         dispatcherStopWarningListener.fireStatusBattery(sw);
 
     }
+
+
+
 }

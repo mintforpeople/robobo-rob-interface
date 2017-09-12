@@ -109,4 +109,11 @@ public interface IRob {
 	 void maxValueMotors(int m1Tension, int m1Time, 
 			 			int m2Tension, int m2Time, int panTension, int panTime,
 			 			int tiltTension, int tiltTime) throws InternalErrorException;
+
+	 void resetRob() throws InternalErrorException;
+
+	 void changeRobBTName(String name) throws InternalErrorException;
+
+	 void resetRobBTName() throws InternalErrorException;
+
 }

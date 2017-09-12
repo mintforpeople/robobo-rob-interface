@@ -155,5 +155,20 @@ public class DummyRob implements IRob{
     public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime, int tiltTension, int tiltTime) throws InternalErrorException {
         LOGGER.info("Call method {}( m1Tension={}, m1Time={},  m2Tension={}, m2Time={}, panTension={}, panTime={}, tiltTension={}, tiltTime={})", "maxValueMotors",  m1Tension, m1Time,  m2Tension, m2Time, panTension,  panTime,  tiltTension,  tiltTime);
     }
-    
+
+    @Override
+    public void resetRob() throws InternalErrorException {
+        LOGGER.info("Call method {}()", "resetRob");
+    }
+
+    @Override
+    public void changeRobBTName(String name) throws InternalErrorException {
+        LOGGER.info("Call method {}( name={})", "changeRobBTName",  name);
+    }
+
+    @Override
+    public void resetRobBTName() throws InternalErrorException {
+        LOGGER.info("Call method {}()", "resetRobBTName");
+    }
+
 }
