@@ -48,11 +48,23 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 250;
-    private static final short MIN_ANG_VEL = -250;
+
+    private static final short MAX_ANG_VEL = 100;
+    private static final short MIN_ANG_VEL = -100;
+
     private static final short PT_ANG_VEL = 6;
+
     private static final int MAX_PAN_ANGLE = 339;
     private static final int MIN_PAN_ANGLE = 27;
+
+    private static final short MAX_PAN_ANG_VEL = 100;
+    private static final short MIN_PAN_ANG_VEL = -100;
+
+
+    private static final short MAX_TILT_ANG_VEL = 100;
+    private static final short MIN_TILT_ANG_VEL = -100;
+
+
     private static final int MAX_TILT_ANGLE = 109;
     private static final int MIN_TILT_ANGLE = 26;
 
@@ -363,7 +375,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
             MotorStatus ms, int index, 
             int[] motorAngle, short[] motorVelocities, int[] motorVoltages) {
         
-        ms.setVariationAngle(convertAngleROB2OBO(motorAngle[index]));
+        ms.setVariationAngle(motorAngle[index]);
         ms.setAngularVelocity(motorVelocities[index]);
         ms.setVoltage(motorVoltages[index]);
         
@@ -417,9 +429,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      */
     @Override
     public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
-        //TODO LIMITAR VELOCIDAD
-        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angleR));
-    
+        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), angleL, limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), angleR);
     }
 
     /**
@@ -444,9 +454,8 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      */
     @Override
     public void movePan(int angVel, int angle) throws InternalErrorException {
-        
-        this.roboCom.movePan(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
-      
+
+        this.roboCom.movePan(limitAngVel(angVel, MAX_PAN_ANG_VEL, MIN_PAN_ANG_VEL), limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE));
     }
 
 
@@ -454,7 +463,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     @Override
     public void moveTilt(int angVel, int angle) throws InternalErrorException {
         
-        this.roboCom.moveTilt(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
+        this.roboCom.moveTilt(limitAngVel(angVel, MAX_TILT_ANG_VEL, MIN_TILT_ANG_VEL), limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE));
     
     }
 
@@ -576,16 +585,6 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     }
 
 
-
-
-    private int convertAngleOBO2ROB(int angle) {
-        return angle*ANGLE_CONVERSION_FACTOR;
-    }
-    
-    private int convertAngleROB2OBO(int angle) {
-        return angle/ANGLE_CONVERSION_FACTOR;
-    }
-    
     private short limitAngVel(int angVel, short max, short min) {
         if (angVel > max)
             return max;

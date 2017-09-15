@@ -376,14 +376,14 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        byte angVel1=101;
+        byte angVel1=100;
         short angle1=66;
-        byte angVel2=127;
+        byte angVel2=-100;
         short angle2= 45;
 
         defaultRob.moveMT( angVel2, angle2, angVel1, angle1);
 
-        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1*10000, angVel2, angle2*10000, 0);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
 
         verify(communicationChannel).send(moveMTMessage);
 
@@ -398,7 +398,7 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        byte angVel1=101;
+        byte angVel1=-1;
         byte angVel2=50;
         long time=60;
 
