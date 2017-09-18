@@ -43,7 +43,8 @@ public class ChangeNameMessage extends RoboCommand {
 
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeString(name, "name");
+        //messageCoder.writeString(this.name, "name");
+        messageCoder.writeByteArray(this.name.getBytes(), "name");
 
         return messageCoder.getBytes();
 
@@ -55,7 +56,9 @@ public class ChangeNameMessage extends RoboCommand {
 
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.name = messageDecoder.readString("name");
+        final byte[] nameBytes = messageDecoder.readByteArray("name");
+
+        this.name = new String(nameBytes);
 
         return this.getMessageDecoder().getArrayIndex();
 
