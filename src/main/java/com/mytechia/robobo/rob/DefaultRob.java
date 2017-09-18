@@ -58,11 +58,11 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     private static final int MIN_PAN_ANGLE = 27;
 
     private static final short MAX_PAN_ANG_VEL = 100;
-    private static final short MIN_PAN_ANG_VEL = -100;
+    private static final short MIN_PAN_ANG_VEL = 0;
 
 
     private static final short MAX_TILT_ANG_VEL = 100;
-    private static final short MIN_TILT_ANG_VEL = -100;
+    private static final short MIN_TILT_ANG_VEL = 0;
 
 
     private static final int MAX_TILT_ANGLE = 109;
