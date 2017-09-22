@@ -589,7 +589,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         if (angVel > max)
             return max;
         else if (angVel < min)
-            return 0;
+            return min;
         else        
             return (short) angVel;
     }
