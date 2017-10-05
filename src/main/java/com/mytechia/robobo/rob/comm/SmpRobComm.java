@@ -322,8 +322,15 @@ public class SmpRobComm implements IRobComm{
             return;
         }
         if(command.getCommandType()== StopWarning.commandType){
-            LOGGER.trace("Received StopWarning[sequenceNumber={}].", command.getSequenceNumber());
-            dispatcherRobCommStopWarningListener.fireReceivedStopWarning((StopWarningMessage) command);
+
+            StopWarningMessage stopWarningMessage=(StopWarningMessage) command;
+
+            LOGGER.warn("Received StopWarning[sequenceNumber={}, reason-stop={}, details={}].", stopWarningMessage.getSequenceNumber(),
+                    stopWarningMessage.getType(),
+                    stopWarningMessage.getDetails());
+
+            dispatcherRobCommStopWarningListener.fireReceivedStopWarning(stopWarningMessage);
+
             return;
         }
 

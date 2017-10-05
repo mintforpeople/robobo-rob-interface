@@ -36,17 +36,31 @@ import static com.mytechia.robobo.rob.comm.MessageType.StopWarning;
 public class StopWarningMessage extends RoboCommand {
     private static final String WARNING_TYPE = "warningType";
     private static final String WARNING_DETAILS = "warningDetails";
+    
     private StopWarningType message;
-
 
     private static final String COMMAND_CODE = "commandCode";
 
     private byte commandCode;
 
+    private byte type;
+
+    private byte details;
+
+
     public StopWarningMessage(byte commandCode) {
         this.setCommandType(StopWarning.commandType);
         this.commandCode = commandCode;
     }
+
+    public byte getType() {
+        return type;
+    }
+
+    public byte getDetails() {
+        return details;
+    }
+
     public StopWarningMessage(byte[] message) throws MessageFormatException {
         super(message);
         this.setCommandType(StopWarning.commandType);
@@ -54,11 +68,13 @@ public class StopWarningMessage extends RoboCommand {
 
     @Override
     protected int decodeMessageData(byte[] bytes, int i) throws MessageFormatException {
+
         MessageDecoder messageDecoder = this.getMessageDecoder();
-        byte type;
-        byte details;
+
         type = messageDecoder.readByte(WARNING_TYPE);
+
         details = messageDecoder.readByte(WARNING_DETAILS);
+
         this.message = StopWarningType.toStopWarningType(type,details);
 
         return 0;
