@@ -67,10 +67,12 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     private static final int MAX_TILT_ANGLE = 109;
     private static final int MIN_TILT_ANGLE = 26;
+    
+    private static final int MAX_COLOR_VALUE = 4095; //12bits
 
 
-    private int min_battery = 574;
-    private int max_battery = 802;
+    private int min_battery = 310; //1%
+    private int max_battery = 400; //100%
 
     private IRobComm roboCom;
 
@@ -391,7 +393,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     public void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException {
 
 
-        if ((color.getRed()>255)||(color.getGreen()>255)||(color.getBlue()>255)){
+        if ((color.getRed()>MAX_COLOR_VALUE)||(color.getGreen()>MAX_COLOR_VALUE)||(color.getBlue()>MAX_COLOR_VALUE)){
             throw new IllegalArgumentException("Invalid color");
         }
         LedStatus s ;
