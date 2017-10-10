@@ -38,8 +38,8 @@ import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
 public class RobStatusMessage extends RoboCommand {
     
     private static final String WALL_CONNECTION = "wallConnection";
-	private static final String BATERRY_INFORMATION = "baterryInformation";
-	private static final String GAPS = "gaps";
+    private static final String BATERRY_INFORMATION = "baterryInformation";
+    private static final String GAPS = "gaps";
     private static final String FALLS = "falls";
     private static final String IRS = "irs";
     private static final String OBSTACLES = "obstacles";
@@ -52,7 +52,7 @@ public class RobStatusMessage extends RoboCommand {
 
     private byte falls;
 
-    private short[] irs;               // 9 * short
+    private int[] irs;               // 9 * short
 
     private short[] motorVelocities;   // 4 * (2 bytes)
 
@@ -67,7 +67,7 @@ public class RobStatusMessage extends RoboCommand {
     public RobStatusMessage(
             byte gaps,
             byte falls,
-            short[] irs,
+            int[] irs,
             short[] obstacles,
             short[] bumps,
             short[] motorVelocities,
@@ -123,7 +123,7 @@ public class RobStatusMessage extends RoboCommand {
 
         messageCoder.writeByte(this.falls, FALLS);
         
-        messageCoder.writeShortArray(this.irs, IRS);
+        messageCoder.writeUShortArray(this.irs, IRS);
 
         //messageCoder.writeShortArray(this.obstacles, OBSTACLES);
 
@@ -152,7 +152,7 @@ public class RobStatusMessage extends RoboCommand {
 
         this.falls = messageDecoder.readByte(FALLS);
 
-        this.irs = messageDecoder.readShortArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
+        this.irs = messageDecoder.readUShortArray(IRS, IRSensorStatus.IRSentorStatusId.values().length);
 
         this.motorVelocities = messageDecoder.readShortArray(MOTOR_VELOCITIES, MotorStatus.MotorStatusId.values().length);
 
@@ -208,7 +208,7 @@ public class RobStatusMessage extends RoboCommand {
         return falls;
     }
 
-    public short[] getIrs() {
+    public int[] getIrs() {
         return irs;
     }
 

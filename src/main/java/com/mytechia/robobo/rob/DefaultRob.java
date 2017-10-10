@@ -249,7 +249,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     private void updateIRSensorStatus(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        short[] irs = robStatusMessage.getIrs();
+        int[] irs = robStatusMessage.getIrs();
 
         if ((irs == null) || (irs.length == 0)) {
             return;

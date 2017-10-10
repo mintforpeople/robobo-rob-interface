@@ -35,7 +35,7 @@ public class DefaultRoboTest {
 
         byte falls= 0;
 
-        short[] irs= new short[IRSentorStatusId.values().length];
+        int[] irs= new int[IRSentorStatusId.values().length];
 
         short[] obstacles= new short[ObstacleSensorStatusId.values().length];
 
@@ -108,7 +108,7 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        short[] irs=statusMessage.getIrs();
+        int[] irs=statusMessage.getIrs();
 
         irs[2]= 287;
         irs[5]= 4567;
