@@ -44,7 +44,9 @@ public enum MessageType {
     FirmwareVersionMessage((byte)12),
     ResetRobMessage((byte)13),
     MoveTiltMessage((byte)14),
-    ChangeBtNameMessage((byte)15);
+    ChangeBtNameMessage((byte)15),
+    TiltCalibrationMessage((byte) 0x10),//Probablemente no se implemente
+    ResetEncodersMessage((byte) 0x11);
 
     public final byte commandType;
 

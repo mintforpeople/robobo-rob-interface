@@ -23,6 +23,7 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import com.mytechia.robobo.rob.RobMotorEnum;
 
 /**
  * This is the low level communication interface between the smartphone (OBO)
@@ -124,5 +125,7 @@ public interface IRobComm {
     void resetRob() throws CommunicationException;
 
     void changeRobName(String name) throws CommunicationException;
+
+    void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException;
 
 }

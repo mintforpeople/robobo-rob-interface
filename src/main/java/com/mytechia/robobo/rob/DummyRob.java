@@ -171,4 +171,10 @@ public class DummyRob implements IRob{
         LOGGER.info("Call method {}()", "resetRobBTName");
     }
 
+    @Override
+    public void resetWheelEncoders(RobMotorEnum motor) throws InternalErrorException {
+        LOGGER.info("Call method {}()", "resetWheelEncoders");
+
+    }
+
 }

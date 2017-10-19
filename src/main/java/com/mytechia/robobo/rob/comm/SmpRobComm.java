@@ -28,6 +28,7 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+import com.mytechia.robobo.rob.RobMotorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,6 +239,11 @@ public class SmpRobComm implements IRobComm{
     @Override
     public void changeRobName(String name) throws CommunicationException {
         this.sendCommand(new ChangeNameMessage(name));
+    }
+
+    @Override
+    public void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException {
+        this.sendCommand(new ResetEncodersMessage(motor));
     }
 
 

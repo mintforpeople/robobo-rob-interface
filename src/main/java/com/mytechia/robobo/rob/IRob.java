@@ -30,90 +30,92 @@ import java.util.List;
 
 public interface IRob {
 
-	 void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException;
+    void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException;
 
-	 void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
-
-
-		/**
-		 * Moves the motors by degrees
-		 * @param angVelR Angular Speed of the right Motor
-		 * @param angleR Angle of the right Motor
-		 * @param angVelL Angular Speed of the left Motor
-		 * @param angleL Angle of the left Motor
-		 * @throws InternalErrorException
-		 */
-	 void moveMT(int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException;
+    void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException;
 
 
-		/**
-		 * Moves the motors by time
-		 * @param angVelR Angular speed of the right motor
-		 * @param angVelL Angular speed of the left motor
-		 * @param time Time in milliseconds
-		 * @throws InternalErrorException
-		 */
-
-	 void moveMT(int angVelR, int angVelL, long time) throws InternalErrorException ;
-
-         /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
-          * 
-          * @param angVel the velocity (0-255)
-          * @param angle  the angle (0-90)
-          */
-	 void movePan(int angVel, int angle) throws InternalErrorException;
+    /**
+     * Moves the motors by degrees
+     * @param angVelR Angular Speed of the right Motor
+     * @param angleR Angle of the right Motor
+     * @param angVelL Angular Speed of the left Motor
+     * @param angleL Angle of the left Motor
+     * @throws InternalErrorException
+     */
+    void moveMT(int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException;
 
 
+    /**
+     * Moves the motors by time
+     * @param angVelR Angular speed of the right motor
+     * @param angVelL Angular speed of the left motor
+     * @param time Time in milliseconds
+     * @throws InternalErrorException
+     */
 
-         /** Moves the TILT of the ROB at 'angVel' velocity until reaching 'angle'
-          * 
-          * @param angVel the velocity (0-255)
-          * @param angle  the angle (0-90)
-          */
-	 void moveTilt(int angVel, int angle) throws InternalErrorException;
+    void moveMT(int angVelR, int angVelL, long time) throws InternalErrorException ;
+
+     /** Moves the PAN of the ROB at 'angVel' velocity until reaching 'angle'
+      *
+      * @param angVel the velocity (0-255)
+      * @param angle  the angle (0-90)
+      */
+    void movePan(int angVel, int angle) throws InternalErrorException;
 
 
-	 void setOperationMode(byte operationMode) throws InternalErrorException;
+
+	/** Moves the TILT of the ROB at 'angVel' velocity until reaching 'angle'
+	*
+	* @param angVel the velocity (0-255)
+	* @param angle  the angle (0-90)
+	*/
+	void moveTilt(int angVel, int angle) throws InternalErrorException;
 
 
-	 void resetPanTiltOffset() throws InternalErrorException;
+	void setOperationMode(byte operationMode) throws InternalErrorException;
 
-	 List<MotorStatus> getLastStatusMotors();
 
-	 List<IRSensorStatus> getLastStatusIRs();
+	void resetPanTiltOffset() throws InternalErrorException;
 
-	 List<GapStatus> getLastGapsStatus();
+	List<MotorStatus> getLastStatusMotors();
 
-	 List<FallStatus> getLastStatusFalls();
+	List<IRSensorStatus> getLastStatusIRs();
 
-	 List<BumpStatus> getLastStatusBumps();
+	List<GapStatus> getLastGapsStatus();
 
-	 List<ObstacleSensorStatus> getLastStatusObstacles();
+	List<FallStatus> getLastStatusFalls();
 
-	 BatteryStatus getLastStatusBattery();
+	List<BumpStatus> getLastStatusBumps();
+
+	List<ObstacleSensorStatus> getLastStatusObstacles();
+
+	BatteryStatus getLastStatusBattery();
 
 	StopWarningType getLastStopWarning();
-         
-	 void setRobStatusPeriod(int period) throws InternalErrorException;
 
-	 void addRobStatusListener(IRobStatusListener listener);
+	void setRobStatusPeriod(int period) throws InternalErrorException;
+
+	void addRobStatusListener(IRobStatusListener listener);
 
 	void addStopWarningListener(IStopWarningListener listener);
 
 	void removeStopWarningListener(IStopWarningListener listener);
 
-	 void removeRobStatusListener(IRobStatusListener listener);
-	 
-	 void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException;
-	 
-	 void maxValueMotors(int m1Tension, int m1Time, 
-			 			int m2Tension, int m2Time, int panTension, int panTime,
-			 			int tiltTension, int tiltTime) throws InternalErrorException;
+	void removeRobStatusListener(IRobStatusListener listener);
 
-	 void resetRob() throws InternalErrorException;
+	void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException;
 
-	 void changeRobBTName(String name) throws InternalErrorException;
+	void maxValueMotors(int m1Tension, int m1Time,
+					int m2Tension, int m2Time, int panTension, int panTime,
+					int tiltTension, int tiltTime) throws InternalErrorException;
 
-	 void resetRobBTName() throws InternalErrorException;
+	void resetRob() throws InternalErrorException;
+
+	void changeRobBTName(String name) throws InternalErrorException;
+
+	void resetRobBTName() throws InternalErrorException;
+
+	void resetWheelEncoders(RobMotorEnum motor) throws InternalErrorException;
 
 }

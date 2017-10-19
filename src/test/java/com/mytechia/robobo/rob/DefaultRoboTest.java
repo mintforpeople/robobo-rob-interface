@@ -474,6 +474,24 @@ public class DefaultRoboTest {
 
     }
 
+    @Test
+    public void testResetWheelsEncoder() throws Exception{
+
+        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
+
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
+
+        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
+
+        defaultRob.resetWheelEncoders(RobMotorEnum.LEFT_MOTOR);
+
+
+        verify(communicationChannel).send(any(ResetPanTiltOffsetMessage.class));
+
+
+
+    }
+
 
 
 }

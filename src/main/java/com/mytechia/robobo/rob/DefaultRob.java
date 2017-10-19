@@ -54,8 +54,8 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     private static final short PT_ANG_VEL = 6;
 
-    private static final int MAX_PAN_ANGLE = 339;
-    private static final int MIN_PAN_ANGLE = 27;
+    private static final int MAX_PAN_ANGLE = 345;
+    private static final int MIN_PAN_ANGLE = 10;
 
     private static final short MAX_PAN_ANG_VEL = 100;
     private static final short MIN_PAN_ANG_VEL = 0;
@@ -65,8 +65,8 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     private static final short MIN_TILT_ANG_VEL = 0;
 
 
-    private static final int MAX_TILT_ANGLE = 109;
-    private static final int MIN_TILT_ANGLE = 26;
+    private static final int MAX_TILT_ANGLE = 105;
+    private static final int MIN_TILT_ANGLE = 5;
     
     private static final int MAX_COLOR_VALUE = 4095; //12bits
 
@@ -518,6 +518,11 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     @Override
     public void resetRobBTName() throws InternalErrorException {
         this.roboCom.changeRobName("");
+    }
+
+    @Override
+    public void resetWheelEncoders(RobMotorEnum motor) throws InternalErrorException {
+        this.roboCom.resetWheelEncoders(motor);
     }
 
     @Override
