@@ -119,13 +119,7 @@ public class DispatcherRobStatusListener {
         }
     }
     
-    void fireInternalError(CommunicationException ex){
-        
-        for (IRobStatusListener robStatusListener : robStatusListeners) {
-            robStatusListener.robCommunicationError(ex);
-            
-        }
-    }
+
 
     void fireStatusLeds(LedStatus status) {
 

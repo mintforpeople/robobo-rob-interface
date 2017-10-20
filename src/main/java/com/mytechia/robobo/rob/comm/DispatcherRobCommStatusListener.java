@@ -35,7 +35,8 @@ import java.util.List;
 public class DispatcherRobCommStatusListener {
 
     private final List<IRobCommStatusListener> robCommStatusListeners = new ArrayList<IRobCommStatusListener>();
-    
+    private final List<IRobCommErrorListener> robErrorListeners= new ArrayList<IRobCommErrorListener>();
+
 
     public void subscribeToRobCommStatus(IRobCommStatusListener robCommStatusListener) {
         if (robCommStatusListener == null) {
@@ -48,21 +49,13 @@ public class DispatcherRobCommStatusListener {
     void unsubscribeFromRobCommStatus(IRobCommStatusListener robCommStatusListener) {
         this.robCommStatusListeners.remove(robCommStatusListener);
     }
-    
 
-    void fireReceivedStatusMotorsMT(RobStatusMessage rs) {
+
+
+    void fireReceivedStatus(RobStatusMessage rs) {
         
         for (IRobCommStatusListener robCommStatusListener : robCommStatusListeners) {
             robCommStatusListener.robStatus(rs);
-        }
-        
-    }
-
-
-    void fireRobCommunicationError(CommunicationException ex) {
-        
-        for (IRobCommStatusListener robCommStatusListener : robCommStatusListeners) {
-            robCommStatusListener.robCommunicationError(ex);
         }
         
     }

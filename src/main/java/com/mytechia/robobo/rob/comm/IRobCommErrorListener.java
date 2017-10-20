@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *   Copyright 2017 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright 2017 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -19,17 +19,14 @@
  *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  ******************************************************************************/
-
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 
 
-/**
- * Callback interface to receive ROB-STATUS messages.
- */
-public interface IRobCommStatusListener {
+public interface IRobCommErrorListener {
 
-    void robStatus(RobStatusMessage rs);
+
+    void robError(CommunicationException ex);
 
 }
