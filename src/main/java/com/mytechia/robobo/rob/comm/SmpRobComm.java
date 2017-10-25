@@ -76,6 +76,11 @@ public class SmpRobComm implements IRobComm{
     private final MessageProcessor messageProcessor= new MessageProcessor();
 
     private int numberSequence=0;
+
+    private boolean started=false;
+
+    private Object lockStarted= new Object();
+
     
 
     
@@ -91,10 +96,20 @@ public class SmpRobComm implements IRobComm{
 
         messageProcessor.start();
 
+        synchronized (lockStarted){
+            started=true;
+        }
+
+
     }
 
 
     public void stop(){
+
+
+        synchronized (lockStarted){
+            started=false;
+        }
 
         if(this.timer!=null) {
             this.timer.cancel();
@@ -364,6 +379,11 @@ public class SmpRobComm implements IRobComm{
                 } catch(MessageFormatException ex){
                     LOGGER.error("Error format command", ex);
                 }catch (CommunicationException ex) {
+                    synchronized (lockStarted){
+                        if(!started){
+                            return;
+                        }
+                    }
                     LOGGER.error("Error receiving command", ex);
                     dispatcherRobErrorListener.fireRobCommError(ex);
                     return;
