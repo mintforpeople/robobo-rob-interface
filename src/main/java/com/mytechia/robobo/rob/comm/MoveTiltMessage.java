@@ -26,36 +26,27 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageCoder;
 import com.mytechia.commons.framework.simplemessageprotocol.MessageDecoder;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
 
-public class MovePanTiltMessage extends RoboCommand {
+public class MoveTiltMessage extends RoboCommand {
 
     private static final String TILT_ANGLE = "tiltAngle";
 
     private static final String TILT_ANGULAR_VELOCITY = "tiltAngularVelocity";
 
-    private static final String PAN_ANGLE = "panAngle";
 
-    private static final String PAN_ANGULAR_VELOCITY = "panAngularVelocity";
-
-    private short panAngularVelocity;
-
-    private int panAngle;
-
-    private short tiltAngularVelocity;
+    private int tiltAngularVelocity;
 
     private int tiltAngle;
 
-    public MovePanTiltMessage(short panAngularVelocity, int panAngle, short tiltAngularVelocity, int tiltAngle) {
+    public MoveTiltMessage(int tiltAngularVelocity, int tiltAngle) {
         super();
-        super.setCommandType(MessageType.MovePanTiltMessage.commandType);
-        this.panAngularVelocity = panAngularVelocity;
-        this.panAngle = panAngle;
+        super.setCommandType(MessageType.MoveTiltMessage.commandType);
         this.tiltAngularVelocity = tiltAngularVelocity;
         this.tiltAngle = tiltAngle;
     }
 
-    public MovePanTiltMessage(byte[] message) throws MessageFormatException {
+    public MoveTiltMessage(byte[] message) throws MessageFormatException {
         super(message);
-        super.setCommandType(MessageType.MovePanTiltMessage.commandType);
+        super.setCommandType(MessageType.MoveTiltMessage.commandType);
     }
 
     @Override
@@ -63,11 +54,7 @@ public class MovePanTiltMessage extends RoboCommand {
 
         MessageCoder messageCoder = this.getMessageCoder();
 
-        messageCoder.writeShort(panAngularVelocity, PAN_ANGULAR_VELOCITY);
-
-        messageCoder.writeInt(panAngle, PAN_ANGLE);
-
-        messageCoder.writeShort(tiltAngularVelocity, TILT_ANGULAR_VELOCITY);
+        messageCoder.writeUShort(tiltAngularVelocity, TILT_ANGULAR_VELOCITY);
 
         messageCoder.writeInt(tiltAngle, TILT_ANGLE);
 
@@ -80,34 +67,15 @@ public class MovePanTiltMessage extends RoboCommand {
 
         MessageDecoder messageDecoder = this.getMessageDecoder();
 
-        this.panAngularVelocity = messageDecoder.readShort(PAN_ANGULAR_VELOCITY);
-
-        this.panAngle = messageDecoder.readInt(PAN_ANGLE);
-
-        this.tiltAngularVelocity = messageDecoder.readShort(TILT_ANGULAR_VELOCITY);
+        this.tiltAngularVelocity = messageDecoder.readUShort(TILT_ANGULAR_VELOCITY);
 
         this.tiltAngle = messageDecoder.readInt(TILT_ANGLE);
 
         return this.getMessageDecoder().getArrayIndex();
     }
 
-    public short getPanAngularVelocity() {
-        return panAngularVelocity;
-    }
 
-    public void setPanAngularVelocity(short panAngularVelocity) {
-        this.panAngularVelocity = panAngularVelocity;
-    }
-
-    public int getPanAngle() {
-        return panAngle;
-    }
-
-    public void setPanAngle(int panAngle) {
-        this.panAngle = panAngle;
-    }
-
-    public short getTiltAngularVelocity() {
+    public int getTiltAngularVelocity() {
         return tiltAngularVelocity;
     }
 
@@ -123,4 +91,23 @@ public class MovePanTiltMessage extends RoboCommand {
         this.tiltAngle = tiltAngle;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MoveTiltMessage that = (MoveTiltMessage) o;
+
+        if (tiltAngularVelocity != that.tiltAngularVelocity) return false;
+        return tiltAngle == that.tiltAngle;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tiltAngularVelocity;
+        result = 31 * result + tiltAngle;
+        return result;
+    }
 }

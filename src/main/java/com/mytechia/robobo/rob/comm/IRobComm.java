@@ -23,6 +23,8 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import com.mytechia.robobo.rob.DefaultRob;
+import com.mytechia.robobo.rob.RobMotorEnum;
 
 /**
  * This is the low level communication interface between the smartphone (OBO)
@@ -54,14 +56,12 @@ public interface IRobComm {
      * The 'mode' paramter configures the direction of movement of the motors: -
      * 0 --- STOP | STOP - 1 --- REVERSE | REVERSE - 2 --- FORWARD | FORWARD - 4
      * --- FORWARD | REVERSE - 8 --- REVERSE | FORWARD
-     *
-     * @param mode direction of movement of the motors
      * @param angVel1 angular velocity of the motor 1
      * @param angle1 total angle of movement of the motor 1
      * @param angVel2 angular velocity of the motor 2
      * @param angle2 total angle of movement of the motor 2
      */
-    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException;
+    public void moveMT(short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException;
 
     /**
      * Sends a move command to the two motors in charge of wheel movement.
@@ -70,12 +70,11 @@ public interface IRobComm {
      * 0 --- STOP | STOP - 1 --- REVERSE | REVERSE - 2 --- FORWARD | FORWARD - 4
      * --- FORWARD | REVERSE - 8 --- REVERSE | FORWARD
      *
-     * @param mode direction of movement of the motors
      * @param angVel1 angular velocity of the motor 1
      * @param angVel2 angular velocity o the motor 2
      * @param time total time duration of the movement
      */
-    public void moveMT(byte mode, short angVel1, short angVel2, long time) throws CommunicationException;
+    public void moveMT(short angVel1, short angVel2, long time) throws CommunicationException;
 
     /**
      * Sends a move command to the motor in charge of the smartphone PAN
@@ -84,7 +83,7 @@ public interface IRobComm {
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
      */
-    public void movePan(short angVel, int angle) throws CommunicationException;
+    public void movePan(int angVel, int angle) throws CommunicationException;
 
     /**
      * Sends a move command to the motor in charge of the smartphone TILT
@@ -93,7 +92,7 @@ public interface IRobComm {
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
      */
-    public void moveTilt(short angVel, int angle) throws CommunicationException;
+    public void moveTilt(int angVel, int angle) throws CommunicationException;
 
     /**
      * Resets the pan and tilt offset...
@@ -113,6 +112,12 @@ public interface IRobComm {
 
     void removeRobStatusListener(IRobCommStatusListener rsListener);
 
+    void addStopWarningListener(IRobCommStopWarningListener swListener);
+
+
+
+    void removeStopWarningListener(IRobCommStopWarningListener swListener);
+
     void setOperationMode(byte operationMode) throws CommunicationException;
 
     void infraredConfiguration(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws CommunicationException;
@@ -120,4 +125,13 @@ public interface IRobComm {
     void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
             int tiltTension, int tiltTime) throws CommunicationException;
 
+    void resetRob() throws CommunicationException;
+
+    void changeRobName(String name) throws CommunicationException;
+
+    void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException;
+
+    void addRobCommErrorListener(IRobCommErrorListener listener);
+
+    void removeRobCommErrorListener(IRobCommErrorListener listener);
 }

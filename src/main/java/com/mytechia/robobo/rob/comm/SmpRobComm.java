@@ -28,6 +28,7 @@ import com.mytechia.commons.framework.simplemessageprotocol.MessageFactory;
 import com.mytechia.commons.framework.simplemessageprotocol.channel.IBasicCommunicationChannel;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 import com.mytechia.commons.framework.simplemessageprotocol.exception.MessageFormatException;
+import com.mytechia.robobo.rob.RobMotorEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,8 @@ import java.util.TimerTask;
 
 import static com.mytechia.robobo.rob.comm.MessageType.AckMessage;
 import static com.mytechia.robobo.rob.comm.MessageType.RobStatusMessage;
+import static com.mytechia.robobo.rob.comm.MessageType.StopWarning;
+
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -58,17 +61,26 @@ public class SmpRobComm implements IRobComm{
 
     private final DispatcherRobCommStatusListener dispatcherRobCommStatusListener= new DispatcherRobCommStatusListener();
 
+    private final DispatcherRobCommStopWarningListener dispatcherRobCommStopWarningListener = new DispatcherRobCommStopWarningListener();
+
+    private final DispatcherRobCommErrorListener dispatcherRobErrorListener= new DispatcherRobCommErrorListener();
+
     protected final ConnectionRob connectionRob = new ConnectionRob();
 
     private final IBasicCommunicationChannel communicationChannel;
 
     protected Timer timer;
 
-    protected  TimerTask timerTask= new ChecherLostMessages();
+    protected  TimerTask timerTask= new CheckerLostMessages();
 
     private final MessageProcessor messageProcessor= new MessageProcessor();
 
     private int numberSequence=0;
+
+    private boolean started=false;
+
+    private Object lockStarted= new Object();
+
     
 
     
@@ -84,10 +96,20 @@ public class SmpRobComm implements IRobComm{
 
         messageProcessor.start();
 
+        synchronized (lockStarted){
+            started=true;
+        }
+
+
     }
 
 
     public void stop(){
+
+
+        synchronized (lockStarted){
+            started=false;
+        }
 
         if(this.timer!=null) {
             this.timer.cancel();
@@ -144,44 +166,43 @@ public class SmpRobComm implements IRobComm{
     }
 
     @Override
-    public void moveMT(byte mode, short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException {
+    public void moveMT( short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException {
         
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1, angVel2, angle2, 0);
-        
-        sendCommand(moveMTMessage);
-        
-    }
-
-    @Override
-    public void moveMT(byte mode, short angVel1, short angVel2, long time) throws CommunicationException {
-        
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
         
         sendCommand(moveMTMessage);
         
     }
 
     @Override
-    public void movePan(short angVel, int angle) throws CommunicationException {
+    public void moveMT(short angVel1, short angVel2, long time) throws CommunicationException {
+        
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
+        
+        sendCommand(moveMTMessage);
+        
+    }
+
+    @Override
+    public void movePan(int angVel, int angle) throws CommunicationException {
         
         
         
-        MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage(angVel, angle, (short) 0, 0);
+        MovePanMessage movePanMessage = new MovePanMessage(angVel, angle);
         
-        sendCommand(movePanTiltMessage);
+        sendCommand(movePanMessage);
     }
 
 
 
     @Override
-    public void moveTilt(short angVel, int angle) throws CommunicationException{
+    public void moveTilt(int angVel, int angle) throws CommunicationException{
         
-    	MovePanTiltMessage movePanTiltMessage= new MovePanTiltMessage((short) 0, 0, angVel, angle);
+    	MoveTiltMessage moveTiltMessage = new MoveTiltMessage(angVel, angle);
         
-        sendCommand(movePanTiltMessage);
+        sendCommand(moveTiltMessage);
         
     }
-
 
 
     @Override
@@ -208,7 +229,8 @@ public class SmpRobComm implements IRobComm{
 	}
 
 
-	@Override
+
+    @Override
 	public void maxValueMotors(int m1Tension, 
 			int m1Time, 
 			int m2Tension, 
@@ -227,8 +249,33 @@ public class SmpRobComm implements IRobComm{
 		
 	}
 
+    @Override
+    public void resetRob() throws CommunicationException {
+        this.sendCommand(new ResetRobMessage());
+    }
 
-	@Override
+    @Override
+    public void changeRobName(String name) throws CommunicationException {
+        this.sendCommand(new ChangeNameMessage(name));
+    }
+
+    @Override
+    public void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException {
+        this.sendCommand(new ResetEncodersMessage(motor));
+    }
+
+    @Override
+    public void addRobCommErrorListener(IRobCommErrorListener listener) {
+        this.dispatcherRobErrorListener.subscribeToRobCommError(listener);
+    }
+
+    @Override
+    public void removeRobCommErrorListener(IRobCommErrorListener listener) {
+        this.dispatcherRobErrorListener.unsubscribeFromRobCommError(listener);
+    }
+
+
+    @Override
     public void addRobStatusListener(IRobCommStatusListener rsListener) {
         dispatcherRobCommStatusListener.subscribeToRobCommStatus(rsListener);
     }
@@ -238,30 +285,34 @@ public class SmpRobComm implements IRobComm{
         dispatcherRobCommStatusListener.unsubscribeFromRobCommStatus(rsListener);
     }
 
-    
+    @Override
+    public void addStopWarningListener(IRobCommStopWarningListener swListener) {
+        dispatcherRobCommStopWarningListener.subscribeToStopWarning(swListener);
+    }
+
+    @Override
+    public void removeStopWarningListener(IRobCommStopWarningListener swListener) {
+        dispatcherRobCommStopWarningListener.unsuscribeFromStopWarning(swListener);
+    }
+
+
     void sendCommand(RoboCommand roboCommand) throws CommunicationException {
 
         if (roboCommand == null) {
             return;
         }
 
-        try {
 
-            roboCommand.setSequenceNumber(numberSequence);
-            numberSequence++;
-            
-            communicationChannel.send(roboCommand);
-            
-        } catch (CommunicationException ex) {
-            LOGGER.error("Error sending command", ex);
-            throw ex;
-        }
+        roboCommand.setSequenceNumber(numberSequence);
+        numberSequence++;
+
+        communicationChannel.send(roboCommand);
 
         roboCommand.setLastTransmissionTime(System.currentTimeMillis());
 
         roboCommand.increaseNumTransmissions();
 
-        LOGGER.debug("Sent {}", roboCommand.toTransmittingString());
+        LOGGER.trace("Sent {}", roboCommand.toTransmittingString());
 
         connectionRob.addSentRoboCommand(roboCommand);
     }
@@ -278,16 +329,15 @@ public class SmpRobComm implements IRobComm{
 
 
     void processReceivedCommand(RoboCommand command){
-
         if(command.getCommandType()== AckMessage.commandType){
             boolean receivedAck=this.connectionRob.receivedAck((AckMessage)command);
             
             if(receivedAck){
                 AckMessage ackMessage= (AckMessage) command;
                 if(ackMessage.getErrorCode()!=0){
-                    LOGGER.debug("Received Ack[sequenceNumber={}, error={}]", command.getSequenceNumber(), command.getErrorCode());
+                    LOGGER.trace("Received Ack[sequenceNumber={}, error={}]", command.getSequenceNumber(), command.getErrorCode());
                 }else{
-                    LOGGER.debug("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
+                    LOGGER.trace("Received Ack[sequenceNumber={}]", command.getSequenceNumber());
                 }
             }
             
@@ -295,12 +345,24 @@ public class SmpRobComm implements IRobComm{
         }
 
         if(command.getCommandType()== RobStatusMessage.commandType){
-            LOGGER.debug("Received RobStatusMessage[sequenceNumber={}].", command.getSequenceNumber());
-            dispatcherRobCommStatusListener.fireReceivedStatusMotorsMT((RobStatusMessage)command);
+            dispatcherRobCommStatusListener.fireReceivedStatus((RobStatusMessage)command);
             return;
         }
 
-        LOGGER.debug("Received Command[sequenceNumber={}]. This command is not processed.", command.getSequenceNumber());
+        if(command.getCommandType()== StopWarning.commandType){
+
+            StopWarningMessage stopWarningMessage=(StopWarningMessage) command;
+
+            LOGGER.warn("Received StopWarning[sequenceNumber={}, reason-stop={}, details={}].", stopWarningMessage.getSequenceNumber(),
+                    stopWarningMessage.getType(),
+                    stopWarningMessage.getDetails());
+
+            dispatcherRobCommStopWarningListener.fireReceivedStopWarning(stopWarningMessage);
+
+            return;
+        }
+
+        LOGGER.trace("Received Command[sequenceNumber={}]. This command is not processed.", command.getSequenceNumber());
         
     }
 
@@ -317,8 +379,13 @@ public class SmpRobComm implements IRobComm{
                 } catch(MessageFormatException ex){
                     LOGGER.error("Error format command", ex);
                 }catch (CommunicationException ex) {
+                    synchronized (lockStarted){
+                        if(!started){
+                            return;
+                        }
+                    }
                     LOGGER.error("Error receiving command", ex);
-                    dispatcherRobCommStatusListener.fireRobCommunicationError(ex);
+                    dispatcherRobErrorListener.fireRobCommError(ex);
                     return;
                 }
             }
@@ -340,16 +407,20 @@ public class SmpRobComm implements IRobComm{
         if((roboCommands==null) || (roboCommands.isEmpty())){
             return;
         }
-        
+
         for (RoboCommand roboCommand : roboCommands) {
-            processReceivedCommand(roboCommand);
+            if (roboCommand == null) {
+                LOGGER.warn("Null Command");
+            } else {
+                processReceivedCommand(roboCommand);
+            }
         }
         
 
     }
 
 
-    class ChecherLostMessages extends TimerTask{
+    class CheckerLostMessages extends TimerTask{
 
         @Override
         public void run(){
@@ -376,7 +447,7 @@ public class SmpRobComm implements IRobComm{
                 LOGGER.error("Error retransmitting {}", roboCommand.toTransmittingString(), exception);
             }
 
-            LOGGER.debug("Retransmitted {}", roboCommand.toTransmittingString());
+            LOGGER.trace("Retransmitted {}", roboCommand.toTransmittingString());
         }
     }
 

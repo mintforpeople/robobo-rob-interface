@@ -31,9 +31,8 @@ import static com.mytechia.robobo.rob.GapStatus.GapStatusId;
 import static com.mytechia.robobo.rob.IRSensorStatus.IRSentorStatusId;
 import static com.mytechia.robobo.rob.MotorStatus.MotorStatusId;
 import static com.mytechia.robobo.rob.ObstacleSensorStatus.ObstacleSensorStatusId;
-import com.mytechia.robobo.rob.comm.IRobComm;
-import com.mytechia.robobo.rob.comm.IRobCommStatusListener;
-import com.mytechia.robobo.rob.comm.RobStatusMessage;
+
+import com.mytechia.robobo.rob.comm.*;
 import com.mytechia.robobo.util.Color;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,22 +42,37 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class DefaultRob implements IRobCommStatusListener, IRob {
+public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningListener, IRobCommErrorListener, IRob {
     
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
     private static final int MOTOR_COUNT = 4;
     private static final int ANGLE_CONVERSION_FACTOR = 10000;
-    private static final short MAX_ANG_VEL = 127;
-    private static final short MIN_ANG_VEL = 10;
-    private static final short PT_ANG_VEL = 6;
-    private static final int MAX_PAN_ANGLE = 339;
-    private static final int MIN_PAN_ANGLE = 27;
-    private static final int MAX_TILT_ANGLE = 109;
-    private static final int MIN_TILT_ANGLE = 26;
 
-    private int min_battery = 574;
-    private int max_battery = 802;
+    private static final short MAX_ANG_VEL = 100;
+    private static final short MIN_ANG_VEL = -100;
+
+    private static final short PT_ANG_VEL = 6;
+
+    private static final int MAX_PAN_ANGLE = 345;
+    private static final int MIN_PAN_ANGLE = 10;
+
+    private static final short MAX_PAN_ANG_VEL = 100;
+    private static final short MIN_PAN_ANG_VEL = 0;
+
+
+    private static final short MAX_TILT_ANG_VEL = 100;
+    private static final short MIN_TILT_ANG_VEL = 0;
+
+
+    private static final int MAX_TILT_ANGLE = 105;
+    private static final int MIN_TILT_ANGLE = 5;
+    
+    private static final int MAX_COLOR_VALUE = 4095; //12bits
+
+
+    private int min_battery = 310; //1%
+    private int max_battery = 400; //100%
 
     private IRobComm roboCom;
 
@@ -74,13 +88,22 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private final List<IRSensorStatus> irSensors = new ArrayList<IRSensorStatus>();
 
+    private final List<LedStatus> leds = new ArrayList<LedStatus>();
+
     private MotorStatus panMotor, tiltMotor, leftMotor, rightMotor;
     
     private WallConnectionStatus wallConnectonStatus= new WallConnectionStatus();
 
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
-    
-    
+
+    private final DispatcherStopWarningListener dispatcherStopWarningListener = new DispatcherStopWarningListener();
+
+    private final DispatcherRobErrorListener dispatcherRobErrorListener = new DispatcherRobErrorListener();
+
+    private StopWarningType lastStopWarning;
+
+    private boolean roboboBaseSleep= false;
+
     
     public DefaultRob(IRobComm roboCom){
         
@@ -100,16 +123,27 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         
         initMotors();
 
+        initLeds();
+
         this.roboCom = roboCom;
         
         this.roboCom.addRobStatusListener(this);
-        
+
+        this.roboCom.addStopWarningListener(this);
+
+        this.roboCom.addRobCommErrorListener(this);
         
     }
     
     private void initIrSensors() {
         for (IRSentorStatusId irSensor: IRSentorStatusId.values()) {
             irSensors.add(new IRSensorStatus(irSensor));
+        }
+    }
+
+    private void initLeds() {
+        for (LedStatus.LedStatusId led: LedStatus.LedStatusId.values()) {
+            leds.add(new LedStatus(led));
         }
     }
 
@@ -153,8 +187,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     @Override
     public void robStatus(RobStatusMessage robStatusMessage) {
         
-        LOGGER.trace("Received robStatusMessage");
-        
+
         Date updateDate= new Date(System.currentTimeMillis());
 
         this.updateGaps(robStatusMessage, updateDate);
@@ -174,6 +207,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         this.updateWallConnection(robStatusMessage, updateDate);
 
     }
+
 
     private void updateWallConnection(RobStatusMessage robStatusMessage, Date updateDate) {
         
@@ -224,7 +258,7 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     private void updateIRSensorStatus(RobStatusMessage robStatusMessage, Date updateDate) {
 
-        short[] irs = robStatusMessage.getIrs();
+        int[] irs = robStatusMessage.getIrs();
 
         if ((irs == null) || (irs.length == 0)) {
             return;
@@ -352,94 +386,191 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
             MotorStatus ms, int index, 
             int[] motorAngle, short[] motorVelocities, int[] motorVoltages) {
         
-        ms.setVariationAngle(convertAngleROB2OBO(motorAngle[index]));
+        ms.setVariationAngle(motorAngle[index]);
         ms.setAngularVelocity(motorVelocities[index]);
         ms.setVoltage(motorVoltages[index]);
         
     }
-    
 
+    /**
+     * Sets the color of a led
+     * @param led Led index (1-7)
+     * @param color Led color
+     * @throws InternalErrorException
+     */
     @Override
-    public void setLEDColor(int led, Color color) throws InternalErrorException {
+    public void setLEDColor(int led, Color color) throws CommunicationException, IllegalArgumentException {
         
+        this.awakeRoboboBase();
+
+
+        if ((color.getRed()>MAX_COLOR_VALUE)||(color.getGreen()>MAX_COLOR_VALUE)||(color.getBlue()>MAX_COLOR_VALUE)){
+            throw new IllegalArgumentException("Invalid color");
+        }
+        LedStatus s ;
+        try {
+            s = new LedStatus(LedStatus.LedStatusId.values()[led-1]);
+
+            s.setColor(color.getRed(), color.getGreen(), color.getBlue());
+            this.dispatcherRobStatusListener.fireStatusLeds(s);
+
+        } catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("Invalid led id");
+        }
+
         this.roboCom.setLEDColor(led, color.getRed(), color.getGreen(), color.getBlue());
+
+
+
      
     }
 
     @Override
-    public void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException {
-        
-            this.roboCom.setLEDsMode(mode.code);
+    public void setLEDsMode(LEDsModeEnum mode) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.setLEDsMode(mode.code);
    
     }
 
+    /**
+     * Moves the motors by degrees
+     * @param angVelR Angular Speed of the right Motor
+     * @param angleR Angle of the right Motor
+     * @param angVelL Angular Speed of the left Motor
+     * @param angleL Angle of the left Motor
+     * @throws InternalErrorException
+     */
     @Override
-    public void moveMT(MoveMTMode mode, short angVel1, int angle1, short angVel2, int angle2) throws InternalErrorException {
+    public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), angleL, limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), angleR);
+    }
+
+    /**
+     * Moves the motors by time
+     * @param angVelR Angular speed of the right motor
+     * @param angVelL Angular speed of the left motor
+     * @param time Time in milliseconds
+     * @throws InternalErrorException
+     */
+    @Override
+    public void moveMT( int angVelR, int angVelL, long time) throws CommunicationException {
+
+        this.awakeRoboboBase();
         
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle1), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), convertAngleOBO2ROB(angle2));
+        this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), time);
+        
+    }
+
+    /**
+     *
+     * @param angVel the velocity (0-255)
+     * @param angle  the angle (0-90)
+     * @throws InternalErrorException
+     */
+    @Override
+    public void movePan(int angVel, int angle) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.movePan(limitAngVel(angVel, MAX_PAN_ANG_VEL, MIN_PAN_ANG_VEL), limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE));
+    }
+
+
+
+    @Override
+    public void moveTilt(int angVel, int angle) throws CommunicationException {
+
+        this.awakeRoboboBase();
+        
+        this.roboCom.moveTilt(limitAngVel(angVel, MAX_TILT_ANG_VEL, MIN_TILT_ANG_VEL), limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE));
     
     }
 
-    @Override
-    public void moveMT(MoveMTMode mode, short angVel1, short angVel2, long time) throws InternalErrorException {
-        
-        this.roboCom.moveMT(mode.getMode(), limitAngVel(angVel1, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVel2, MAX_ANG_VEL, MIN_ANG_VEL), time);
-        
-    }
 
     @Override
-    public void movePan(short angVel, int angle) throws InternalErrorException {        
-        
-        this.roboCom.movePan(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE)));
-      
-    }
+    public void resetPanTiltOffset() throws CommunicationException {
 
+        this.awakeRoboboBase();
 
-
-    @Override
-    public void moveTilt(short angVel, int angle) throws InternalErrorException {
-        
-        this.roboCom.moveTilt(angVel, convertAngleOBO2ROB(limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE)));
-    
-    }
-
-
-
-    @Override
-    public void resetPanTiltOffset() throws InternalErrorException {
         this.roboCom.resetPanTiltOffset();
     }
     
     @Override
-    public void setRobStatusPeriod(int period) throws InternalErrorException {
+    public void setRobStatusPeriod(int period) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.setRobStatusPeriod(period);
 
     }
 
     @Override
-    public void setOperationMode(byte operationMode) throws InternalErrorException {
+    public void setOperationMode(byte operationMode) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.setOperationMode(operationMode);
 
     }
 
     @Override
-    public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException {
+    public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
 
     }
 
+
     @Override
     public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
-            int tiltTension, int tiltTime) throws InternalErrorException {
+            int tiltTension, int tiltTime) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.maxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime);
 
     }
 
-	@Override
+    @Override
+    public void resetRob() throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.resetRob();
+    }
+
+    @Override
+    public void changeRobBTName(String name) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.changeRobName(name);
+    }
+
+    @Override
+    public void resetRobBTName() throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.changeRobName("");
+    }
+
+    @Override
+    public void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
+        this.roboCom.resetWheelEncoders(motor);
+    }
+
+    @Override
     public List<MotorStatus> getLastStatusMotors() {
         ArrayList<MotorStatus> motors = new ArrayList<MotorStatus>();
         motors.add(panMotor);
@@ -480,8 +611,29 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
     }
 
     @Override
+    public StopWarningType getLastStopWarning() {
+        return lastStopWarning;
+    }
+
+    @Override
     public void addRobStatusListener(IRobStatusListener listener) {
         dispatcherRobStatusListener.subscribetoContentChanges(listener);
+    }
+
+    @Override
+    public void addStopWarningListener(IStopWarningListener listener) {
+        dispatcherStopWarningListener.subscribetoStopWarnings(listener);
+    }
+
+    @Override
+    public void addRobErrorListener(IRobErrorListener listener) {
+        this.dispatcherRobErrorListener.subscribeToRobError(listener);
+    }
+
+    @Override
+    public void removeStopWarningListener(IStopWarningListener listener) {
+        dispatcherStopWarningListener.unsubscribeFromStopWarnings(listener);
+
     }
 
     @Override
@@ -489,24 +641,33 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
         dispatcherRobStatusListener.unsubscribeFromContentChanges(listener);
     }
 
-
-
-
-    private int convertAngleOBO2ROB(int angle) {
-        return angle*ANGLE_CONVERSION_FACTOR;
+    @Override
+    public void removeRobErrorListener(IRobErrorListener listener) {
+        this.dispatcherRobErrorListener.unsubscribeFromRobError(listener);
     }
-    
-    private int convertAngleROB2OBO(int angle) {
-        return angle/ANGLE_CONVERSION_FACTOR;
+
+
+    private void awakeRoboboBase() throws CommunicationException {
+
+        if(lastStopWarning==null){
+            return;
+        }
+
+        if(this.roboboBaseSleep){
+            this.roboboBaseSleep=false;
+            this.roboCom.moveMT((short)0,(short)0,(long)0);
+        }
+
     }
-    
-    private short limitAngVel(short angVel, short max, short min) {
+
+
+    private short limitAngVel(int angVel, short max, short min) {
         if (angVel > max)
             return max;
         else if (angVel < min)
-            return 0;
+            return min;
         else        
-            return angVel;
+            return (short) angVel;
     }
 
     
@@ -534,9 +695,23 @@ public class DefaultRob implements IRobCommStatusListener, IRob {
 
     }
 
+
+
     @Override
-    public void robCommunicationError(CommunicationException ex) {
-        dispatcherRobStatusListener.fireInternalError(ex);
+    public void stopWarning(StopWarningMessage sw) {
+        lastStopWarning = sw.getMessage();
+
+        if((lastStopWarning!=null) && (lastStopWarning==StopWarningType.SLEEP_WARNING)){
+            roboboBaseSleep=true;
+        }
+
+        dispatcherStopWarningListener.fireStatusBattery(sw);
+
     }
 
+
+    @Override
+    public void robError(CommunicationException ex) {
+        dispatcherRobErrorListener.fireRobCommError(ex);
+    }
 }

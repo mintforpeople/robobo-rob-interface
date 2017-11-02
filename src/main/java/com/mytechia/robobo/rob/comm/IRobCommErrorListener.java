@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2017 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright 2017 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -19,39 +19,14 @@
  *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  ******************************************************************************/
-
 package com.mytechia.robobo.rob.comm;
 
-/**
- *
- *
- * @author Julio Alberto Gomez Fernandez
- */
-public enum MessageType {
+import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 
-    AckMessage((byte)0),
-    RobStatusMessage((byte)1),
-    SetRobStatusPeriodMessage((byte)2),
-    SetLEDColorMessage((byte)3),
-    RobSetLEDsModeMessage((byte)4),
-    MoveMTMessage((byte)5),
-    MovePanMessage((byte)6),
-    ResetPanTiltOffsetMessage((byte)7),
-    InfraredConfigurationMessage((byte)8),
-    OperationModeMessage((byte)9), 
-    MaxValueMotors((byte)10),
-    StopWarning((byte)11),
-    FirmwareVersionMessage((byte)12),
-    ResetRobMessage((byte)13),
-    MoveTiltMessage((byte)14),
-    ChangeBtNameMessage((byte)15),
-    TiltCalibrationMessage((byte) 0x10),//Probablemente no se implemente
-    ResetEncodersMessage((byte) 0x11);
 
-    public final byte commandType;
+public interface IRobCommErrorListener {
 
-    MessageType(byte code){
-        this.commandType = code;
-    }
+
+    void robError(CommunicationException ex);
 
 }

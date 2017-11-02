@@ -8,17 +8,17 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Victor Sonora Pombo
  */
-public class MovePanTiltMessageTest {
+public class MovePanMessageTest {
 
     @Test
     public void testCodeMessageData() throws Exception {
 
-        OldMovePanTiltMessage originalMessage =
-                new OldMovePanTiltMessage((byte)3, (short)4, 60, 15000);
+        MovePanMessage originalMessage =
+                new MovePanMessage(4, 60);
 
         final byte[] messageData = originalMessage.codeMessage();
 
-        OldMovePanTiltMessage decodedMessage = new OldMovePanTiltMessage(messageData);
+        MovePanMessage decodedMessage = new MovePanMessage(messageData);
 
         assertEquals(originalMessage, decodedMessage);
 

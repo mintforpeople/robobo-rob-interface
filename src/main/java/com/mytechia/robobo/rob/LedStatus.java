@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *   Copyright 2017 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright 2017 Luis Llamas <luis.llamas@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -19,17 +19,43 @@
  *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  ******************************************************************************/
-
-package com.mytechia.robobo.rob.comm;
-
-import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
-
+package com.mytechia.robobo.rob;
 
 /**
- * Callback interface to receive ROB-STATUS messages.
+ * Class representing the color of the Rob leds
  */
-public interface IRobCommStatusListener {
+public class LedStatus extends RobDeviceStatus<LedStatus.LedStatusId> {
 
-    void robStatus(RobStatusMessage rs);
+    private int[] color;
 
+    public LedStatus(LedStatusId id) {
+        super(id);
+        color =new int[3];
+    }
+
+    /**
+     * Sets the led color
+     * @param r red channeñ
+     * @param g green channel
+     * @param b blue channel
+     */
+    public void setColor(int r, int g, int b){
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+    }
+
+    /**
+     * Gets the led color
+     * @return int array [red, green, blue]
+     */
+    public int[] getColor(){
+        return color;
+    };
+
+    public enum LedStatusId{
+        LedStatus1,LedStatus2,LedStatus3,
+        LedStatus4,LedStatus5,LedStatus6,
+        LedStatus7
+    }
 }

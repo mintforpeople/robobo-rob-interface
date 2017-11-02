@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
  *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright (C) 2016 Victor Sonora Pombo <victor.pombo@mytechia.com>
+ *   Copyright 2016 Luis Llamas <luis.llamas@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -20,38 +20,42 @@
  *
  ******************************************************************************/
 
-package com.mytechia.robobo.rob.comm;
+package com.mytechia.robobo.rob;
+
+import com.mytechia.robobo.rob.comm.StopWarningMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * This class is used to manage instances of StopWarningListener. And it
+ * implements methods to fire events of StopWarningListener.
  *
- *
- * @author Julio Alberto Gomez Fernandez
+ * @author Luis Felipe Llamas Luaces
  */
-public enum MessageType {
+public class DispatcherStopWarningListener {
 
-    AckMessage((byte)0),
-    RobStatusMessage((byte)1),
-    SetRobStatusPeriodMessage((byte)2),
-    SetLEDColorMessage((byte)3),
-    RobSetLEDsModeMessage((byte)4),
-    MoveMTMessage((byte)5),
-    MovePanMessage((byte)6),
-    ResetPanTiltOffsetMessage((byte)7),
-    InfraredConfigurationMessage((byte)8),
-    OperationModeMessage((byte)9), 
-    MaxValueMotors((byte)10),
-    StopWarning((byte)11),
-    FirmwareVersionMessage((byte)12),
-    ResetRobMessage((byte)13),
-    MoveTiltMessage((byte)14),
-    ChangeBtNameMessage((byte)15),
-    TiltCalibrationMessage((byte) 0x10),//Probablemente no se implemente
-    ResetEncodersMessage((byte) 0x11);
+    private final List<IStopWarningListener> stopWarningListeners = new ArrayList<IStopWarningListener>();
 
-    public final byte commandType;
 
-    MessageType(byte code){
-        this.commandType = code;
+    public void subscribetoStopWarnings(IStopWarningListener swListener) {
+        if (swListener == null) {
+            return;
+        }
+
+        this.stopWarningListeners.add(swListener);
     }
 
+    void unsubscribeFromStopWarnings(IStopWarningListener swListener) {
+        this.stopWarningListeners.remove(swListener);
+    }
+
+
+    void fireStatusBattery(StopWarningMessage swmsg) {
+
+        for (IStopWarningListener swListener : stopWarningListeners) {
+            swListener.stopWarning(swmsg.getMessage());
+
+        }
+    }
 }

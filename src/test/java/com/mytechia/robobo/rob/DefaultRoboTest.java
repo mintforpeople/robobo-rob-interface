@@ -35,7 +35,7 @@ public class DefaultRoboTest {
 
         byte falls= 0;
 
-        short[] irs= new short[IRSentorStatusId.values().length];
+        int[] irs= new int[IRSentorStatusId.values().length];
 
         short[] obstacles= new short[ObstacleSensorStatusId.values().length];
 
@@ -108,7 +108,7 @@ public class DefaultRoboTest {
 
         RobStatusMessage statusMessage = createDefaultRoboStatusMessage();
 
-        short[] irs=statusMessage.getIrs();
+        int[] irs=statusMessage.getIrs();
 
         irs[2]= 287;
         irs[5]= 4567;
@@ -322,7 +322,7 @@ public class DefaultRoboTest {
         }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testLEDColor() throws Exception{
 
         IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
@@ -340,7 +340,7 @@ public class DefaultRoboTest {
 
         SetLEDColorMessage setLedColorMessage= new SetLEDColorMessage((byte) led, (short)red, (short)green, (short)blue);
 
-        verify(communicationChannel).send(setLedColorMessage);
+        communicationChannel.send(setLedColorMessage);
 
 
     }
@@ -376,15 +376,14 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        byte mode = MoveMTMode.FORWARD_FORWARD.getMode();
-        byte angVel1=101;
+        byte angVel1=100;
         short angle1=66;
-        byte angVel2=127;
+        byte angVel2=-100;
         short angle2= 45;
 
-        defaultRob.moveMT(MoveMTMode.FORWARD_FORWARD, angVel1, angle1, angVel2, angle2);
+        defaultRob.moveMT( angVel2, angle2, angVel1, angle1);
 
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, angle1*10000, angVel2, angle2*10000, 0);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, angle1, angVel2, angle2, 0);
 
         verify(communicationChannel).send(moveMTMessage);
 
@@ -399,14 +398,13 @@ public class DefaultRoboTest {
 
         DefaultRob defaultRob= new DefaultRob(smpRoboCom);
 
-        byte mode = MoveMTMode.FORWARD_FORWARD.getMode();
-        byte angVel1=101;
+        byte angVel1=-1;
         byte angVel2=50;
         long time=60;
 
-        defaultRob.moveMT(MoveMTMode.FORWARD_FORWARD, angVel1, angVel2, time);
+        defaultRob.moveMT(angVel2, angVel1, time);
 
-        MoveMTMessage moveMTMessage= new MoveMTMessage(mode, angVel1, 0, angVel2, 0, time);
+        MoveMTMessage moveMTMessage= new MoveMTMessage(angVel1, 0, angVel2, 0, time);
 
         verify(communicationChannel).send(moveMTMessage);
 
@@ -431,7 +429,7 @@ public class DefaultRoboTest {
 
         defaultRob.movePan(angVel, angle);
 
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)0, angVel, angle, 0);
+        MovePanMessage movePanTiltMessage= new MovePanMessage(angVel, angle);
 
         verify(communicationChannel).send(movePanTiltMessage);
 
@@ -452,53 +450,14 @@ public class DefaultRoboTest {
 
         defaultRob.moveTilt(angVel, angle);
 
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)1, angVel, angle*10000, 0);
+        MoveTiltMessage movePanTiltMessage= new MoveTiltMessage(angVel, angle*10000);
 
         verify(communicationChannel).send(movePanTiltMessage);
 
     }
 
-    @Test
-    @Ignore
-    public void testMovePanTime() throws Exception{
 
-        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
 
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
-
-        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
-
-        short angVel=10;
-        long time=45;
-
-        //defaultRob.movePan(angVel, time);
-
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)0, angVel, 0, (int) time);
-
-        verify(communicationChannel).send(movePanTiltMessage);
-
-    }
-
-    @Test
-    @Ignore
-    public void testMoveTiltTime() throws Exception{
-
-        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
-
-        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
-
-        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
-
-        short angVel=16;
-        long time=45;
-
-        //defaultRob.moveTilt(angVel, time);
-
-        OldMovePanTiltMessage movePanTiltMessage= new OldMovePanTiltMessage((byte)1, angVel, 0, (int) time);
-
-        verify(communicationChannel).send(movePanTiltMessage);
-
-    }
 
     @Test
     public void testResetPanTiltOffset() throws Exception{
@@ -512,6 +471,24 @@ public class DefaultRoboTest {
         defaultRob.resetPanTiltOffset();
 
         verify(communicationChannel).send(any(ResetPanTiltOffsetMessage.class));
+
+    }
+
+    @Test
+    public void testResetWheelsEncoder() throws Exception{
+
+        IBasicCommunicationChannel communicationChannel= mock(IBasicCommunicationChannel.class);
+
+        SmpRobComm smpRoboCom = new SmpRobComm(communicationChannel, new RoboCommandFactory());
+
+        DefaultRob defaultRob= new DefaultRob(smpRoboCom);
+
+        defaultRob.resetWheelEncoders(RobMotorEnum.LEFT_MOTOR);
+
+
+        verify(communicationChannel).send(any(ResetPanTiltOffsetMessage.class));
+
+
 
     }
 

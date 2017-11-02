@@ -139,7 +139,7 @@ public class DummyCommunicationChannel implements INetworkBasicCommunicationChan
                     }
 
                     public Command buildMessage(byte[] bytes) throws MessageFormatException {
-                        return new OldMovePanTiltMessage(bytes);
+                        return new MovePanMessage(bytes);
                     }
                 }
         );
@@ -152,6 +152,17 @@ public class DummyCommunicationChannel implements INetworkBasicCommunicationChan
 
                     public Command buildMessage(byte[] bytes) throws MessageFormatException {
                         return new ResetPanTiltOffsetMessage(bytes);
+                    }
+                }
+        );
+        this.messageFactory.registerMessageBuilder(
+                new IMessageBuilder() {
+                    public byte type() {
+                        return 14;
+                    }
+
+                    public Command buildMessage(byte[] bytes) throws MessageFormatException {
+                        return new MoveTiltMessage(bytes);
                     }
                 }
         );

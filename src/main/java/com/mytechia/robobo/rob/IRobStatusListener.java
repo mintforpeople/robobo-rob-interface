@@ -43,7 +43,7 @@ public interface IRobStatusListener {
     void statusBattery(BatteryStatus battery);
     
     void statusWallConnectionStatus(WallConnectionStatus wallConnectionStatus);
-    
-    void robCommunicationError(InternalErrorException ex);
+
+    void statusLeds(LedStatus led);
 
 }
