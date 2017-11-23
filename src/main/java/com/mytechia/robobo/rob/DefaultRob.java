@@ -222,7 +222,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
         int batteryLevel = robStatusMessage.getBatteryLevel();
 
-        this.battery.setBattery(calcBattery(batteryLevel));
+        this.battery.setBattery(batteryLevel);
 
         this.battery.setLastUpdate(updateDate);
         
