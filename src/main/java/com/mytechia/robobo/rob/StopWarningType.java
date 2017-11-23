@@ -55,7 +55,8 @@ public enum StopWarningType {
     RANGE_WARNING_TILT_ANGLE((byte) 8,(byte) 6),
     RANGE_WARNING_WHEELS_SPEED((byte) 8,(byte) 8),
     IR_CONFIG_WARNING_OK((byte) 10,(byte) 1),
-    IR_CONFIG_WARNING_NOT_CONFIGURED((byte) 10,(byte) 2);
+    IR_CONFIG_WARNING_NOT_CONFIGURED((byte) 10,(byte) 2),
+    SLEEP_WARNING((byte) 11,(byte) 1);
 
     private byte type;
     private byte details;

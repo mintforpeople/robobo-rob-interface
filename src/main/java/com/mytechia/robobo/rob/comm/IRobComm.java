@@ -23,6 +23,7 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
+import com.mytechia.robobo.rob.DefaultRob;
 import com.mytechia.robobo.rob.RobMotorEnum;
 
 /**
@@ -113,6 +114,8 @@ public interface IRobComm {
 
     void addStopWarningListener(IRobCommStopWarningListener swListener);
 
+
+
     void removeStopWarningListener(IRobCommStopWarningListener swListener);
 
     void setOperationMode(byte operationMode) throws CommunicationException;
@@ -128,4 +131,7 @@ public interface IRobComm {
 
     void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException;
 
+    void addRobCommErrorListener(IRobCommErrorListener listener);
+
+    void removeRobCommErrorListener(IRobCommErrorListener listener);
 }

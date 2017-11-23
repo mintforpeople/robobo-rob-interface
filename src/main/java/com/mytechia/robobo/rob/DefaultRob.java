@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 
 
-public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningListener, IRob {
+public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningListener, IRobCommErrorListener, IRob {
     
     private static final Logger LOGGER= LoggerFactory.getLogger(DefaultRob.class);
 
@@ -97,7 +97,13 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     private final DispatcherRobStatusListener dispatcherRobStatusListener = new DispatcherRobStatusListener();
 
     private final DispatcherStopWarningListener dispatcherStopWarningListener = new DispatcherStopWarningListener();
+
+    private final DispatcherRobErrorListener dispatcherRobErrorListener = new DispatcherRobErrorListener();
+
     private StopWarningType lastStopWarning;
+
+    private boolean roboboBaseSleep= false;
+
     
     public DefaultRob(IRobComm roboCom){
         
@@ -122,8 +128,10 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         this.roboCom = roboCom;
         
         this.roboCom.addRobStatusListener(this);
+
         this.roboCom.addStopWarningListener(this);
-        
+
+        this.roboCom.addRobCommErrorListener(this);
         
     }
     
@@ -199,6 +207,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
         this.updateWallConnection(robStatusMessage, updateDate);
 
     }
+
 
     private void updateWallConnection(RobStatusMessage robStatusMessage, Date updateDate) {
         
@@ -390,7 +399,9 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @throws InternalErrorException
      */
     @Override
-    public void setLEDColor(int led, Color color) throws InternalErrorException, IllegalArgumentException {
+    public void setLEDColor(int led, Color color) throws CommunicationException, IllegalArgumentException {
+        
+        this.awakeRoboboBase();
 
 
         if ((color.getRed()>MAX_COLOR_VALUE)||(color.getGreen()>MAX_COLOR_VALUE)||(color.getBlue()>MAX_COLOR_VALUE)){
@@ -415,9 +426,11 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     }
 
     @Override
-    public void setLEDsMode(LEDsModeEnum mode) throws InternalErrorException {
+    public void setLEDsMode(LEDsModeEnum mode) throws CommunicationException {
 
-            this.roboCom.setLEDsMode(mode.code);
+        this.awakeRoboboBase();
+
+        this.roboCom.setLEDsMode(mode.code);
    
     }
 
@@ -430,7 +443,10 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @throws InternalErrorException
      */
     @Override
-    public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws InternalErrorException {
+    public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), angleL, limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), angleR);
     }
 
@@ -442,7 +458,9 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @throws InternalErrorException
      */
     @Override
-    public void moveMT( int angVelR, int angVelL, long time) throws InternalErrorException {
+    public void moveMT( int angVelR, int angVelL, long time) throws CommunicationException {
+
+        this.awakeRoboboBase();
         
         this.roboCom.moveMT( limitAngVel(angVelL, MAX_ANG_VEL, MIN_ANG_VEL), limitAngVel(angVelR, MAX_ANG_VEL, MIN_ANG_VEL), time);
         
@@ -455,7 +473,9 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @throws InternalErrorException
      */
     @Override
-    public void movePan(int angVel, int angle) throws InternalErrorException {
+    public void movePan(int angVel, int angle) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.movePan(limitAngVel(angVel, MAX_PAN_ANG_VEL, MIN_PAN_ANG_VEL), limitAngle(angle, MAX_PAN_ANGLE, MIN_PAN_ANGLE));
     }
@@ -463,7 +483,9 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
 
     @Override
-    public void moveTilt(int angVel, int angle) throws InternalErrorException {
+    public void moveTilt(int angVel, int angle) throws CommunicationException {
+
+        this.awakeRoboboBase();
         
         this.roboCom.moveTilt(limitAngVel(angVel, MAX_TILT_ANG_VEL, MIN_TILT_ANG_VEL), limitAngle(angle, MAX_TILT_ANGLE, MIN_TILT_ANGLE));
     
@@ -471,26 +493,35 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
 
     @Override
-    public void resetPanTiltOffset() throws InternalErrorException {
+    public void resetPanTiltOffset() throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.resetPanTiltOffset();
     }
     
     @Override
-    public void setRobStatusPeriod(int period) throws InternalErrorException {
+    public void setRobStatusPeriod(int period) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.setRobStatusPeriod(period);
 
     }
 
     @Override
-    public void setOperationMode(byte operationMode) throws InternalErrorException {
+    public void setOperationMode(byte operationMode) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.setOperationMode(operationMode);
 
     }
 
     @Override
-    public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws InternalErrorException {
+    public void configureInfrared(byte infraredId, byte commandCode, byte dataByteLow, byte dataByteHigh) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.infraredConfiguration(infraredId, commandCode, dataByteLow, dataByteHigh);
 
@@ -499,29 +530,43 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     @Override
     public void maxValueMotors(int m1Tension, int m1Time, int m2Tension, int m2Time, int panTension, int panTime,
-            int tiltTension, int tiltTime) throws InternalErrorException {
+            int tiltTension, int tiltTime) throws CommunicationException {
+
+        this.awakeRoboboBase();
 
         this.roboCom.maxValueMotors(m1Tension, m1Time, m2Tension, m2Time, panTension, panTime, tiltTension, tiltTime);
 
     }
 
     @Override
-    public void resetRob() throws InternalErrorException {
+    public void resetRob() throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.resetRob();
     }
 
     @Override
-    public void changeRobBTName(String name) throws InternalErrorException {
+    public void changeRobBTName(String name) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.changeRobName(name);
     }
 
     @Override
-    public void resetRobBTName() throws InternalErrorException {
+    public void resetRobBTName() throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.changeRobName("");
     }
 
     @Override
-    public void resetWheelEncoders(RobMotorEnum motor) throws InternalErrorException {
+    public void resetWheelEncoders(RobMotorEnum motor) throws CommunicationException {
+
+        this.awakeRoboboBase();
+
         this.roboCom.resetWheelEncoders(motor);
     }
 
@@ -581,6 +626,11 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     }
 
     @Override
+    public void addRobErrorListener(IRobErrorListener listener) {
+        this.dispatcherRobErrorListener.subscribeToRobError(listener);
+    }
+
+    @Override
     public void removeStopWarningListener(IStopWarningListener listener) {
         dispatcherStopWarningListener.unsubscribeFromStopWarnings(listener);
 
@@ -589,6 +639,25 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
     @Override
     public void removeRobStatusListener(IRobStatusListener listener) {
         dispatcherRobStatusListener.unsubscribeFromContentChanges(listener);
+    }
+
+    @Override
+    public void removeRobErrorListener(IRobErrorListener listener) {
+        this.dispatcherRobErrorListener.unsubscribeFromRobError(listener);
+    }
+
+
+    private void awakeRoboboBase() throws CommunicationException {
+
+        if(lastStopWarning==null){
+            return;
+        }
+
+        if(this.roboboBaseSleep){
+            this.roboboBaseSleep=false;
+            this.roboCom.moveMT((short)0,(short)0,(long)0);
+        }
+
     }
 
 
@@ -626,18 +695,23 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
 
     }
 
-    @Override
-    public void robCommunicationError(CommunicationException ex) {
-        dispatcherRobStatusListener.fireInternalError(ex);
-    }
+
 
     @Override
     public void stopWarning(StopWarningMessage sw) {
         lastStopWarning = sw.getMessage();
+
+        if((lastStopWarning!=null) && (lastStopWarning==StopWarningType.SLEEP_WARNING)){
+            roboboBaseSleep=true;
+        }
+
         dispatcherStopWarningListener.fireStatusBattery(sw);
 
     }
 
 
-
+    @Override
+    public void robError(CommunicationException ex) {
+        dispatcherRobErrorListener.fireRobCommError(ex);
+    }
 }

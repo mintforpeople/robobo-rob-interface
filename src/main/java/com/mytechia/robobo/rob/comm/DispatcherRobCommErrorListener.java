@@ -1,7 +1,7 @@
 /*******************************************************************************
  *
- *   Copyright 2016 Mytech Ingenieria Aplicada <http://www.mytechia.com>
- *   Copyright 2016 Julio Gómez <julio.gomez@mytechia.com>
+ *   Copyright 2017 Mytech Ingenieria Aplicada <http://www.mytechia.com>
+ *   Copyright 2017 Julio Gómez <julio.gomez@mytechia.com>
  *
  *   This file is part of Robobo ROB Interface Library.
  *
@@ -19,17 +19,35 @@
  *   along with Robobo ROB Interface Library.  If not, see <http://www.gnu.org/licenses/>.
  *
  ******************************************************************************/
-
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Callback interface to receive ROB-STATUS messages.
- */
-public interface IRobCommStatusListener {
 
-    void robStatus(RobStatusMessage rs);
+public class DispatcherRobCommErrorListener {
 
+    private  final List<IRobCommErrorListener> robErrorListeners = new ArrayList<IRobCommErrorListener>();
+
+    public void subscribeToRobCommError(IRobCommErrorListener robCommStatusListener) {
+        if (robCommStatusListener == null) {
+            return;
+        }
+
+        this.robErrorListeners.add(robCommStatusListener);
+    }
+
+    void unsubscribeFromRobCommError(IRobCommErrorListener robCommStatusListener) {
+        this.robErrorListeners.remove(robCommStatusListener);
+    }
+
+    void fireRobCommError(CommunicationException ex) {
+
+        for (IRobCommErrorListener robCommErrorListener : robErrorListeners) {
+            robCommErrorListener.robError(ex);
+        }
+
+    }
 }
