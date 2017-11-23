@@ -396,7 +396,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * Sets the color of a led
      * @param led Led index (1-7)
      * @param color Led color
-     * @throws InternalErrorException
+     * @throws CommunicationException when communication with the base is not possible
      */
     @Override
     public void setLEDColor(int led, Color color) throws CommunicationException, IllegalArgumentException {
@@ -440,7 +440,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @param angleR Angle of the right Motor
      * @param angVelL Angular Speed of the left Motor
      * @param angleL Angle of the left Motor
-     * @throws InternalErrorException
+     * @throws CommunicationException when communication with the base is not possible
      */
     @Override
     public void moveMT( int angVelR, int angleR, int angVelL, int angleL) throws CommunicationException {
@@ -455,7 +455,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      * @param angVelR Angular speed of the right motor
      * @param angVelL Angular speed of the left motor
      * @param time Time in milliseconds
-     * @throws InternalErrorException
+     * @throws CommunicationException when communication with the base is not possible
      */
     @Override
     public void moveMT( int angVelR, int angVelL, long time) throws CommunicationException {
@@ -470,7 +470,7 @@ public class DefaultRob implements IRobCommStatusListener,IRobCommStopWarningLis
      *
      * @param angVel the velocity (0-255)
      * @param angle  the angle (0-90)
-     * @throws InternalErrorException
+     * @throws CommunicationException when communication with the base is not possible
      */
     @Override
     public void movePan(int angVel, int angle) throws CommunicationException {

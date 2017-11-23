@@ -23,7 +23,6 @@
 package com.mytechia.robobo.rob.comm;
 
 import com.mytechia.commons.framework.simplemessageprotocol.exception.CommunicationException;
-import com.mytechia.robobo.rob.DefaultRob;
 import com.mytechia.robobo.rob.RobMotorEnum;
 
 /**
@@ -40,6 +39,7 @@ public interface IRobComm {
      * @param r the red value of the RGB color
      * @param g the green value of the RGB color
      * @param b the blue value of the RGB color
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void setLEDColor(int ledId, int r, int g, int b) throws CommunicationException;
 
@@ -47,6 +47,7 @@ public interface IRobComm {
      * Changes the automatic mode of operation of the LEDs.
      *
      * @param mode the new mode of operation of the LEDs
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void setLEDsMode(byte mode) throws CommunicationException;
 
@@ -60,6 +61,7 @@ public interface IRobComm {
      * @param angle1 total angle of movement of the motor 1
      * @param angVel2 angular velocity of the motor 2
      * @param angle2 total angle of movement of the motor 2
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void moveMT(short angVel1, int angle1, short angVel2, int angle2) throws CommunicationException;
 
@@ -73,6 +75,7 @@ public interface IRobComm {
      * @param angVel1 angular velocity of the motor 1
      * @param angVel2 angular velocity o the motor 2
      * @param time total time duration of the movement
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void moveMT(short angVel1, short angVel2, long time) throws CommunicationException;
 
@@ -82,6 +85,7 @@ public interface IRobComm {
      *
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void movePan(int angVel, int angle) throws CommunicationException;
 
@@ -91,12 +95,14 @@ public interface IRobComm {
      *
      * @param angVel angular velocity of the motor
      * @param angle total angle of movement
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void moveTilt(int angVel, int angle) throws CommunicationException;
 
     /**
      * Resets the pan and tilt offset...
      *
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void resetPanTiltOffset() throws CommunicationException;
 
@@ -105,6 +111,7 @@ public interface IRobComm {
      *
      * @param period the period in millisecods, a value of 0 stops the sending
      * of status messages
+     * @throws CommunicationException when communication with the base is not possible
      */
     public void setRobStatusPeriod(int period) throws CommunicationException;
 
